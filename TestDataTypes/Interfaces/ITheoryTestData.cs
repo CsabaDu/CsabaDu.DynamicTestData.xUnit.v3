@@ -27,5 +27,5 @@ public interface ITheoryTestData
 {
     ArgsCode ArgsCode { get; }
 
-    void SetTestMethodName(string testMethodName);
+    void InitTestMethodName(string testMethodName);
 }

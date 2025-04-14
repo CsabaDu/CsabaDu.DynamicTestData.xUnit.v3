@@ -29,7 +29,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
 
     #region Properties
     [NotNull]
-    protected TheoryTestData TheoryTestData { get; set; } = new(argsCode);
+    protected TheoryTestData TheoryTestData { get; init; } = new(argsCode);
 
     internal string ArgumentsMismatchMessageEnd => " elements and do not match with the initiated "
     + TestDataType!.Name + " instance's type parameters.";
@@ -243,15 +243,17 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
         {
             TheoryTestData.Add(testData);
         }
-
-        Type testDataType = testData.GetType();
-
-        if (testDataType != TestDataType)
+        else
         {
+            Type testDataType = testData.GetType();
+
+            if (testDataType == TestDataType)
+            {
+                TheoryTestData.Add(testData);
+            }
+
             throw new ArgumentException(GetArgumentsMismatchMessage(testDataType));
         }
-
-        TheoryTestData.Add(testData);
     }
     #endregion
 

@@ -53,9 +53,9 @@ public sealed class DynamicTestDisplayNameAttribute(string dataSourceMemberName)
     {
         Type? declaringType = testMethod.DeclaringType
             ?? throw new InvalidOperationException(TestMethodHasNoDeclaringTypeMessage);
-        MethodInfo? getDataSourceMethod = FindDataSourceMethod(declaringType)
+        MethodInfo? dataSourceMethod = FindDataSourceMethod(declaringType)
             ?? throw new ArgumentException(GetDataSourceMemberNotFoundMesssage(declaringType));
-        object? data = getDataSourceMethod.Invoke(null, null);
+        object? data = dataSourceMethod.Invoke(null, null);
         var namedDataRowList = GetNamedDataRowList(data, testMethod);
 
         return new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(namedDataRowList);

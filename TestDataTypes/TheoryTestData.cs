@@ -25,12 +25,22 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes;
 
 public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTestDataRow, TestData>, ITheoryTestData
 {
+    internal const string TestMethodNameIsNotNullMessage
+        = "Test method name is not null.";
+
     private string? _testMethodName = null;
 
     public ArgsCode ArgsCode => argsCode.Defined(nameof(argsCode));
 
-    public void SetTestMethodName(string testMethodName)
-    => _testMethodName = testMethodName;
+    public void InitTestMethodName(string testMethodName)
+    {
+        if (_testMethodName is null)
+        {
+            _testMethodName = testMethodName;
+        }
+
+        throw new InvalidOperationException(TestMethodNameIsNotNullMessage);
+    }
 
     protected override TheoryTestDataRow Convert(TestData testData)
     => new(testData, ArgsCode, GetTestDisplayName(_testMethodName, testData));
