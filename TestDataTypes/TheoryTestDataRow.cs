@@ -23,7 +23,7 @@
  */
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes;
 
-public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
+public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, string? TestDisplayName = null)
 : ITheoryTestDataRow, ISetTheoryDataRow<TheoryTestDataRow>
 {
     #region Constants
@@ -36,7 +36,7 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
 
     public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
 
-    public string? TestDisplayName { get; init; } = null;
+    //public string? TestDisplayName { get; init; } = null;
 
     public bool? Explicit { get; init; } = null;
 
@@ -51,8 +51,15 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
     #endregion
 
     #region Methods
+    internal static string? GetTestDisplayName(string? testMethodName, TestData testData)
+    {
+        return testMethodName is not null ?
+            GetDisplayName(testMethodName, testData.TestCase)
+            : null;
+    }
+
     public TheoryTestDataRow SetTestDisplayName(string? testMethodName)
-    => this with { TestDisplayName = GetDisplayName(testMethodName, TestDataToArgs()) };
+    => this with { TestDisplayName = GetTestDisplayName(testMethodName, TestData) };
 
     public TheoryTestDataRow SetExplicit(bool? explicitValue)
     => this with { Explicit = explicitValue };
@@ -78,9 +85,9 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
             return this with { Traits = traits };
         }
 
-        if (Traits!.TryGetValue(traitName, out HashSet<string>? values))
+        if (Traits!.TryGetValue(traitName, out HashSet<string>? traitvalues))
         {
-            _ = values.Add(traitValue);
+            _ = traitvalues.Add(traitValue);
         }
         else
         {
@@ -92,13 +99,14 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
 
     public object?[] GetData() => ArgsCode switch
     {
-        ArgsCode.Instance => TestDataToArgs(),
+        ArgsCode.Instance => [TestData],
         ArgsCode.Properties => string.IsNullOrEmpty(TestData.ExitMode) ?
-            TestDataToArgs()[2..]
-            : TestDataToArgs()[1..],
+            TestDataPropertiesToArgs(2)
+            : TestDataPropertiesToArgs(1),
         _ => throw ArgsCodeProperyValueInvalidOperationException
     };
 
-    private object?[] TestDataToArgs() => TestData.ToArgs(ArgsCode);
+    private object?[] TestDataPropertiesToArgs(int startIndex)
+    => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
     #endregion
 }

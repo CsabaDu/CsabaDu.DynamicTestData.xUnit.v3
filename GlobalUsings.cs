@@ -33,3 +33,4 @@ global using Xunit.Internal;
 global using Xunit.Sdk;
 global using Xunit.v3;
 global using static CsabaDu.DynamicTestData.DynamicDataSources.DynamicDataSource;
+global using static CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes.TheoryTestDataRow;

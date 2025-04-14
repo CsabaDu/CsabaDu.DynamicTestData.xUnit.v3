@@ -23,10 +23,12 @@
  */
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes;
 
-public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTestDataRow, TestData>, ITheoryTestData
+public sealed class TheoryTestData(ArgsCode argsCode, string? testMethodName = null) : TheoryDataBase<TheoryTestDataRow, TestData>, ITheoryTestData
 {
+    private string? _testMethodName = testMethodName;
+
     public ArgsCode ArgsCode => argsCode.Defined(nameof(argsCode));
 
     protected override TheoryTestDataRow Convert(TestData testData)
-    => new(testData, ArgsCode);
+    => new(testData, ArgsCode, GetTestDisplayName(_testMethodName, testData));
 }

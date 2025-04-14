@@ -84,11 +84,7 @@ public sealed class DynamicTestDisplayNameAttribute(string dataSourceMemberName)
         foreach (TheoryTestDataRow? item in dataRowList)
         {
             var testData = item.TestData;
-            string displayName = GetDisplayName(testMethod.Name, testData.TestCase);
-            var namedDataRow = new TheoryTestDataRow(testData, item.ArgsCode)
-            {
-                TestDisplayName = displayName,
-            };
+            var namedDataRow = new TheoryTestDataRow(testData, item.ArgsCode, GetTestDisplayName(testMethod.Name, testData));
 
             namedDataRowList.Add(namedDataRow);
         }
