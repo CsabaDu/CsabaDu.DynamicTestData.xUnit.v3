@@ -26,4 +26,6 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes.Interfaces;
 public interface ITheoryTestData
 {
     ArgsCode ArgsCode { get; }
+
+    void SetTestMethodName(string testMethodName);
 }

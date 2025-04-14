@@ -36,8 +36,6 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, str
 
     public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
 
-    //public string? TestDisplayName { get; init; } = null;
-
     public bool? Explicit { get; init; } = null;
 
     public string? Skip { get; init; } = null;
@@ -45,9 +43,6 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, str
     public int? Timeout { get; init; } = null;
 
     public Dictionary<string, HashSet<string>>? Traits { get; init; } = [];
-
-    private InvalidOperationException ArgsCodeProperyValueInvalidOperationException
-    => new(ArgsCodePropertyHasInvalidValue_ + (int)ArgsCode);
     #endregion
 
     #region Methods
@@ -72,8 +67,8 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, str
 
     public TheoryTestDataRow SetTraits(string traitName, string traitValue)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameof(traitName), traitName);
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameof(traitValue), traitValue);
+        Guard.ArgumentNotNullOrEmpty(nameof(traitName), traitName);
+        Guard.ArgumentNotNullOrEmpty(nameof(traitValue), traitValue);
 
         if (Traits == null)
         {
@@ -103,7 +98,7 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, str
         ArgsCode.Properties => string.IsNullOrEmpty(TestData.ExitMode) ?
             TestDataPropertiesToArgs(2)
             : TestDataPropertiesToArgs(1),
-        _ => throw ArgsCodeProperyValueInvalidOperationException
+        _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValue_ + (int)ArgsCode)
     };
 
     private object?[] TestDataPropertiesToArgs(int startIndex)
