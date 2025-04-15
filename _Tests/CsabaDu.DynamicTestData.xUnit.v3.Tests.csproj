@@ -37,7 +37,7 @@
   <ItemGroup>
     <Folder Include="UnitTests\Attributes\" />
     <Folder Include="UnitTests\DynamicDataSources\" />
-    <Folder Include="UnitTests\TestDataTypes\" />
+    <Folder Include="UnitTests\TheoryTestDataTypes\" />
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,10 @@
  */
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 
-public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, string? TestDisplayName = null)
+public sealed record TheoryTestDataRow(
+    TestData TestData,
+    ArgsCode ArgsCode,
+    string? TestDisplayName = null)
 : ITheoryTestDataRow, ISetTheoryDataRow<TheoryTestDataRow>
 {
     #region Constants
@@ -46,7 +49,7 @@ public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, str
     #endregion
 
     #region Methods
-    internal static string? GetTestDisplayName(string? testMethodName, TestData testData)
+    internal static string? GetTestDisplayName(string? testMethodName, [NotNull] TestData testData)
     {
         return testMethodName is not null ?
             GetDisplayName(testMethodName, testData.TestCase)

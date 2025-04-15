@@ -21,8 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
-
 namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 
 public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDataSource(argsCode)
@@ -241,6 +239,8 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #region AddToTheoryTestData
     private void AddToTheoryTestData(TestData testData)
     {
+        TheoryTestData ??= new(ArgsCode);
+
         if (TheoryTestData.Count == 0)
         {
             TheoryTestData.Add(testData);
