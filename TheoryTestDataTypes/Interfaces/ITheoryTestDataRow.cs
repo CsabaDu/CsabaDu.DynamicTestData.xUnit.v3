@@ -23,9 +23,25 @@
  */
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
+/// <summary>
+/// Represents a row of test data for xUnit.net theory tests with strongly-typed test data.
+/// </summary>
+/// <remarks>
+/// Extends <see cref="ITheoryDataRow"/> to provide access to the <see cref="TestData"/> instance
+/// and specifies how the test data should be converted to arguments via <see cref="ArgsCode"/>.
+/// </remarks>
 public interface ITheoryTestDataRow : ITheoryDataRow
 {
+    /// <summary>
+    /// Gets the test data instance for this test row.
+    /// </summary>
+    /// <value>The <see cref="TestData"/> instance (never null).</value>
     [NotNull]
     TestData TestData { get; }
+
+    /// <summary>
+    /// Gets the code specifying how the test data should be converted to arguments.
+    /// </summary>
+    /// <value>An <see cref="ArgsCode"/> value indicating the argument conversion method.</value>
     ArgsCode ArgsCode { get; }
 }

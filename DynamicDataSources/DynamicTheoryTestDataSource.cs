@@ -23,26 +23,81 @@
  */
 namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 
+/// <summary>
+/// Abstract base class for providing dynamic theory test data sources with type-safe argument handling.
+/// </summary>
+/// <remarks>
+/// <para>
+/// This class serves as a foundation for creating strongly-typed test data sources
+/// that can be used with xUnit theory tests. It maintains type consistency across
+/// all added test data and provides various methods for adding different kinds of
+/// test cases (normal, return value, and exception cases).
+/// </para>
+/// <para>
+/// The class ensures all test data added to a single instance maintains consistent
+/// generic type parameters through runtime checks.
+/// </para>
+/// </remarks>
+/// <param name="argsCode">The strategy for converting test data to method arguments</param>
 public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDataSource(argsCode)
 {
+    /// <summary>
+    /// Error message prefix for argument type mismatch exceptions.
+    /// </summary>
     internal const string ArgumentsAreSuitableForCreating_ = "Arguments are suitable for creating ";
 
     #region Properties
+    /// <summary>
+    /// Gets the underlying theory test data collection.
+    /// </summary>
+    /// <value>
+    /// A <see cref="TheoryTestData"/> instance that contains all added test cases.
+    /// This property is never null.
+    /// </value>
     [NotNull]
     protected TheoryTestData TheoryTestData { get; private set; } = new(argsCode);
 
+    /// <summary>
+    /// Gets the suffix for argument mismatch error messages.
+    /// </summary>
+    /// <value>
+    /// A string describing the type mismatch between added arguments and existing test data.
+    /// </value>
     internal string ArgumentsMismatchMessageEnd => " elements and do not match with the initiated "
-    + TestDataType!.Name + " instance's type parameters.";
+        + TestDataType!.Name + " instance's type parameters.";
 
+    /// <summary>
+    /// Gets the type of the first test data item in the collection.
+    /// </summary>
+    /// <value>
+    /// The <see cref="Type"/> of the first test data item, or null if the collection is empty.
+    /// </value>
     private Type? TestDataType => TheoryTestData.FirstOrDefault()?.TestData.GetType();
     #endregion
 
     #region Methods
     #region ResetTheoryTestData
+    /// <summary>
+    /// Resets the underlying theory test data collection to a new empty instance.
+    /// </summary>
+    /// <remarks>
+    /// This clears all previously added test cases while maintaining the original <see cref="ArgsCode"/>.
+    /// </remarks>
     public void ResetTheoryTestData() => TheoryTestData = new(ArgsCode);
     #endregion
 
     #region AddOptionalToTheoryTestData
+    /// <summary>
+    /// Adds optional test data to the collection with a specific argument conversion strategy.
+    /// </summary>
+    /// <param name="addTestDataToTheoryTestData">Action that adds the test data</param>
+    /// <param name="argsCode">The argument conversion strategy to use</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="addTestDataToTheoryTestData"/> is null
+    /// </exception>
+    /// <remarks>
+    /// This method allows temporarily changing the <see cref="ArgsCode"/> for a specific set of test data.
+    /// </remarks>
     public void AddOptionalToTheoryTestData(Action addTestDataToTheoryTestData, ArgsCode argsCode)
     {
         ArgumentNullException.ThrowIfNull(addTestDataToTheoryTestData, nameof(addTestDataToTheoryTestData));
@@ -51,12 +106,28 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #endregion
 
     #region AddTestDataToTheoryTestData
+    /// <summary>
+    /// Adds a test case with one argument to the theory test data.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first argument</typeparam>
+    /// <param name="definition">Description of the test case</param>
+    /// <param name="expected">Expected result or outcome description</param>
+    /// <param name="arg1">First argument value</param>
     public void AddTestDataToTheoryTestData<T1>(string definition, string expected, T1? arg1)
     {
         var testData = new TestData<T1>(definition, expected, arg1);
         AddToTheoryTestData(testData);
     }
 
+    /// <summary>
+    /// Adds a test case with two arguments to the theory test data.
+    /// </summary>
+    /// <typeparam name="T1">The type of the first argument</typeparam>
+    /// <typeparam name="T2">The type of the second argument</typeparam>
+    /// <param name="definition">Description of the test case</param>
+    /// <param name="expected">Expected result or outcome description</param>
+    /// <param name="arg1">First argument value</param>
+    /// <param name="arg2">Second argument value</param>
     public void AddTestDataToTheoryTestData<T1, T2>(string definition, string expected, T1? arg1, T2? arg2)
     {
         var testData = new TestData<T1, T2>(definition, expected, arg1, arg2);
@@ -107,6 +178,14 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #endregion
 
     #region AddTestDataReturnsToTheoryTestData
+    /// <summary>
+    /// Adds a test case with one argument that returns a value type.
+    /// </summary>
+    /// <typeparam name="TStruct">The return value type (must be a value type)</typeparam>
+    /// <typeparam name="T1">The type of the first argument</typeparam>
+    /// <param name="definition">Description of the test case</param>
+    /// <param name="expected">Expected return value</param>
+    /// <param name="arg1">First argument value</param>
     public void AddTestDataReturnsToTheoryTestData<TStruct, T1>(string definition, TStruct expected, T1? arg1)
     where TStruct : struct
     {
@@ -114,6 +193,16 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
         AddToTheoryTestData(testData);
     }
 
+    /// <summary>
+    /// Adds a test case with two arguments that returns a value type.
+    /// </summary>
+    /// <typeparam name="TStruct">The return value type (must be a value type)</typeparam>
+    /// <typeparam name="T1">The type of the first argument</typeparam>
+    /// <typeparam name="T2">The type of the second argument</typeparam>
+    /// <param name="definition">Description of the test case</param>
+    /// <param name="expected">Expected return value</param>
+    /// <param name="arg1">First argument value</param>
+    /// <param name="arg2">Second argument value</param>
     public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2>(string definition, TStruct expected, T1? arg1, T2? arg2)
     where TStruct : struct
     {
@@ -172,6 +261,14 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #endregion
 
     #region AddTestDataThrowsToTheoryTestData
+    /// <summary>
+    /// Adds a test case with one argument that throws an exception.
+    /// </summary>
+    /// <typeparam name="TException">The expected exception type</typeparam>
+    /// <typeparam name="T1">The type of the first argument</typeparam>
+    /// <param name="definition">Description of the test case</param>
+    /// <param name="expected">Expected exception instance</param>
+    /// <param name="arg1">First argument value</param>
     public void AddTestDataThrowsToTheoryTestData<TException, T1>(string definition, TException expected, T1? arg1)
     where TException : Exception
     {
@@ -179,6 +276,16 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
         AddToTheoryTestData(testData);
     }
 
+    /// <summary>
+    /// Adds a test case with two arguments that throws an exception.
+    /// </summary>
+    /// <typeparam name="TException">The expected exception type</typeparam>
+    /// <typeparam name="T1">The type of the first argument</typeparam>
+    /// <typeparam name="T2">The type of the second argument</typeparam>
+    /// <param name="definition">Description of the test case</param>
+    /// <param name="expected">Expected exception instance</param>
+    /// <param name="arg1">First argument value</param>
+    /// <param name="arg2">Second argument value</param>
     public void AddTestDataThrowsToTheoryTestData<TException, T1, T2>(string definition, TException expected, T1? arg1, T2? arg2)
     where TException : Exception
     {
@@ -237,6 +344,16 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #endregion
 
     #region AddToTheoryTestData
+    /// <summary>
+    /// Adds test data to the collection, ensuring type consistency.
+    /// </summary>
+    /// <param name="testData">The test data to add</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the test data type doesn't match previously added items
+    /// </exception>
+    /// <remarks>
+    /// All test data added to a single instance must have the same generic type parameters.
+    /// </remarks>
     private void AddToTheoryTestData(TestData testData)
     {
         TheoryTestData ??= new(ArgsCode);
@@ -260,7 +377,12 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #endregion
 
     #region GetArgumentsMismatchMessage
-    internal string GetArgumentsMismatchMessage(Type  testDataType)
+    /// <summary>
+    /// Generates an error message for argument type mismatches.
+    /// </summary>
+    /// <param name="testDataType">The type of the test data being added</param>
+    /// <returns>A formatted error message describing the type mismatch</returns>
+    internal string GetArgumentsMismatchMessage(Type testDataType)
     => ArgumentsAreSuitableForCreating_ + testDataType.Name
         + ArgumentsMismatchMessageEnd;
     #endregion

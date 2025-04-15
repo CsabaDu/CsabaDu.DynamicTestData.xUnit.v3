@@ -23,9 +23,31 @@
  */
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
+/// <summary>
+/// Represents a container for theory test data with initialization capabilities.
+/// </summary>
+/// <remarks>
+/// This interface provides access to the argument conversion strategy (<see cref="ArgsCode"/>)
+/// and allows initialization with a test method name.
+/// </remarks>
 public interface ITheoryTestData
 {
+    /// <summary>
+    /// Gets the strategy for converting test data to method arguments.
+    /// </summary>
+    /// <value>
+    /// An <see cref="ArgsCode"/> enum value that determines how test data should be
+    /// converted to test method arguments.
+    /// </value>
     ArgsCode ArgsCode { get; }
 
+    /// <summary>
+    /// Initializes the test data with the specified test method name.
+    /// </summary>
+    /// <param name="testMethodName">The name of the test method to associate with this test data.</param>
+    /// <remarks>
+    /// This method should typically be called once before the test data is used,
+    /// to properly set up test-specific information.
+    /// </remarks>
     void InitTestMethodName(string testMethodName);
 }
