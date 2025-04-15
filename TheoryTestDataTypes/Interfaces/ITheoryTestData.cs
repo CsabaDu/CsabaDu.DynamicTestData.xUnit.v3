@@ -27,7 +27,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// Represents a container for theory test data with initialization capabilities.
 /// </summary>
 /// <remarks>
-/// This interface provides access to the argument conversion strategy (<see cref="ArgsCode"/>)
+/// This interface provides access to the argument conversion strategy (<see cref="DynamicTestData.DynamicDataSources.ArgsCode"/>)
 /// and allows initialization with a test method name.
 /// </remarks>
 public interface ITheoryTestData
