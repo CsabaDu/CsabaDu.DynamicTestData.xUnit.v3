@@ -38,8 +38,10 @@ public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTes
         {
             _testMethodName = testMethodName;
         }
-
-        throw new InvalidOperationException(TestMethodNameIsNotNullMessage);
+        else
+        {
+            throw new InvalidOperationException(TestMethodNameIsNotNullMessage);
+        }
     }
 
     protected override TheoryTestDataRow Convert(TestData testData)

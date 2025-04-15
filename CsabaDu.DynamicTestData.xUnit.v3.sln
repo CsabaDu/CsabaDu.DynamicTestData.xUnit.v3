@@ -5,6 +5,10 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsabaDu.DynamicTestData.xUnit.v3", "CsabaDu.DynamicTestData.xUnit.v3.csproj", "{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsabaDu.DynamicTestData.xUnit.v3.Tests", "_Tests\CsabaDu.DynamicTestData.xUnit.v3.Tests\CsabaDu.DynamicTestData.xUnit.v3.Tests.csproj", "{F31C8ECD-C592-4AA8-8325-F019B785B2C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Tests", "_Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31C8ECD-C592-4AA8-8325-F019B785B2C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31C8ECD-C592-4AA8-8325-F019B785B2C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31C8ECD-C592-4AA8-8325-F019B785B2C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31C8ECD-C592-4AA8-8325-F019B785B2C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F31C8ECD-C592-4AA8-8325-F019B785B2C1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E038A92-BD1F-4518-ACF4-18D12D76F7DC}

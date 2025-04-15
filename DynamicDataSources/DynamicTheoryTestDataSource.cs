@@ -29,7 +29,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
 
     #region Properties
     [NotNull]
-    protected TheoryTestData TheoryTestData { get; init; } = new(argsCode);
+    protected TheoryTestData TheoryTestData { get; private set; } = new(argsCode);
 
     internal string ArgumentsMismatchMessageEnd => " elements and do not match with the initiated "
     + TestDataType!.Name + " instance's type parameters.";
