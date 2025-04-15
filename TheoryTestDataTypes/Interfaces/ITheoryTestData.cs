@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes.Interfaces;
+namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
-public interface ISetTheoryDataRow<TTheoryDataRow> where TTheoryDataRow : ITheoryDataRow
+public interface ITheoryTestData
 {
-    TTheoryDataRow SetTestDisplayName(string? testMethodName);
-    TTheoryDataRow SetExplicit(bool? explicitValue);
-    TTheoryDataRow SetSkip(string? skipValue);
-    TTheoryDataRow SetTimeout(int? timeOutValue);
-    TTheoryDataRow SetTraits(string traitName, string traitValue);
+    ArgsCode ArgsCode { get; }
+
+    void InitTestMethodName(string testMethodName);
 }

@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes.Interfaces;
+namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
-public interface ITheoryTestData
+public interface ITheoryTestDataRow : ITheoryDataRow
 {
+    [NotNull]
+    TestData TestData { get; }
     ArgsCode ArgsCode { get; }
-
-    void InitTestMethodName(string testMethodName);
 }

@@ -21,6 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 
 public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDataSource(argsCode)

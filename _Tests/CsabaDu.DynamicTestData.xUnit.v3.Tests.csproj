@@ -1,4 +1,4 @@
-<Project Sdk="MSTest.Sdk/3.6.4">
+﻿<Project Sdk="MSTest.Sdk/3.6.4">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -32,6 +32,12 @@
 
   <ItemGroup>
     <PackageReference Update="MSTest.TestFramework" Version="3.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UnitTests\Attributes\" />
+    <Folder Include="UnitTests\DynamicDataSources\" />
+    <Folder Include="UnitTests\TestDataTypes\" />
   </ItemGroup>
 
 </Project>

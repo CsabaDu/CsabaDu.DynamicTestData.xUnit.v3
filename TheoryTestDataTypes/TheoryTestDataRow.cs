@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataTypes;
+namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 
 public sealed record TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode, string? TestDisplayName = null)
 : ITheoryTestDataRow, ISetTheoryDataRow<TheoryTestDataRow>
