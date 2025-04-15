@@ -53,7 +53,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// Gets the underlying theory test data collection.
     /// </summary>
     /// <value>
-    /// A <see cref="TheoryTestData"/> instance that contains all added test cases.
+    /// A <see cref="TheoryTestDataTypes.TheoryTestData"/> instance that contains all added test cases.
     /// This property is never null.
     /// </value>
     [NotNull]

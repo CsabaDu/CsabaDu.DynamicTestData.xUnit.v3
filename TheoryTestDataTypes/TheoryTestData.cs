@@ -51,7 +51,7 @@ public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTes
     /// Gets the strategy for converting test data to method arguments.
     /// </summary>
     /// <value>
-    /// An <see cref="ArgsCode"/> value that determines how test data should be
+    /// An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> value that determines how test data should be
     /// converted to test method arguments. The value is validated to be a defined enum value.
     /// </value>
     public ArgsCode ArgsCode => argsCode.Defined(nameof(argsCode));

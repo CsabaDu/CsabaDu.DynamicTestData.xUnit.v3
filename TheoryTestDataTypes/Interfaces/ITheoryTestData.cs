@@ -36,7 +36,7 @@ public interface ITheoryTestData
     /// Gets the strategy for converting test data to method arguments.
     /// </summary>
     /// <value>
-    /// An <see cref="ArgsCode"/> enum value that determines how test data should be
+    /// An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> enum value that determines how test data should be
     /// converted to test method arguments.
     /// </value>
     ArgsCode ArgsCode { get; }
