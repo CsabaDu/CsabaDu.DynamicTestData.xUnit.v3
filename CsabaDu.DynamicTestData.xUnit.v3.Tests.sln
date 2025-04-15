@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsabaDu.DynamicTestData.xUn
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Tests", "_Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsabaDu.DynamicTestData.TestHelpers", "..\CsabaDu.DynamicTestData.TestHelpers\CsabaDu.DynamicTestData.TestHelpers.csproj", "{8AC0C450-8BE6-7729-1004-2708ABDCC851}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_TestHelpers", "_TestHelpers", "{2242C44C-E1D4-4E2B-AEF4-B2A606BD6DD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +27,17 @@ Global
 		{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFC7A404-D4FE-ED30-1B1B-8D65A4603E1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AC0C450-8BE6-7729-1004-2708ABDCC851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC0C450-8BE6-7729-1004-2708ABDCC851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC0C450-8BE6-7729-1004-2708ABDCC851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC0C450-8BE6-7729-1004-2708ABDCC851}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5C893636-BA5C-407A-B800-06B29EAA624B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{8AC0C450-8BE6-7729-1004-2708ABDCC851} = {2242C44C-E1D4-4E2B-AEF4-B2A606BD6DD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B369C13A-7B8F-4737-82CD-AD4134BC6D1D}
