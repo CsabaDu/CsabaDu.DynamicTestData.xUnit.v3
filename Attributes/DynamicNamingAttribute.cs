@@ -38,7 +38,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 /// </remarks>
 /// <param name="dataSourceMemberName">The name of the static method or property that provides the test data</param>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-public sealed class DynamicTestDisplayNameAttribute(string dataSourceMemberName) : DataAttribute
+public sealed class DynamicNamingAttribute(string dataSourceMemberName) : DataAttribute
 {
     #region Fields
     private readonly string _dataSourceMemberName = dataSourceMemberName;
