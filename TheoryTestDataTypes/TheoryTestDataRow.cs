@@ -35,8 +35,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <param name="TestDisplayName">Optional display name for the test</param>
 public sealed record TheoryTestDataRow(
     TestData TestData,
-    ArgsCode ArgsCode,
-    string? TestDisplayName = null)
+    ArgsCode ArgsCode)
 : ITheoryTestDataRow, ISetTheoryDataRow<TheoryTestDataRow>
 {
     #region Constants
@@ -57,6 +56,11 @@ public sealed record TheoryTestDataRow(
     /// Gets the code specifying how the test data should be converted to arguments.
     /// </summary>
     public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
+
+    /// <summary>
+    /// Gets or sets the display name for the test.
+    /// </summary>
+    public string? TestDisplayName { get; init; } = null;
 
     /// <summary>
     /// Gets or sets whether the test should be marked as explicit.

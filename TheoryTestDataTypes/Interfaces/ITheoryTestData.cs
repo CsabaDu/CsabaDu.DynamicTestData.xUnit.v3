@@ -49,5 +49,5 @@ public interface ITheoryTestData
     /// This method should typically be called once before the test data is used,
     /// to properly set up test-specific information.
     /// </remarks>
-    void InitTestMethodName(string testMethodName);
+    void InitTestMethodName(string? testMethodName);
 }

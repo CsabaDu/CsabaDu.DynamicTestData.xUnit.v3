@@ -100,7 +100,7 @@ public sealed class DynamicTestDisplayNameAttribute(string dataSourceMemberName)
         MethodInfo? dataSourceMethod = FindDataSourceMethod(declaringType)
             ?? throw new ArgumentException(GetDataSourceMemberNotFoundMesssage(declaringType));
         object? data = dataSourceMethod.Invoke(null, null);
-        var namedDataRowList = GetNamedDataRowList(data, testMethod);
+        var namedDataRowList = GetNamedDataRowList(testMethod, data);
 
         return new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(namedDataRowList);
     }
@@ -132,7 +132,7 @@ public sealed class DynamicTestDisplayNameAttribute(string dataSourceMemberName)
     /// <exception cref="ArgumentException">
     /// Thrown when the data is not of type <see cref="IEnumerable{T}"/> of <see cref="TheoryTestDataRow"/>
     /// </exception>
-    private static List<TheoryTestDataRow> GetNamedDataRowList(object? data, MethodInfo testMethod)
+    private static List<TheoryTestDataRow> GetNamedDataRowList(MethodInfo testMethod, object? data)
     {
         if (data is not IEnumerable<TheoryTestDataRow> dataRowList)
         {
@@ -144,7 +144,10 @@ public sealed class DynamicTestDisplayNameAttribute(string dataSourceMemberName)
         foreach (TheoryTestDataRow? item in dataRowList)
         {
             var testData = item.TestData;
-            var namedDataRow = new TheoryTestDataRow(testData, item.ArgsCode, GetTestDisplayName(testMethod.Name, testData));
+            var namedDataRow = new TheoryTestDataRow(testData, item.ArgsCode)
+            {
+                TestDisplayName = GetTestDisplayName(testMethod.Name, testData)
+            };
 
             namedDataRowList.Add(namedDataRow);
         }

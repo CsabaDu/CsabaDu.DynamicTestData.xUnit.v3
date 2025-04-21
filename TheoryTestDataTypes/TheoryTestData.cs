@@ -72,8 +72,10 @@ public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTes
     /// Subsequent calls will throw an <see cref="InvalidOperationException"/>.
     /// </para>
     /// </remarks>
-    public void InitTestMethodName(string testMethodName)
+    public void InitTestMethodName(string? testMethodName)
     {
+        if (testMethodName is null) return;
+
         if (_testMethodName is null)
         {
             _testMethodName = testMethodName;
@@ -96,5 +98,8 @@ public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTes
     /// The display name is generated using the initialized test method name and test case information.
     /// </remarks>
     protected override TheoryTestDataRow Convert(TestData testData)
-    => new(testData, ArgsCode, GetTestDisplayName(_testMethodName, testData));
+    => new(testData, ArgsCode)
+    {
+        TestDisplayName = GetTestDisplayName(_testMethodName, testData)
+    };
 }

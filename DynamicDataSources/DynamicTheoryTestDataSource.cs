@@ -100,9 +100,9 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <remarks>
     /// This method allows temporarily changing the <see cref="ArgsCode"/> for a specific set of test data.
     /// </remarks>
-    public void AddOptionalToTheoryTestData(Action addTestDataToTheoryTestData, ArgsCode argsCode)
+    public void AddOptionalToTheoryTestData(Action addTestDataToTheoryTestData, ArgsCode? argsCode)
     {
-        ArgumentNullException.ThrowIfNull(addTestDataToTheoryTestData, nameof(addTestDataToTheoryTestData));
+        Guard.ArgumentNotNull(addTestDataToTheoryTestData, nameof(addTestDataToTheoryTestData));
         WithOptionalArgsCode(this, addTestDataToTheoryTestData, argsCode);
     }
     #endregion
@@ -415,8 +415,10 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             {
                 TheoryTestData.Add(testData);
             }
-
-            throw new ArgumentException(GetArgumentsMismatchMessage(testDataType));
+            else
+            {
+                throw new ArgumentException(GetArgumentsMismatchMessage(testDataType));
+            }
         }
     }
     #endregion
