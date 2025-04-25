@@ -58,11 +58,6 @@ public sealed record TheoryTestDataRow(
     public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
 
     /// <summary>
-    /// Gets or sets the display name for the test.
-    /// </summary>
-    public string? TestDisplayName { get; init; } = null;
-
-    /// <summary>
     /// Gets or sets whether the test should be marked as explicit.
     /// </summary>
     public bool? Explicit { get; init; } = null;
@@ -71,6 +66,11 @@ public sealed record TheoryTestDataRow(
     /// Gets or sets the skip reason for the test (null means the test won't be skipped).
     /// </summary>
     public string? Skip { get; init; } = null;
+
+    /// <summary>
+    /// Gets or sets the display name for the test.
+    /// </summary>
+    public string? TestDisplayName { get; init; } = null;
 
     /// <summary>
     /// Gets or sets the timeout in milliseconds for the test.

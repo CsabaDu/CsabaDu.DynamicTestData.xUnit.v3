@@ -17,9 +17,4 @@
     <PackageReference Include="xunit.v3.extensibility.core" Version="2.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CsabaDu.DynamicTestData.TestHelpers\CsabaDu.DynamicTestData.TestHelpers.csproj" />
-    <ProjectReference Include="_Tests\CsabaDu.DynamicTestData.xUnit.v3.Tests.csproj" />
-  </ItemGroup>
-
 </Project>

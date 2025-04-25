@@ -57,7 +57,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// This property is never null.
     /// </value>
     [NotNull]
-    protected TheoryTestData TheoryTestData { get; private set; } = new(argsCode);
+    protected TheoryTestData? TheoryTestData { get; private set; } = null;
 
     /// <summary>
     /// Gets the suffix for argument mismatch error messages.
@@ -85,7 +85,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <remarks>
     /// This clears all previously added test cases while maintaining the original <see cref="ArgsCode"/>.
     /// </remarks>
-    public void ResetTheoryTestData() => TheoryTestData = new(ArgsCode);
+    public void ResetTheoryTestData() => TheoryTestData = null;
     #endregion
 
     #region AddOptionalToTheoryTestData
@@ -403,23 +403,24 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     {
         TheoryTestData ??= new(ArgsCode);
 
-        if (TheoryTestData.Count == 0)
+        if (TheoryTestData.Count == 0
+            || testData.GetType() == TestDataType)
         {
             TheoryTestData.Add(testData);
         }
-        else
-        {
-            Type testDataType = testData.GetType();
+        //else
+        //{
+        //    Type testDataType = testData.GetType();
 
-            if (testDataType == TestDataType)
-            {
-                TheoryTestData.Add(testData);
-            }
-            else
-            {
-                throw new ArgumentException(GetArgumentsMismatchMessage(testDataType));
-            }
-        }
+        //    if (testDataType == TestDataType)
+        //    {
+        //        TheoryTestData.Add(testData);
+        //    }
+            //else
+            //{
+            //    throw new ArgumentException(GetArgumentsMismatchMessage(testDataType));
+            //}
+        //}
     }
     #endregion
 

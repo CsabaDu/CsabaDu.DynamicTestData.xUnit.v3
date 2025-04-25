@@ -21,6 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+using System.Collections.Immutable;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
 /// <summary>
@@ -41,13 +43,13 @@ public interface ITheoryTestData
     /// </value>
     ArgsCode ArgsCode { get; }
 
-    /// <summary>
-    /// Initializes the test data with the specified test method name.
-    /// </summary>
-    /// <param name="testMethodName">The name of the test method to associate with this test data.</param>
-    /// <remarks>
-    /// This method should typically be called once before the test data is used,
-    /// to properly set up test-specific information.
-    /// </remarks>
-    void InitTestMethodName(string? testMethodName);
+    ///// <summary>
+    ///// Initializes the test data with the specified test method name.
+    ///// </summary>
+    ///// <param name="testMethodName">The name of the test method to associate with this test data.</param>
+    ///// <remarks>
+    ///// This method should typically be called once before the test data is used,
+    ///// to properly set up test-specific information.
+    ///// </remarks>
+    //void InitTestMethodName(string? testMethodName);
 }

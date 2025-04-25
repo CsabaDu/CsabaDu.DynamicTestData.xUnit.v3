@@ -39,4 +39,9 @@
     <Folder Include="UnitTests\DynamicDataSources\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\CsabaDu.DynamicTestData.TestHelpers\CsabaDu.DynamicTestData.TestHelpers.csproj" />
+    <ProjectReference Include="..\CsabaDu.DynamicTestData.xUnit.v3.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -56,35 +56,35 @@ public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTes
     /// </value>
     public ArgsCode ArgsCode => argsCode.Defined(nameof(argsCode));
 
-    /// <summary>
-    /// Initializes the test method name for display purposes.
-    /// </summary>
-    /// <param name="testMethodName">The name of the test method.</param>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when attempting to initialize the test method name more than once.
-    /// </exception>
-    /// <remarks>
-    /// <para>
-    /// This method must be called exactly once before adding test data rows.
-    /// The test method name is used to generate display names for test cases.
-    /// </para>
-    /// <para>
-    /// Subsequent calls will throw an <see cref="InvalidOperationException"/>.
-    /// </para>
-    /// </remarks>
-    public void InitTestMethodName(string? testMethodName)
-    {
-        if (testMethodName is null) return;
+    ///// <summary>
+    ///// Initializes the test method name for display purposes.
+    ///// </summary>
+    ///// <param name="testMethodName">The name of the test method.</param>
+    ///// <exception cref="InvalidOperationException">
+    ///// Thrown when attempting to initialize the test method name more than once.
+    ///// </exception>
+    ///// <remarks>
+    ///// <para>
+    ///// This method must be called exactly once before adding test data rows.
+    ///// The test method name is used to generate display names for test cases.
+    ///// </para>
+    ///// <para>
+    ///// Subsequent calls will throw an <see cref="InvalidOperationException"/>.
+    ///// </para>
+    ///// </remarks>
+    //public void InitTestMethodName(string? testMethodName)
+    //{
+    //    if (testMethodName is null) return;
 
-        if (_testMethodName is null)
-        {
-            _testMethodName = testMethodName;
-        }
-        else
-        {
-            throw new InvalidOperationException(TestMethodNameIsNotNullMessage);
-        }
-    }
+    //    if (_testMethodName is null)
+    //    {
+    //        _testMethodName = testMethodName;
+    //    }
+    //    else
+    //    {
+    //        throw new InvalidOperationException(TestMethodNameIsNotNullMessage);
+    //    }
+    //}
 
     /// <summary>
     /// Converts test data into a theory test data row.
