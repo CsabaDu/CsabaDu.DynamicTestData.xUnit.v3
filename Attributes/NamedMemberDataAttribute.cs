@@ -21,23 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
+namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 
-/// <summary>
-/// Represents a container for theory test data with initialization capabilities.
-/// </summary>
-/// <remarks>
-/// This interface provides access to the argument conversion strategy (<see cref="DynamicTestData.DynamicDataSources.ArgsCode"/>)
-/// and allows initialization with a test method name.
-/// </remarks>
-public interface ITheoryTestData
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+public sealed class NamedMemberDataAttribute(string memberName, params object[] arguments)
+: MemberDataAttributeBase(memberName, arguments)
 {
-    /// <summary>
-    /// Gets the strategy for converting test data to method arguments.
-    /// </summary>
-    /// <value>
-    /// An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> enum value that determines how test data should be
-    /// converted to test method arguments.
-    /// </value>
-    ArgsCode ArgsCode { get; }
+    public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
+            MethodInfo testMethod,
+            DisposalTracker disposalTracker)
+    {
+        var data = base.GetData(testMethod, disposalTracker).AsTask().Result;
+
+        if (data is not IReadOnlyCollection<TheoryTestDataRow> dataRows)
+        {
+            return new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(data);
+        }
+
+        var namedDataRows = new List<ITheoryDataRow>(dataRows.Count);
+
+        foreach (TheoryTestDataRow item in dataRows)
+        {
+            namedDataRows.Add(new TheoryTestDataRow(item.TestData, item.ArgsCode)
+            {
+                TestDisplayName = GetTestDisplayName(testMethod.Name, item.TestData)
+            });
+        }
+
+        return new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(namedDataRows);
+    }
 }

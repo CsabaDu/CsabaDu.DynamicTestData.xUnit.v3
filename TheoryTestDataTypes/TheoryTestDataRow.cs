@@ -33,7 +33,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
 /// <param name="TestDisplayName">Optional display name for the test</param>
-public sealed record TheoryTestDataRow(
+public sealed record class TheoryTestDataRow(
     TestData TestData,
     ArgsCode ArgsCode)
 : ITheoryTestDataRow, ISetTheoryDataRow<TheoryTestDataRow>
@@ -94,7 +94,7 @@ public sealed record TheoryTestDataRow(
     internal static string? GetTestDisplayName(string? testMethodName, [NotNull] TestData testData)
     {
         return testMethodName is not null ?
-            GetDisplayName(testMethodName, testData.TestCase)
+            GetDisplayName(testMethodName, testData)
             : null;
     }
 

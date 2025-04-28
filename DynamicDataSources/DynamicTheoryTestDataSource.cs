@@ -41,51 +41,25 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 /// <param name="argsCode">The strategy for converting test data to method arguments</param>
 public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDataSource(argsCode)
 {
-    #region Constants
-    /// <summary>
-    /// Error message prefix for argument type mismatch exceptions.
-    /// </summary>
-    internal const string ArgumentsAreSuitableForCreating_ = "Arguments are suitable for creating ";
-    #endregion
-
     #region Properties
     /// <summary>
     /// Gets the underlying theory test data collection.
     /// </summary>
     /// <value>
     /// A <see cref="TheoryTestDataTypes.TheoryTestData"/> instance that contains all added test cases.
-    /// This property is never null.
     /// </value>
-    [NotNull]
     protected TheoryTestData? TheoryTestData { get; private set; } = null;
-
-    /// <summary>
-    /// Gets the suffix for argument mismatch error messages.
-    /// </summary>
-    /// <value>
-    /// A string describing the type mismatch between added arguments and existing test data.
-    /// </value>
-    internal string ArgumentsMismatchMessageEnd => " elements and do not match with the initiated "
-        + TestDataType!.Name + " instance's type parameters.";
-
-    /// <summary>
-    /// Gets the type of the first test data item in the collection.
-    /// </summary>
-    /// <value>
-    /// The <see cref="Type"/> of the first test data item, or null if the collection is empty.
-    /// </value>
-    private Type? TestDataType => TheoryTestData.FirstOrDefault()?.TestData.GetType();
     #endregion
 
     #region Methods
     #region ResetTheoryTestData
     /// <summary>
-    /// Resets the underlying theory test data collection to a new empty instance.
+    /// Resets the underlying theory test data collection to an empty 'TheoryTestData' instance.
     /// </summary>
-    /// <remarks>
-    /// This clears all previously added test cases while maintaining the original <see cref="ArgsCode"/>.
-    /// </remarks>
-    public void ResetTheoryTestData() => TheoryTestData = null;
+    public void ResetTheoryTestData()
+    {
+        TheoryTestData = new(ArgsCode);
+    }
     #endregion
 
     #region AddOptionalToTheoryTestData
@@ -393,46 +367,20 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// Adds test data to the collection, ensuring type consistency.
     /// </summary>
     /// <param name="testData">The test data to add</param>
-    /// <exception cref="ArgumentException">
-    /// Thrown when the test data type doesn't match previously added items
-    /// </exception>
     /// <remarks>
     /// All test data added to a single instance must have the same generic type parameters.
     /// </remarks>
     private void AddToTheoryTestData(TestData testData)
     {
-        TheoryTestData ??= new(ArgsCode);
+        TheoryTestDataRow? firstRow = TheoryTestData?.FirstOrDefault();
 
-        if (TheoryTestData.Count == 0
-            || testData.GetType() == TestDataType)
+        if (TheoryTestData is null || testData.GetType() != firstRow?.TestData.GetType())
         {
-            TheoryTestData.Add(testData);
+            ResetTheoryTestData();
         }
-        //else
-        //{
-        //    Type testDataType = testData.GetType();
 
-        //    if (testDataType == TestDataType)
-        //    {
-        //        TheoryTestData.Add(testData);
-        //    }
-            //else
-            //{
-            //    throw new ArgumentException(GetArgumentsMismatchMessage(testDataType));
-            //}
-        //}
+        TheoryTestData!.Add(testData);
     }
-    #endregion
-
-    #region GetArgumentsMismatchMessage
-    /// <summary>
-    /// Generates an error message for argument type mismatches.
-    /// </summary>
-    /// <param name="testDataType">The type of the test data being added</param>
-    /// <returns>A formatted error message describing the type mismatch</returns>
-    internal string GetArgumentsMismatchMessage(Type testDataType)
-    => ArgumentsAreSuitableForCreating_ + testDataType.Name
-        + ArgumentsMismatchMessageEnd;
     #endregion
     #endregion
 }
