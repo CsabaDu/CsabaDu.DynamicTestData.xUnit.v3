@@ -368,7 +368,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </summary>
     /// <param name="testData">The test data to add</param>
     /// <remarks>
-    /// All test data added to a single instance must have the same generic type parameters.
+    /// All test data added to a single instance must have different <see cref="TestData.TestCase"/> property.
     /// </remarks>
     private void AddToTheoryTestData(TestData testData)
     {
