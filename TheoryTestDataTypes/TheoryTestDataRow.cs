@@ -26,17 +26,15 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
 /// </summary>
-/// <remarks>
-/// This record implements both <see cref="ITheoryTestDataRow"/> and <see cref="ISetTheoryDataRow{T}"/> interfaces,
-/// providing a fluent API for configuring test data rows.
-/// </remarks>
+///// <remarks>
+///// This record implements both <see cref="ITheoryTestDataRow"/> and <see cref="ISetTheoryDataRow{T}"/> interfaces,
+///// providing a fluent API for configuring test data rows.
+///// </remarks>
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-/// <param name="TestDisplayName">Optional display name for the test</param>
-public sealed record class TheoryTestDataRow(
-    TestData TestData,
-    ArgsCode ArgsCode)
-: ITheoryTestDataRow, ISetTheoryDataRow<TheoryTestDataRow>
+///// <param name="TestDisplayName">Optional display name for the test</param>
+public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
+: ITheoryTestDataRow
 {
     #region Constants
     /// <summary>
@@ -103,66 +101,8 @@ public sealed record class TheoryTestDataRow(
     /// </summary>
     /// <param name="testMethodName">The name of the test method</param>
     /// <returns>A new instance with the updated display name</returns>
-    public TheoryTestDataRow SetTestDisplayName(string? testMethodName)
+    public ITheoryTestDataRow SetTestDisplayName(string? testMethodName)
     => this with { TestDisplayName = GetTestDisplayName(testMethodName, TestData) };
-
-    /// <summary>
-    /// Sets whether the test should be marked as explicit.
-    /// </summary>
-    /// <param name="explicitValue">The explicit flag value</param>
-    /// <returns>A new instance with the updated explicit value</returns>
-    public TheoryTestDataRow SetExplicit(bool? explicitValue)
-    => this with { Explicit = explicitValue };
-
-    /// <summary>
-    /// Sets the skip reason for the test.
-    /// </summary>
-    /// <param name="skipValue">The skip reason (null means the test won't be skipped)</param>
-    /// <returns>A new instance with the updated skip reason</returns>
-    public TheoryTestDataRow SetSkip(string? skipValue)
-    => this with { Skip = skipValue };
-
-    /// <summary>
-    /// Sets the timeout for the test in milliseconds.
-    /// </summary>
-    /// <param name="timeoutValue">The timeout value in milliseconds</param>
-    /// <returns>A new instance with the updated timeout</returns>
-    public TheoryTestDataRow SetTimeout(int? timeoutValue)
-    => this with { Timeout = timeoutValue };
-
-    /// <summary>
-    /// Adds or updates a trait for the test.
-    /// </summary>
-    /// <param name="traitName">The name of the trait (cannot be null or empty)</param>
-    /// <param name="traitValue">The value of the trait (cannot be null or empty)</param>
-    /// <returns>A new instance with the updated traits</returns>
-    /// <exception cref="ArgumentException">Thrown when traitName or traitValue is null or empty</exception>
-    public TheoryTestDataRow SetTraits(string traitName, string traitValue)
-    {
-        Guard.ArgumentNotNullOrEmpty(nameof(traitName), traitName);
-        Guard.ArgumentNotNullOrEmpty(nameof(traitValue), traitValue);
-
-        if (Traits == null)
-        {
-            var traits = new Dictionary<string, HashSet<string>>()
-            {
-                { traitName, [traitValue] }
-            };
-
-            return this with { Traits = traits };
-        }
-
-        if (Traits!.TryGetValue(traitName, out HashSet<string>? traitvalues))
-        {
-            _ = traitvalues.Add(traitValue);
-        }
-        else
-        {
-            Traits.Add(traitName, [traitValue]);
-        }
-
-        return this;
-    }
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the ArgsCode.
@@ -174,9 +114,9 @@ public sealed record class TheoryTestDataRow(
     public object?[] GetData() => ArgsCode switch
     {
         ArgsCode.Instance => [TestData],
-        ArgsCode.Properties => string.IsNullOrEmpty(TestData.ExitMode) ?
-            TestDataPropertiesToArgs(2)
-            : TestDataPropertiesToArgs(1),
+        ArgsCode.Properties => TestData.ExitMode == "returns" || TestData.ExitMode == "throws" ?
+            TestDataPropertiesToArgs(1)
+            : TestDataPropertiesToArgs(2),
         _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValue_ + (int)ArgsCode)
     };
 

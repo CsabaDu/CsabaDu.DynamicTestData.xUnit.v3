@@ -44,4 +44,11 @@ public interface ITheoryTestDataRow : ITheoryDataRow
     /// </summary>
     /// <value>An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> value indicating the argument conversion method.</value>
     ArgsCode ArgsCode { get; }
+
+    /// <summary>
+    /// Sets the display name for the test row based on the test method name.
+    /// </summary>
+    /// <param name="testMethodName">The name of the test method (optional). If null, the default display name will be used.</param>
+    /// <returns>The configured test data row instance.</returns>
+    ITheoryTestDataRow SetTestDisplayName(string? testMethodName);
 }

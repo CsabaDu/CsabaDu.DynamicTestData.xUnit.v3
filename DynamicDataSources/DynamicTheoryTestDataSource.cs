@@ -374,7 +374,8 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     {
         TheoryTestDataRow? firstRow = TheoryTestData?.FirstOrDefault();
 
-        if (TheoryTestData is null || testData.GetType() != firstRow?.TestData.GetType())
+        if (TheoryTestData is null
+            || TheoryTestData.Any(t => t.TestData.TestCase == testData.TestCase))
         {
             ResetTheoryTestData();
         }
