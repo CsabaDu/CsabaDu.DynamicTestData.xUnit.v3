@@ -114,9 +114,11 @@ public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCod
     public object?[] GetData() => ArgsCode switch
     {
         ArgsCode.Instance => [TestData],
-        ArgsCode.Properties => TestData.ExitMode == "returns" || TestData.ExitMode == "throws" ?
-            TestDataPropertiesToArgs(1)
-            : TestDataPropertiesToArgs(2),
+        ArgsCode.Properties => TestData.ExitMode switch
+        {
+            "returns" or "throws" => TestDataPropertiesToArgs(1),
+            _ => TestDataPropertiesToArgs(2),
+        },
         _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValue_ + (int)ArgsCode)
     };
 
