@@ -370,8 +370,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         }
 
         /// <inheritdoc/>
-        public override bool SupportsDiscoveryEnumeration() =>
-            !DisableDiscoveryEnumeration;
+        public override bool SupportsDiscoveryEnumeration() => false;
     }
 
     //[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]

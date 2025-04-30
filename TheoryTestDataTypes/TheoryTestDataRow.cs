@@ -26,13 +26,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
 /// </summary>
-///// <remarks>
-///// This record implements both <see cref="ITheoryTestDataRow"/> and <see cref="ISetTheoryDataRow{T}"/> interfaces,
-///// providing a fluent API for configuring test data rows.
-///// </remarks>
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-///// <param name="TestDisplayName">Optional display name for the test</param>
 public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
 : ITheoryTestDataRow
 {
@@ -90,11 +85,9 @@ public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCod
     /// <returns>The formatted display name or null if testMethodName is null</returns>
     /// <exception cref="ArgumentNullException">Thrown when testData is null</exception>
     internal static string? GetTestDisplayName(string? testMethodName, [NotNull] TestData testData)
-    {
-        return testMethodName is not null ?
-            GetDisplayName(testMethodName, testData)
-            : null;
-    }
+    => testMethodName is not null ?
+        GetDisplayName(testMethodName, testData)
+        : null;
 
     /// <summary>
     /// Sets the test display name based on the test method name.

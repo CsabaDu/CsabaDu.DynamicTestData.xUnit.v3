@@ -372,15 +372,15 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </remarks>
     private void AddToTheoryTestData(TestData testData)
     {
-        TheoryTestDataRow? firstRow = TheoryTestData?.FirstOrDefault();
-
-        if (TheoryTestData is null
-            || TheoryTestData.Any(t => t.TestData.TestCase == testData.TestCase))
+        if (TheoryTestData is null)
         {
             ResetTheoryTestData();
         }
 
-        TheoryTestData!.Add(testData);
+        if (!TheoryTestData!.Any(t => t.TestData.TestCase == testData.TestCase))
+        {
+            TheoryTestData!.Add(testData);
+        }
     }
     #endregion
     #endregion
