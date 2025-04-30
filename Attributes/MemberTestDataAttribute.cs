@@ -52,7 +52,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         /// This will cause the theory to yield a single test case for all data, and the data discovery
         /// will be during test execution instead of discovery.
         /// </summary>
-        public bool DisableDiscoveryEnumeration { get; set; }
+        public bool DisableDiscoveryEnumeration { get; set; } = true;
 
         /// <summary>
         /// Gets the member name.
@@ -68,31 +68,29 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         /// <inheritdoc/>
         protected override ITheoryDataRow ConvertDataRow(object dataRow)
         {
-            Guard.ArgumentNotNull(dataRow);
-
             if (dataRow is TheoryTestDataRow theoryTestDataRow)
             {
                 return theoryTestDataRow;
             }
-            else
+
+            Guard.ArgumentNotNull(dataRow);
+            
+            try
             {
-                try
-                {
-                    return base.ConvertDataRow(dataRow);
-                }
-                catch (ArgumentException)
-                {
-                    throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "Member '{0}' on '{1}' yielded an item of type '{2}' which is not an 'object?[]', 'Xunit.ITheoryDataRow' or 'System.Runtime.CompilerServices.ITuple'",
-                            MemberName,
-                            MemberType?.SafeName(),
-                            dataRow.GetType().SafeName()
-                        ),
-                        nameof(dataRow)
-                    );
-                }
+                return base.ConvertDataRow(dataRow);
+            }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        "Member '{0}' on '{1}' yielded an item of type '{2}' which is not an 'object?[]', 'Xunit.ITheoryDataRow' or 'System.Runtime.CompilerServices.ITuple'",
+                        MemberName,
+                        MemberType?.SafeName(),
+                        dataRow.GetType().SafeName()
+                    ),
+                    nameof(dataRow)
+                );
             }
         }
 
@@ -134,9 +132,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
                 var result = new List<ITheoryDataRow>();
 
                 foreach (var dataItem in dataItems)
-                {
                     AddToResult(dataItem, testMethod, ref result);
-                }
 
                 return new(result.CastOrToReadOnlyCollection());
             }
@@ -196,18 +192,17 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
                     testDataRow = testDataRow.SetTestDisplayName(testMethod.Name);
                 }
 
-                addConverted(testDataRow, ref result);
+                AddConverted(testDataRow, ref result);
             }
             else if (dataItem is not null)
             {
-                addConverted(dataItem, ref result);
+                AddConverted(dataItem, ref result);
             }
 
-            #region Local methods
-            void addConverted(object dataRow, ref List<ITheoryDataRow> result)
-            => result.Add(ConvertDataRow(dataRow));
-            #endregion
         }
+
+        void AddConverted(object dataRow, ref List<ITheoryDataRow> result)
+        => result.Add(ConvertDataRow(dataRow));
 
         Func<object?>? GetFieldAccessor(Type? type)
         {
@@ -328,6 +323,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         }
 
         /// <inheritdoc/>
-        public override bool SupportsDiscoveryEnumeration() => false;
+        public override bool SupportsDiscoveryEnumeration()
+        =>  !DisableDiscoveryEnumeration;
     }
 }
