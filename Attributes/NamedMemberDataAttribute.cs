@@ -21,53 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-using System.Collections;
-using System.Globalization;
-using Xunit.Sdk;
-
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class NamedMemberDataAttribute(string memberName, params object[] arguments)
-    : MemberDataAttributeBase(memberName, arguments)
-    {
-        public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
-                MethodInfo testMethod,
-                DisposalTracker disposalTracker)
-        {
-            var data = base.GetData(testMethod, disposalTracker).AsTask().Result;
-
-            if (data is not IReadOnlyCollection<TheoryTestDataRow> dataRows)
-            {
-                return base.GetData(testMethod, disposalTracker);
-            }
-
-            var namedDataRows = new List<ITheoryDataRow>(dataRows.Count);
-
-            foreach (TheoryTestDataRow item in dataRows)
-            {
-                namedDataRows.Add(new TheoryTestDataRow(item.TestData, item.ArgsCode)
-                {
-                    TestDisplayName = GetTestDisplayName(testMethod.Name, item.TestData)
-                });
-            }
-
-            return new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(namedDataRows);
-        }
-
-        protected override ITheoryDataRow ConvertDataRow(object dataRow)
-        {
-            Guard.ArgumentNotNull(dataRow);
-
-            if (dataRow is TheoryTestDataRow theoryTestDataRow)
-            {
-                return theoryTestDataRow;
-            }
-
-            return base.ConvertDataRow(dataRow);
-        }
-    }
-
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class NamedMemberTestDataAttribute(string memberName, params object[] arguments)
     : DataAttribute
@@ -372,29 +327,4 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         /// <inheritdoc/>
         public override bool SupportsDiscoveryEnumeration() => false;
     }
-
-    //[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    //public sealed class NamedMemberDataAttribute : MemberDataAttributeBase
-    //{
-    //    /// <summary>
-    //    /// Initializes a new instance of the <see cref="MemberDataAttribute"/> class.
-    //    /// </summary>
-    //    /// <param name="memberName">The name of the public static member on the test class that will provide the test data</param>
-    //    /// <param name="parameters">The parameters for the member (only supported for methods; ignored for everything else)</param>
-    //    public NamedMemberDataAttribute(string memberName, params object[] parameters)
-    //        : base(memberName, parameters) { }
-
-    //    /// <inheritdoc/>
-    //    protected override ITheoryDataRow ConvertDataRow(object dataRow)
-    //    {
-    //        if (dataRow == null)
-    //            return null;
-
-    //        var array = dataRow as object[];
-    //        if (array == null)
-    //            throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[]");
-
-    //        return array;
-    //    }
-    //}
 }
