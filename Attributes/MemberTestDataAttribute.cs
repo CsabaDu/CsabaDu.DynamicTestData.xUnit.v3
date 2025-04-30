@@ -101,10 +101,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             MethodInfo testMethod,
             DisposalTracker disposalTracker)
         {
-            if (MemberType is null)
-            {
-                MemberType = testMethod.DeclaringType ?? throw new ArgumentNullException(nameof(testMethod.DeclaringType));
-            }
+            MemberType = testMethod.DeclaringType ?? throw new InvalidOperationException("Test method declaring type is null.");
 
             var accessor =
                 GetPropertyAccessor(MemberType)
