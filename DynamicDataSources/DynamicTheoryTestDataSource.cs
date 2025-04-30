@@ -57,9 +57,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// Resets the underlying theory test data collection to an empty 'TheoryTestData' instance.
     /// </summary>
     public void ResetTheoryTestData()
-    {
-        TheoryTestData = new(ArgsCode);
-    }
+    => TheoryTestData = new(ArgsCode);
     #endregion
 
     #region AddOptionalToTheoryTestData
