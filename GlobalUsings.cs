@@ -24,6 +24,7 @@
 global using CsabaDu.DynamicTestData.DynamicDataSources;
 global using CsabaDu.DynamicTestData.Statics;
 global using CsabaDu.DynamicTestData.TestDataTypes;
+global using CsabaDu.DynamicTestData.TestDataTypes.Interfaces;
 global using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 global using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 global using System.Collections;
@@ -35,4 +36,3 @@ global using Xunit.Internal;
 global using Xunit.Sdk;
 global using Xunit.v3;
 global using static CsabaDu.DynamicTestData.DynamicDataSources.DynamicDataSource;
-global using static CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.TheoryTestDataRow;

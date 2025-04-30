@@ -35,9 +35,9 @@ public interface ITheoryTestDataRow : ITheoryDataRow
     /// <summary>
     /// Gets the test data instance for this test row.
     /// </summary>
-    /// <value>The <see cref="TestDataTypes.TestData"/> instance (never null).</value>
+    /// <value>The <see cref="ITestData"/> instance (never null).</value>
     [NotNull]
-    TestData TestData { get; }
+    ITestData TestData { get; }
 
     /// <summary>
     /// Gets the code specifying how the test data should be converted to arguments.

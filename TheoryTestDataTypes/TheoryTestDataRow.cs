@@ -28,7 +28,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// </summary>
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCode)
+public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCode)
 : ITheoryTestDataRow
 {
     #region Constants
@@ -43,7 +43,7 @@ public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCod
     /// Gets the test data instance. This property cannot be null.
     /// </summary>
     [NotNull]
-    public TestData TestData { get; init; } = Guard.ArgumentNotNull(TestData, nameof(TestData));
+    public ITestData TestData { get; init; } = Guard.ArgumentNotNull(TestData, nameof(TestData));
 
     /// <summary>
     /// Gets the code specifying how the test data should be converted to arguments.
@@ -84,7 +84,7 @@ public sealed record class TheoryTestDataRow(TestData TestData, ArgsCode ArgsCod
     /// <param name="testData">The test data instance (cannot be null)</param>
     /// <returns>The formatted display name or null if testMethodName is null</returns>
     /// <exception cref="ArgumentNullException">Thrown when testData is null</exception>
-    internal static string? GetTestDisplayName(string? testMethodName, [NotNull] TestData testData)
+    internal static string? GetTestDisplayName(string? testMethodName, [NotNull] ITestData testData)
     => testMethodName is not null ?
         GetDisplayName(testMethodName, testData)
         : null;
