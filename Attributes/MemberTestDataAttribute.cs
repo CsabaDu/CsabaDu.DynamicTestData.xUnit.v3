@@ -51,6 +51,11 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         /// Returns <c>true</c> if the data attribute wants to skip enumerating data during discovery.
         /// This will cause the theory to yield a single test case for all data, and the data discovery
         /// will be during test execution instead of discovery.
+        /// <remark>Default value is <c>true</c> because <see cref="TheoryTestDataRow"/> is a record class so it
+        /// cannot implement <see cref="IXunitSerializable"/>, neither an <see cref="IXunitSerializer"/>
+        /// can be implemented to support its serialization, because it does not have a parameterless constructor.
+        /// Set <see cref="DisableDiscoveryEnumeration"/> to <c>false</c> if you want to enumerate the data during discovery.
+        /// </remark>
         /// </summary>
         public bool DisableDiscoveryEnumeration { get; set; } = true;
 
