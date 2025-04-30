@@ -24,12 +24,12 @@
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class NamedMemberTestDataAttribute(string memberName, params object[] arguments)
+    public sealed class MemberTestDataAttribute(string memberName, params object[] arguments)
     : DataAttribute
     {
         static readonly Lazy<string> supportedDataSignatures;
 
-        static NamedMemberTestDataAttribute() =>
+        static MemberTestDataAttribute() =>
             supportedDataSignatures = new(() =>
             {
                 var dataSignatures = new List<string>(18);
