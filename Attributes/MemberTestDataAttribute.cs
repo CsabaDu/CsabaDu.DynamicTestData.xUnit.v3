@@ -70,7 +70,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         {
             Guard.ArgumentNotNull(dataRow);
 
-            if (dataRow is ITheoryTestDataRow theoryTestDataRow)
+            if (dataRow is TheoryTestDataRow theoryTestDataRow)
             {
                 return theoryTestDataRow;
             }
