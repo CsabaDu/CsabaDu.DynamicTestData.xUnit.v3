@@ -101,7 +101,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             MethodInfo testMethod,
             DisposalTracker disposalTracker)
         {
-            MemberType = testMethod.DeclaringType ?? throw new InvalidOperationException("Test method declaring type is null.");
+            MemberType ??= testMethod.DeclaringType
+                ?? throw new InvalidOperationException("Test method declaring type is null.");
 
             var accessor =
                 GetPropertyAccessor(MemberType)
@@ -141,23 +142,6 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             }
 
             return GetDataAsync(returnValue, MemberType, testMethod);
-        }
-
-        private void AddToResult(object? dataItem, MethodInfo testMethod, ref List<ITheoryDataRow> result)
-        {
-            if (dataItem is ITheoryTestDataRow theoryTestDataRow)
-            {
-                if (theoryTestDataRow.ArgsCode == ArgsCode.Properties)
-                {
-                    theoryTestDataRow = theoryTestDataRow.SetTestDisplayName(testMethod.Name);
-                }
-
-                result.Add(theoryTestDataRow);
-            }
-            else if (dataItem is not null)
-            {
-                result.Add(ConvertDataRow(dataItem));
-            }
         }
 
         async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetDataAsync(
@@ -201,6 +185,28 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
                     supportedDataSignatures.Value
                 )
             );
+        }
+
+        private void AddToResult(object? dataItem, MethodInfo testMethod, ref List<ITheoryDataRow> result)
+        {
+            if (dataItem is ITheoryTestDataRow testDataRow)
+            {
+                if (testDataRow.ArgsCode == ArgsCode.Properties)
+                {
+                    testDataRow = testDataRow.SetTestDisplayName(testMethod.Name);
+                }
+
+                addConverted(testDataRow, ref result);
+            }
+            else if (dataItem is not null)
+            {
+                addConverted(dataItem, ref result);
+            }
+
+            #region Local methods
+            void addConverted(object dataRow, ref List<ITheoryDataRow> result)
+            => result.Add(ConvertDataRow(dataRow));
+            #endregion
         }
 
         Func<object?>? GetFieldAccessor(Type? type)
