@@ -54,7 +54,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         /// <remark>Default value is <c>true</c> because <see cref="TheoryTestDataRow"/> is a record class so it
         /// cannot implement <see cref="IXunitSerializable"/>, neither an <see cref="IXunitSerializer"/>
         /// can be implemented to support its serialization, because it does not have a parameterless constructor.
-        /// Set <see cref="DisableDiscoveryEnumeration"/> to <c>false</c> if you want to enumerate the data during discovery.
+        /// Set <see cref="DisableDiscoveryEnumeration"/> to <c>false</c> if use serializable type
+        /// and you want to enumerate the data during discovery.
         /// </remark>
         /// </summary>
         public bool DisableDiscoveryEnumeration { get; set; } = true;
