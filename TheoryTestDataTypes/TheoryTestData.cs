@@ -34,7 +34,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// </para>
 /// </remarks>
 /// <param name="argsCode">The strategy for converting test data to method arguments.</param>
-public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTestDataRow, ITestData>, ITheoryTestData
+public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<ITheoryTestDataRow, ITestData>, ITheoryTestData
 {
     /// <summary>
     /// Gets the strategy for converting test data to method arguments.
@@ -53,6 +53,6 @@ public sealed class TheoryTestData(ArgsCode argsCode) : TheoryDataBase<TheoryTes
     /// A new <see cref="TheoryTestDataRow"/> instance configured with the test data,
     /// and argument conversion strategy.
     /// </returns>
-    protected override TheoryTestDataRow Convert(ITestData testData)
-    => new(testData, ArgsCode);
+    protected override ITheoryTestDataRow Convert(ITestData testData)
+    => new TheoryTestDataRow(testData, ArgsCode);
 }

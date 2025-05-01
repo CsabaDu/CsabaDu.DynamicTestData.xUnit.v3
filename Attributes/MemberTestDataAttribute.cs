@@ -332,3 +332,4 @@ public sealed class MemberTestDataAttribute(string memberName, params object[] a
     public override bool SupportsDiscoveryEnumeration()
     =>  !DisableDiscoveryEnumeration;
 }
+
