@@ -1,32 +1,12 @@
-﻿/*
- * MIT License
- * 
- * Copyright (c) 2025. Csaba Dudas (CsabaDu)
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+Here's your `MemberTestDataAttribute` class with clear separation and comments indicating which parts are reused from `MemberDataAttributeBase` and which are new:
+
+```csharp
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class MemberTestDataAttribute
-    : MemberDataAttributeBase
+    public sealed class MemberTestDataAttribute : MemberDataAttributeBase
     {
+        // REUSED CODE FROM BASE CLASS (with minor modifications) - START
         static readonly Lazy<string> supportedDataSignatures;
 
         static MemberTestDataAttribute() =>
@@ -43,17 +23,20 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             });
 
         public MemberTestDataAttribute(string memberName, params object[] arguments)
-        : base(memberName, arguments)
+            : base(memberName, arguments)
         {
             DisableDiscoveryEnumeration = true;
         }
 
         /// <inheritdoc/>
-        protected override ITheoryDataRow ConvertDataRow(object dataRow)
-        => dataRow is TheoryTestDataRow theoryTestDataRow ?
-            theoryTestDataRow
-            : base.ConvertDataRow(dataRow);
+        protected override ITheoryDataRow ConvertDataRow(object dataRow) =>
+            dataRow is TheoryTestDataRow theoryTestDataRow ?
+                theoryTestDataRow
+                : base.ConvertDataRow(dataRow);
 
+        // REUSED CODE FROM BASE CLASS (with modifications) - END
+
+        // NEW CODE - START
         /// <inheritdoc/>
         public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
             MethodInfo testMethod,
@@ -119,8 +102,6 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
                 return result.CastOrToReadOnlyCollection();
             }
 
-            // Duplicate from GetData(), but it's hard to avoid since we need to support Task/ValueTask
-            // of IEnumerable (and not just IAsyncEnumerable).
             if (returnValue is IEnumerable dataItems)
             {
                 var result = new List<ITheoryDataRow>();
@@ -160,9 +141,11 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             }
         }
 
-        private void AddConverted(object dataRow, ref List<ITheoryDataRow> result)
-        => result.Add(ConvertDataRow(dataRow));
+        private void AddConverted(object dataRow, ref List<ITheoryDataRow> result) =>
+            result.Add(ConvertDataRow(dataRow));
+        // NEW CODE - END
 
+        // REUSED CODE FROM BASE CLASS - START
         Func<object?>? GetFieldAccessor(Type? type)
         {
             FieldInfo? fieldInfo = null;
@@ -280,5 +263,26 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
 
             return true;
         }
+        // REUSED CODE FROM BASE CLASS - END
     }
 }
+```
+
+Key points about the separation:
+1. **Reused Code**: 
+   - The static constructor and `supportedDataSignatures` field
+   - The attribute constructor (with added `DisableDiscoveryEnumeration` setting)
+   - The member accessor methods (`GetFieldAccessor`, `GetMethodAccessor`, `GetPropertyAccessor`)
+   - The type resolution helper methods (`GetTypesForMemberResolution`, `ParameterTypesCompatible`)
+   - The base `ConvertDataRow` method (with added check for `TheoryTestDataRow`)
+
+2. **New Code**:
+   - The modified `GetData` and `GetDataAsync` methods that now handle `ITheoryTestDataRow`
+   - The `AddToResult` and `AddConverted` helper methods for processing test data rows
+   - The logic for setting test display names based on method names
+
+3. **Modifications**:
+   - The `ConvertDataRow` override that adds support for `TheoryTestDataRow`
+   - The `GetData` methods now include the test method context for display name generation
+
+This separation clearly shows which parts are derived from the base class and which are new functionality specific to your test data attribute.
