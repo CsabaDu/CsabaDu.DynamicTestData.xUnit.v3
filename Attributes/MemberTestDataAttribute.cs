@@ -1,27 +1,5 @@
-﻿/*
- * MIT License
- * 
- * Copyright (c) 2025. Csaba Dudas (CsabaDu)
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-using System.Data;
+﻿// SPDX-License-Identifier: MIT
+// Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 
@@ -29,12 +7,10 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 public sealed class MemberTestDataAttribute : MemberDataAttributeBase
 {
     #region Modified constructor
-    // Modified to set DisableDiscoveryEnumeration to true
+    // Modified to set 'DisableDiscoveryEnumeration' to true.
     public MemberTestDataAttribute(string memberName, params object[] arguments)
     : base(memberName, arguments)
-    {
-        DisableDiscoveryEnumeration = true;
-    }
+    => DisableDiscoveryEnumeration = true;
     #endregion Modified constructor
 
     #region Reused MemberDataAttributeBase codes
@@ -273,19 +249,20 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
 
     // New method to access the private static field 'supportedDataSignatures' of the base class directly.
     // Needed just in edge case when ArgumentException is thrown.
-    // This will be contained in the exception message.
+    // This will be contained by the exception message.
     private static Lazy<string> GetSupportedDataSignatures()
     {
+        const string supportedDataSignatures = "supportedDataSignatures";
         Type baseType = typeof(MemberDataAttributeBase);
         FieldInfo fieldInfo = baseType.GetField(
-            "supportedDataSignatures",
+            supportedDataSignatures,
             BindingFlags.Static | BindingFlags.NonPublic)
             ?? throw new InvalidOperationException(
-                "'supportedDataSignatures' member of 'MemberDataAttributeBase' does not exist.");
+                $"'{supportedDataSignatures}' member of 'MemberDataAttributeBase' does not exist.");
 
         return fieldInfo.GetValue(null) as Lazy<string>
             ?? throw new InvalidOperationException(
-                "'supportedDataSignatures' is not of 'Lazy<string>' type.");
+                $"'{supportedDataSignatures}' is not of 'Lazy<string>' type.");
     }
     #endregion New methods
 }
