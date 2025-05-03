@@ -21,264 +21,270 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
+using System.Data;
+
+namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+public sealed class MemberTestDataAttribute : MemberDataAttributeBase
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class MemberTestDataAttribute
-    : MemberDataAttributeBase
+    #region Modified constructor
+    // Modified to set DisableDiscoveryEnumeration to true
+    public MemberTestDataAttribute(string memberName, params object[] arguments)
+    : base(memberName, arguments)
     {
-        static readonly Lazy<string> supportedDataSignatures;
+        DisableDiscoveryEnumeration = true;
+    }
+    #endregion Modified constructor
 
-        static MemberTestDataAttribute() =>
-            supportedDataSignatures = new(() =>
-            {
-                var dataSignatures = new List<string>(18);
+    #region Reused MemberDataAttributeBase codes
+    #region Reused with changes
+    // Modified to use SetTestDisplayName
+    /// <inheritdoc/>
+    public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
+        MethodInfo testMethod,
+        DisposalTracker disposalTracker)
+    {
+        MemberType ??= testMethod.DeclaringType
+            ?? throw new InvalidOperationException("Test method declaring type is null.");
 
-                foreach (var enumerable in new[] { "IEnumerable<{0}>", "IAsyncEnumerable<{0}>" })
-                    foreach (var dataType in new[] { "ITheoryDataRow", "object[]", "Tuple<...>" })
-                        foreach (var wrapper in new[] { "- {0}", "- Task<{0}>", "- ValueTask<{0}>" })
-                            dataSignatures.Add(string.Format(CultureInfo.CurrentCulture, wrapper, string.Format(CultureInfo.CurrentCulture, enumerable, dataType)));
+        var accessor =
+            GetPropertyAccessor(MemberType)
+                ?? GetFieldAccessor(MemberType)
+                ?? GetMethodAccessor(MemberType)
+                ?? throw new ArgumentException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        "Could not find public static member (property, field, or method) named '{0}' on '{1}'{2}",
+                        MemberName,
+                        MemberType.SafeName(),
+                        Arguments.Length > 0 ? string.Format(CultureInfo.CurrentCulture, " with parameter types: {0}", string.Join(", ", Arguments.Select(p => p?.GetType().SafeName() ?? "(null)"))) : ""
+                    )
+                );
 
-                return string.Join(Environment.NewLine, dataSignatures);
-            });
+        var returnValue =
+            accessor()
+                ?? throw new ArgumentException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        "Member '{0}' on '{1}' returned null when queried for test data",
+                        MemberName,
+                        MemberType.SafeName()
+                    )
+                );
 
-        public MemberTestDataAttribute(string memberName, params object[] arguments)
-        : base(memberName, arguments)
+        if (returnValue is IEnumerable dataItems)
         {
-            DisableDiscoveryEnumeration = true;
+            var result = new List<ITheoryDataRow>();
+
+            foreach (var dataItem in dataItems)
+                // Modified to use SetTestDisplayName
+                AddToResult(dataItem, testMethod, ref result);
+
+            return new(result.CastOrToReadOnlyCollection());
         }
 
-        /// <inheritdoc/>
-        protected override ITheoryDataRow ConvertDataRow(object dataRow)
-        => dataRow is TheoryTestDataRow theoryTestDataRow ?
-            theoryTestDataRow
-            : base.ConvertDataRow(dataRow);
+        return GetDataAsync(returnValue, MemberType, testMethod);
+    }
 
-        /// <inheritdoc/>
-        public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
-            MethodInfo testMethod,
-            DisposalTracker disposalTracker)
+    // Modified to use SetTestDisplayName
+    async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetDataAsync(
+        object? returnValue,
+        Type type,
+        MethodInfo testMethod)
+    {
+        var taskAwaitable = returnValue.AsValueTask();
+        if (taskAwaitable.HasValue)
+            returnValue = await taskAwaitable.Value;
+
+        if (returnValue is IAsyncEnumerable<object?> asyncDataItems)
         {
-            MemberType ??= testMethod.DeclaringType
-                ?? throw new InvalidOperationException("Test method declaring type is null.");
+            var result = new List<ITheoryDataRow>();
 
-            var accessor =
-                GetPropertyAccessor(MemberType)
-                    ?? GetFieldAccessor(MemberType)
-                    ?? GetMethodAccessor(MemberType)
-                    ?? throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "Could not find public static member (property, field, or method) named '{0}' on '{1}'{2}",
-                            MemberName,
-                            MemberType.SafeName(),
-                            Arguments.Length > 0 ? string.Format(CultureInfo.CurrentCulture, " with parameter types: {0}", string.Join(", ", Arguments.Select(p => p?.GetType().SafeName() ?? "(null)"))) : ""
-                        )
-                    );
+            await foreach (var dataItem in asyncDataItems)
+                // Modified to use SetTestDisplayName
+                AddToResult(dataItem, testMethod, ref result);
 
-            var returnValue =
-                accessor()
-                    ?? throw new ArgumentException(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            "Member '{0}' on '{1}' returned null when queried for test data",
-                            MemberName,
-                            MemberType.SafeName()
-                        )
-                    );
-
-            if (returnValue is IEnumerable dataItems)
-            {
-                var result = new List<ITheoryDataRow>();
-
-                foreach (var dataItem in dataItems)
-                    AddToResult(dataItem, testMethod, ref result);
-
-                return new(result.CastOrToReadOnlyCollection());
-            }
-
-            return GetDataAsync(returnValue, MemberType, testMethod);
+            return result.CastOrToReadOnlyCollection();
         }
 
-        async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetDataAsync(
-            object? returnValue,
-            Type type,
-            MethodInfo testMethod)
+        if (returnValue is IEnumerable dataItems)
         {
-            var taskAwaitable = returnValue.AsValueTask();
-            if (taskAwaitable.HasValue)
-                returnValue = await taskAwaitable.Value;
+            var result = new List<ITheoryDataRow>();
 
-            if (returnValue is IAsyncEnumerable<object?> asyncDataItems)
+            foreach (var dataItem in dataItems)
+                // Modified to use SetTestDisplayName
+                AddToResult(dataItem, testMethod, ref result);
+
+            return result.CastOrToReadOnlyCollection();
+        }
+
+        throw new ArgumentException(
+            string.Format(
+                CultureInfo.CurrentCulture,
+                "Member '{0}' on '{1}' must return data in one of the following formats:{2}{3}",
+                MemberName,
+                type.SafeName(),
+                Environment.NewLine,
+                // Modified to access the private static field 'supportedDataSignatures' of the base class directly.
+                GetSupportedDataSignatures().Value
+            )
+        );
+    }
+    #endregion Reused with changes
+
+    #region Copied without changes
+    // Modified GetData and GetDataAsync methods use these methods to access the member data
+    Func<object?>? GetFieldAccessor(Type? type)
+    {
+        FieldInfo? fieldInfo = null;
+        foreach (var reflectionType in GetTypesForMemberResolution(type, includeInterfaces: false))
+        {
+            fieldInfo = reflectionType.GetRuntimeField(MemberName);
+            if (fieldInfo is not null)
+                break;
+        }
+
+        return
+            fieldInfo is not null && fieldInfo.IsStatic
+                ? (() => fieldInfo.GetValue(null))
+                : null;
+    }
+
+    Func<object?>? GetMethodAccessor(Type? type)
+    {
+        MethodInfo? methodInfo = null;
+        var argumentTypes = Arguments is null ? [] : Arguments.Select(p => p?.GetType()).ToArray();
+        foreach (var reflectionType in GetTypesForMemberResolution(type, includeInterfaces: true))
+        {
+            var methodInfoArray =
+                reflectionType
+                    .GetRuntimeMethods()
+                    .Where(m => m.Name == MemberName && ParameterTypesCompatible(m.GetParameters(), argumentTypes))
+                    .ToArray();
+            if (methodInfoArray.Length == 0)
+                continue;
+            if (methodInfoArray.Length == 1)
             {
-                var result = new List<ITheoryDataRow>();
-
-                await foreach (var dataItem in asyncDataItems)
-                    AddToResult(dataItem, testMethod, ref result);
-
-                return result.CastOrToReadOnlyCollection();
+                methodInfo = methodInfoArray[0];
+                break;
             }
-
-            // Duplicate from GetData(), but it's hard to avoid since we need to support Task/ValueTask
-            // of IEnumerable (and not just IAsyncEnumerable).
-            if (returnValue is IEnumerable dataItems)
-            {
-                var result = new List<ITheoryDataRow>();
-
-                foreach (var dataItem in dataItems)
-                    AddToResult(dataItem, testMethod, ref result);
-
-                return result.CastOrToReadOnlyCollection();
-            }
+            methodInfo = methodInfoArray.Where(m => m.GetParameters().Length == argumentTypes.Length).FirstOrDefault();
+            if (methodInfo is not null)
+                break;
 
             throw new ArgumentException(
                 string.Format(
                     CultureInfo.CurrentCulture,
-                    "Member '{0}' on '{1}' must return data in one of the following formats:{2}{3}",
+                    "The call to method '{0}.{1}' is ambigous between {2} different options for the given arguments.",
+                    type!.SafeName(),
                     MemberName,
-                    type.SafeName(),
-                    Environment.NewLine,
-                    supportedDataSignatures.Value
-                )
+                    methodInfoArray.Length
+                ),
+                nameof(type)
             );
         }
 
-        private void AddToResult(object? dataItem, MethodInfo testMethod, ref List<ITheoryDataRow> result)
-        {
-            if (dataItem is ITheoryTestDataRow testDataRow)
-            {
-                if (testDataRow.ArgsCode == ArgsCode.Properties)
-                {
-                    testDataRow = testDataRow.SetTestDisplayName(testMethod.Name);
-                }
+        if (methodInfo is null || !methodInfo.IsStatic)
+            return null;
 
-                AddConverted(testDataRow, ref result);
-            }
-            else if (dataItem is not null)
-            {
-                AddConverted(dataItem, ref result);
-            }
+        var completedArguments = Arguments ?? [];
+        var finalMethodParameters = methodInfo.GetParameters();
+
+        completedArguments =
+            completedArguments.Length == finalMethodParameters.Length
+                ? completedArguments
+                : completedArguments.Concat(finalMethodParameters.Skip(completedArguments.Length).Select(pi => pi.DefaultValue)).ToArray();
+
+        return () => methodInfo.Invoke(null, completedArguments);
+    }
+
+    Func<object?>? GetPropertyAccessor(Type? type)
+    {
+        PropertyInfo? propInfo = null;
+        foreach (var reflectionType in GetTypesForMemberResolution(type, includeInterfaces: true))
+        {
+            propInfo = reflectionType.GetRuntimeProperty(MemberName);
+            if (propInfo is not null)
+                break;
         }
 
-        private void AddConverted(object dataRow, ref List<ITheoryDataRow> result)
-        => result.Add(ConvertDataRow(dataRow));
+        return
+            propInfo is not null && propInfo.GetMethod is not null && propInfo.GetMethod.IsStatic
+                ? (() => propInfo.GetValue(null, null))
+                : null;
+    }
 
-        Func<object?>? GetFieldAccessor(Type? type)
+    static IEnumerable<Type> GetTypesForMemberResolution(
+        Type? typeToInspect,
+        bool includeInterfaces)
+    {
+        HashSet<Type> interfaces = [];
+
+        for (var reflectionType = typeToInspect; reflectionType is not null; reflectionType = reflectionType.BaseType)
         {
-            FieldInfo? fieldInfo = null;
-            foreach (var reflectionType in GetTypesForMemberResolution(type, includeInterfaces: false))
-            {
-                fieldInfo = reflectionType.GetRuntimeField(MemberName);
-                if (fieldInfo is not null)
-                    break;
-            }
+            yield return reflectionType;
 
-            return
-                fieldInfo is not null && fieldInfo.IsStatic
-                    ? (() => fieldInfo.GetValue(null))
-                    : null;
+            if (includeInterfaces)
+                foreach (var @interface in reflectionType.GetInterfaces())
+                    interfaces.Add(@interface);
         }
 
-        Func<object?>? GetMethodAccessor(Type? type)
-        {
-            MethodInfo? methodInfo = null;
-            var argumentTypes = Arguments is null ? [] : Arguments.Select(p => p?.GetType()).ToArray();
-            foreach (var reflectionType in GetTypesForMemberResolution(type, includeInterfaces: true))
-            {
-                var methodInfoArray =
-                    reflectionType
-                        .GetRuntimeMethods()
-                        .Where(m => m.Name == MemberName && ParameterTypesCompatible(m.GetParameters(), argumentTypes))
-                        .ToArray();
-                if (methodInfoArray.Length == 0)
-                    continue;
-                if (methodInfoArray.Length == 1)
-                {
-                    methodInfo = methodInfoArray[0];
-                    break;
-                }
-                methodInfo = methodInfoArray.Where(m => m.GetParameters().Length == argumentTypes.Length).FirstOrDefault();
-                if (methodInfo is not null)
-                    break;
+        foreach (var @interface in interfaces)
+            yield return @interface;
+    }
 
-                throw new ArgumentException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        "The call to method '{0}.{1}' is ambigous between {2} different options for the given arguments.",
-                        type!.SafeName(),
-                        MemberName,
-                        methodInfoArray.Length
-                    ),
-                    nameof(type)
-                );
-            }
+    static bool ParameterTypesCompatible(
+        ParameterInfo[] parameters,
+        Type?[] argumentTypes)
+    {
+        if (parameters.Length < argumentTypes.Length)
+            return false;
 
-            if (methodInfo is null || !methodInfo.IsStatic)
-                return null;
-
-            var completedArguments = Arguments ?? [];
-            var finalMethodParameters = methodInfo.GetParameters();
-
-            completedArguments =
-                completedArguments.Length == finalMethodParameters.Length
-                    ? completedArguments
-                    : completedArguments.Concat(finalMethodParameters.Skip(completedArguments.Length).Select(pi => pi.DefaultValue)).ToArray();
-
-            return () => methodInfo.Invoke(null, completedArguments);
-        }
-
-        Func<object?>? GetPropertyAccessor(Type? type)
-        {
-            PropertyInfo? propInfo = null;
-            foreach (var reflectionType in GetTypesForMemberResolution(type, includeInterfaces: true))
-            {
-                propInfo = reflectionType.GetRuntimeProperty(MemberName);
-                if (propInfo is not null)
-                    break;
-            }
-
-            return
-                propInfo is not null && propInfo.GetMethod is not null && propInfo.GetMethod.IsStatic
-                    ? (() => propInfo.GetValue(null, null))
-                    : null;
-        }
-
-        static IEnumerable<Type> GetTypesForMemberResolution(
-            Type? typeToInspect,
-            bool includeInterfaces)
-        {
-            HashSet<Type> interfaces = [];
-
-            for (var reflectionType = typeToInspect; reflectionType is not null; reflectionType = reflectionType.BaseType)
-            {
-                yield return reflectionType;
-
-                if (includeInterfaces)
-                    foreach (var @interface in reflectionType.GetInterfaces())
-                        interfaces.Add(@interface);
-            }
-
-            foreach (var @interface in interfaces)
-                yield return @interface;
-        }
-
-        static bool ParameterTypesCompatible(
-            ParameterInfo[] parameters,
-            Type?[] argumentTypes)
-        {
-            if (parameters.Length < argumentTypes.Length)
+        var idx = 0;
+        for (; idx < argumentTypes.Length; ++idx)
+            if (argumentTypes[idx] is not null && !parameters[idx].ParameterType.IsAssignableFrom(argumentTypes[idx]!))
                 return false;
 
-            var idx = 0;
-            for (; idx < argumentTypes.Length; ++idx)
-                if (argumentTypes[idx] is not null && !parameters[idx].ParameterType.IsAssignableFrom(argumentTypes[idx]!))
-                    return false;
+        for (; idx < parameters.Length; ++idx)
+            if (!parameters[idx].IsOptional)
+                return false;
 
-            for (; idx < parameters.Length; ++idx)
-                if (!parameters[idx].IsOptional)
-                    return false;
+        return true;
+    }
+    #endregion Copied without changes
+    #endregion Reused MemberDataAttributeBase codes
 
-            return true;
+    #region New methods
+    // New method to set the test display name in certain cases
+    private void AddToResult(object? dataItem, MethodInfo testMethod, ref List<ITheoryDataRow> result)
+    {
+        if (dataItem is ITheoryTestDataRow testDataRow
+            && testDataRow.ArgsCode == ArgsCode.Properties)
+        {
+            dataItem = testDataRow.SetTestDisplayName(testMethod.Name);
+        }
+
+        if (dataItem is not null)
+        {
+            result.Add(ConvertDataRow(dataItem));
         }
     }
+
+    // New method to access the private static field 'supportedDataSignatures' of the base class directly.
+    // Needed just in edge case when ArgumentException is thrown. This will be contained in the exception message.
+    private static Lazy<string> GetSupportedDataSignatures()
+    {
+        Type baseType = typeof(MemberDataAttributeBase);
+        FieldInfo fieldInfo = baseType.GetField(
+            "supportedDataSignatures",
+            BindingFlags.Static | BindingFlags.NonPublic)
+            ?? throw new InvalidOperationException(
+                "'supportedDataSignatures' member of 'MemberDataAttributeBase' does not exist.");
+
+        return fieldInfo.GetValue(null) as Lazy<string>
+            ?? throw new InvalidOperationException(
+                "'supportedDataSignatures' is not of a 'Lazy<string>' type.");
+    }
+    #endregion New methods
 }
