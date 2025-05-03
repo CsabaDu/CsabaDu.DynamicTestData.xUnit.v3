@@ -272,7 +272,8 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
     }
 
     // New method to access the private static field 'supportedDataSignatures' of the base class directly.
-    // Needed just in edge case when ArgumentException is thrown. This will be contained in the exception message.
+    // Needed just in edge case when ArgumentException is thrown.
+    // This will be contained in the exception message.
     private static Lazy<string> GetSupportedDataSignatures()
     {
         Type baseType = typeof(MemberDataAttributeBase);
@@ -284,7 +285,7 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
 
         return fieldInfo.GetValue(null) as Lazy<string>
             ?? throw new InvalidOperationException(
-                "'supportedDataSignatures' is not of a 'Lazy<string>' type.");
+                "'supportedDataSignatures' is not of 'Lazy<string>' type.");
     }
     #endregion New methods
 }
