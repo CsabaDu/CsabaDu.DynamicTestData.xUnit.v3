@@ -31,8 +31,8 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
         #region Local methods
         ITheoryDataRow setTestDisplayNameIfArgsCodeProperties(ITheoryTestDataRow testDataRow)
         => testDataRow.ArgsCode == ArgsCode.Properties ?
-                testDataRow.SetTestDisplayName(testMethod.Name)
-                : testDataRow;
+            testDataRow.SetTestDisplayName(testMethod.Name)
+            : testDataRow;
         #endregion
     }
 }
