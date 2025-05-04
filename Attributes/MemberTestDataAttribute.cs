@@ -16,21 +16,16 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             DisposalTracker disposalTracker)
         {
             var dataCollection = await base.GetData(testMethod, disposalTracker);
-            List<ITheoryTestDataRow> testDataCollection = [];
 
-            foreach (ITheoryDataRow item in dataCollection)
+            if (dataCollection is IReadOnlyCollection<ITheoryTestDataRow> testDataCollection)
             {
-                if (item is not ITheoryTestDataRow testDataRow)
-                {
-                    return await new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(dataCollection);
-                }
-                if (testDataRow.ArgsCode == ArgsCode.Properties)
-                {
-                    testDataCollection.Add(testDataRow.SetTestDisplayName(testMethod.Name));
-                }
+                dataCollection =
+                    testDataCollection
+                    .Select(x => x.SetTestDisplayName(testMethod.Name))
+                    .CastOrToReadOnlyCollection();
             }
 
-            return await new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(testDataCollection);
+            return await new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(dataCollection);
         }
 
         //[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
@@ -298,4 +293,3 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         //}
     }
 }
-
