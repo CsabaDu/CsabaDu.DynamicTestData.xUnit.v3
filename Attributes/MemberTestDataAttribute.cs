@@ -18,7 +18,6 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             DisposalTracker disposalTracker)
         {
             var dataCollection = await base.GetData(testMethod, disposalTracker);
-
             if (dataCollection is IEnumerable<ITheoryTestDataRow> testDataCollection)
             {
                 dataCollection =
