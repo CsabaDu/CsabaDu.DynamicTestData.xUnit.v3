@@ -17,11 +17,11 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
         {
             var dataCollection = await base.GetData(testMethod, disposalTracker);
 
-            if (dataCollection is IReadOnlyCollection<ITheoryTestDataRow> testDataCollection)
+            if (dataCollection is IEnumerable<ITheoryTestDataRow> testDataCollection)
             {
                 dataCollection =
                     testDataCollection
-                    .Select(x => x.SetTestDisplayName(testMethod.Name))
+                    .Select(row => row.SetTestDisplayName(testMethod.Name))
                     .CastOrToReadOnlyCollection();
             }
 
