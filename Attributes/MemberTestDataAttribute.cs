@@ -21,11 +21,18 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             {
                 dataCollection =
                     testDataCollection
-                    .Select(row => row.SetTestDisplayName(testMethod.Name))
+                    .Select(setTestDisplayNameIfProperties)
                     .CastOrToReadOnlyCollection();
             }
 
             return await new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(dataCollection);
+
+            #region Local methods
+            ITheoryTestDataRow setTestDisplayNameIfProperties(ITheoryTestDataRow dataRow)
+            => dataRow.ArgsCode == ArgsCode.Properties ?
+                    dataRow.SetTestDisplayName(testMethod.Name)
+                    : dataRow;
+            #endregion
         }
 
         //[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
