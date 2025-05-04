@@ -30,10 +30,10 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
             return await new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(dataCollection);
 
             #region Local methods
-            ITheoryDataRow setTestDisplayNameIfArgsCodeProperties(ITheoryTestDataRow dataRow)
-            => dataRow.ArgsCode == ArgsCode.Properties ?
-                    dataRow.SetTestDisplayName(testMethod.Name)
-                    : dataRow;
+            ITheoryDataRow setTestDisplayNameIfArgsCodeProperties(ITheoryTestDataRow testDataRow)
+            => testDataRow.ArgsCode == ArgsCode.Properties ?
+                    testDataRow.SetTestDisplayName(testMethod.Name)
+                    : testDataRow;
             #endregion
         }
 
