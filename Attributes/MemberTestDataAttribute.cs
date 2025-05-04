@@ -8,7 +8,9 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes
     {
         public MemberTestDataAttribute(string memberName, params object[] arguments)
         : base(memberName, arguments)
-        => DisableDiscoveryEnumeration = true;
+        {
+            DisableDiscoveryEnumeration = true;
+        }
 
         /// <inheritdoc/>
         public override async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
