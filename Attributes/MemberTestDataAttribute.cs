@@ -17,7 +17,7 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
         MethodInfo testMethod,
         DisposalTracker disposalTracker)
     {
-        var dataCollection = await base.GetData(testMethod, disposalTracker);
+        var dataCollection = await base.GetData(testMethod, disposalTracker).ConfigureAwait(false);
         if (dataCollection is IEnumerable<ITheoryTestDataRow> testDataCollection)
         {
             dataCollection =
@@ -26,7 +26,7 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
                 .CastOrToReadOnlyCollection();
         }
 
-        return await new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(dataCollection);
+        return dataCollection;
 
         #region Local methods
         ITheoryDataRow setTestDisplayNameIfArgsCodeProperties(ITheoryTestDataRow testDataRow)
