@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using System.Linq;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 
 /// <summary>
@@ -355,10 +357,15 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             ResetTheoryTestData();
         }
 
-        if (!TheoryTestData!.Any(t => t.TestData.TestCase == testData.TestCase))
+        if (!TheoryTestData!.Any(testCaseEquals))
         {
             TheoryTestData!.Add(testData);
         }
+
+        #region Local methods
+        bool testCaseEquals(ITheoryTestDataRow testDataRow)
+        => testDataRow.TestData.TestCase == testData.TestCase;
+        #endregion
     }
     #endregion
     #endregion
