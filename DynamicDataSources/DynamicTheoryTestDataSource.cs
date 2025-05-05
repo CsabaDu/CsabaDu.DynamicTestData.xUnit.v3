@@ -43,15 +43,15 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #region AddOptionalToTheoryTestData
     /// <summary>
     /// Adds optional test data to the collection with a specific argument conversion strategy.
+    /// <remarks>
+    /// This method allows temporarily changing the <see cref="ArgsCode"/> for a specific set of test data.
+    /// </remarks>
     /// </summary>
     /// <param name="addTestDataToTheoryTestData">Action that adds the test data</param>
     /// <param name="argsCode">The argument conversion strategy to use</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="addTestDataToTheoryTestData"/> is null
     /// </exception>
-    /// <remarks>
-    /// This method allows temporarily changing the <see cref="ArgsCode"/> for a specific set of test data.
-    /// </remarks>
     public void AddOptionalToTheoryTestData(Action addTestDataToTheoryTestData, ArgsCode? argsCode)
     {
         Guard.ArgumentNotNull(addTestDataToTheoryTestData, nameof(addTestDataToTheoryTestData));
@@ -343,11 +343,11 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #region AddToTheoryTestData
     /// <summary>
     /// Adds test data to the collection, ensuring type consistency.
-    /// </summary>
-    /// <param name="testData">The test data to add</param>
     /// <remarks>
     /// All test data added to a single instance must have different <see cref="TestData.TestCase"/> property.
     /// </remarks>
+    /// </summary>
+    /// <param name="testData">The test data to add</param>
     private void AddToTheoryTestData(TestData testData)
     {
         if (TheoryTestData is null)
