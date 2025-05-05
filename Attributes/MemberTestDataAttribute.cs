@@ -6,6 +6,10 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
 public sealed class MemberTestDataAttribute : MemberDataAttributeBase
 {
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Constructor extension to set <see cref="MemberDataAttributeBase.DisableDiscoveryEnumeration"/> to true.
+    /// </remarks>
     public MemberTestDataAttribute(string memberName, params object[] arguments)
     : base(memberName, arguments)
     {
@@ -13,6 +17,10 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Sets <see cref="ITheoryDataRow.TestDisplayName"/> if elements are <see cref="ITheoryTestDataRow"/>
+    /// and their <see cref="ITheoryTestDataRow.ArgsCode"/> property is <see cref="ArgsCode.Properties"/>.
+    /// </remarks>
     public override async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
         MethodInfo testMethod,
         DisposalTracker disposalTracker)
