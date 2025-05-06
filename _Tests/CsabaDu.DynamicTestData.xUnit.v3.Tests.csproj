@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnitTests\Attributes\**" />
+    <Compile Remove="UnitTests\DynamicDataSources\**" />
+    <EmbeddedResource Remove="UnitTests\Attributes\**" />
+    <EmbeddedResource Remove="UnitTests\DynamicDataSources\**" />
+    <None Remove="UnitTests\Attributes\**" />
+    <None Remove="UnitTests\DynamicDataSources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,11 +41,6 @@
 
   <ItemGroup>
     <PackageReference Update="MSTest.TestFramework" Version="3.8.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UnitTests\Attributes\" />
-    <Folder Include="UnitTests\DynamicDataSources\" />
   </ItemGroup>
 
   <ItemGroup>
