@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsabaDu.DynamicTestData" Version="1.2.3" />
+    <PackageReference Include="CsabaDu.DynamicTestData" Version="1.3.0" />
     <PackageReference Include="xunit.v3.extensibility.core" Version="2.0.1" />
   </ItemGroup>
 
