@@ -87,20 +87,24 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     public object?[] GetData() => ArgsCode switch
     {
         ArgsCode.Instance => [TestData],
-        ArgsCode.Properties => TestData switch
-        {
-            ITestDataReturns or ITestDataThrows => TestDataPropertiesToArgs(1),
-            _ => TestDataPropertiesToArgs(2),
-        },
+        ArgsCode.Properties => TestDataPropertiesToArgs(),
         _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValue_ + (int)ArgsCode)
     };
 
     /// <summary>
     /// Converts test data properties to arguments starting from the specified index.
     /// </summary>
-    /// <param name="startIndex">The starting index for the arguments</param>
     /// <returns>An array of arguments</returns>
-    private object?[] TestDataPropertiesToArgs(int startIndex)
-    => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
+    private object?[] TestDataPropertiesToArgs()
+    {
+        return TestData is ITestDataReturns or ITestDataThrows ?
+            testDataPropertiesToArgs(1)
+            : testDataPropertiesToArgs(2);
+
+        #region Local methods
+        object?[] testDataPropertiesToArgs(int startIndex)
+        => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
+        #endregion
+    }
     #endregion
 }

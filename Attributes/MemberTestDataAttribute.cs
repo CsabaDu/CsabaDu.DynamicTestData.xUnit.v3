@@ -1,5 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 
 /// <summary>
@@ -18,10 +19,8 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
     /// <param name="memberName">The name of the public member that will provide the test data.</param>
     /// <param name="arguments">The arguments to be passed to the member (only supported for static members).</param>
     public MemberTestDataAttribute(string memberName, params object[] arguments)
-        : base(memberName, arguments)
-    {
-        DisableDiscoveryEnumeration = true;
-    }
+    : base(memberName, arguments)
+    => DisableDiscoveryEnumeration = true;
 
     /// <summary>
     /// Retrieves the data to be used to test the theory.
@@ -38,19 +37,18 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
         MethodInfo testMethod,
         DisposalTracker disposalTracker)
     {
-        var dataCollection = await base.GetData(testMethod, disposalTracker).ConfigureAwait(false);
-        if (dataCollection is IEnumerable<ITheoryTestDataRow> testDataCollection)
-        {
-            dataCollection =
-                testDataCollection
-                .Select(setTestDisplayNameIfArgsCodeProperties)
-                .CastOrToReadOnlyCollection();
-        }
+        var dataCollection =
+            await base.GetData(testMethod, disposalTracker)
+            .ConfigureAwait(false);
 
-        return dataCollection;
+        return dataCollection is IEnumerable<ITheoryTestDataRow> testDataCollection ?
+            testDataCollection
+            .Select(namedRowIfArgsCodeProperties)
+            .CastOrToReadOnlyCollection()
+            : dataCollection;
 
         #region Local methods
-        ITheoryDataRow setTestDisplayNameIfArgsCodeProperties(ITheoryTestDataRow testDataRow)
+        ITheoryDataRow namedRowIfArgsCodeProperties(ITheoryTestDataRow testDataRow)
         => testDataRow.ArgsCode == ArgsCode.Properties ?
             testDataRow.SetTestDisplayName(testMethod.Name)
             : testDataRow;
