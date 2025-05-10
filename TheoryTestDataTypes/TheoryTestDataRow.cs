@@ -12,10 +12,6 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
 : ITheoryTestDataRow
 {
     #region Constants
-    /// <summary>
-    /// Error message for invalid ArgsCode property value
-    /// </summary>
-    internal const string ArgsCodePropertyHasInvalidValue_ = "ArgsCode property has invalid value: ";
     #endregion
 
     #region Properties
@@ -53,7 +49,13 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     /// <summary>
     /// Gets or sets the traits associated with the test.
     /// </summary>
-    public Dictionary<string, HashSet<string>>? Traits { get; init; } = [];
+    public Dictionary<string, HashSet<string>>? Traits { get; init; } = null;
+
+    /// <summary>
+    /// Gets the error message for invalid ArgsCode property value
+    /// </summary>
+    internal string ArgsCodePropertyHasInvalidValueMessage
+    => $"ArgsCode property has invalid value: {(int)ArgsCode}";
     #endregion
 
     #region Methods
@@ -87,24 +89,18 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     public object?[] GetData() => ArgsCode switch
     {
         ArgsCode.Instance => [TestData],
-        ArgsCode.Properties => TestDataPropertiesToArgs(),
-        _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValue_ + (int)ArgsCode)
+        ArgsCode.Properties => TestData is ITestDataReturns or ITestDataThrows ?
+            TestDataPropertiesToArgs(1)
+            : TestDataPropertiesToArgs(2),
+        _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValueMessage)
     };
 
     /// <summary>
     /// Converts test data properties to arguments starting from the specified index.
     /// </summary>
+    /// <param name="startIndex">The starting index of the object array elements of the TestData properties.</param>
     /// <returns>An array of arguments</returns>
-    private object?[] TestDataPropertiesToArgs()
-    {
-        return TestData is ITestDataReturns or ITestDataThrows ?
-            testDataPropertiesToArgs(1)
-            : testDataPropertiesToArgs(2);
-
-        #region Local methods
-        object?[] testDataPropertiesToArgs(int startIndex)
-        => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
-        #endregion
-    }
+    private object?[] TestDataPropertiesToArgs(int startIndex)
+    => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
     #endregion
 }

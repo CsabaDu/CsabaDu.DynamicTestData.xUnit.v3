@@ -17,4 +17,11 @@
     <PackageReference Include="xunit.v3.extensibility.core" Version="2.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>CsabaDu.DynamicTestData.xUnit.v3.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+
 </Project>
