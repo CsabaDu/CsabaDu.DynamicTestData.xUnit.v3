@@ -76,6 +76,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1);
+
         AddToTheoryTestData(testData);
     }
 
@@ -91,6 +92,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2);
+
         AddToTheoryTestData(testData);
     }
 
@@ -106,6 +108,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3);
+
         AddToTheoryTestData(testData);
     }
 
@@ -121,6 +124,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4);
+
         AddToTheoryTestData(testData);
     }
 
@@ -136,6 +140,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5);
+
         AddToTheoryTestData(testData);
     }
 
@@ -151,6 +156,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6);
+
         AddToTheoryTestData(testData);
     }
 
@@ -166,6 +172,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+
         AddToTheoryTestData(testData);
     }
 
@@ -181,6 +188,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+
         AddToTheoryTestData(testData);
     }
 
@@ -196,6 +204,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+
         AddToTheoryTestData(testData);
     }
     #endregion
@@ -219,6 +228,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1);
+
         AddToTheoryTestData(testData);
     }
 
@@ -235,6 +245,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2);
+
         AddToTheoryTestData(testData);
     }
 
@@ -251,6 +262,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3);
+
         AddToTheoryTestData(testData);
     }
 
@@ -267,6 +279,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4);
+
         AddToTheoryTestData(testData);
     }
 
@@ -283,6 +296,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5);
+
         AddToTheoryTestData(testData);
     }
 
@@ -299,6 +313,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6);
+
         AddToTheoryTestData(testData);
     }
 
@@ -315,6 +330,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+
         AddToTheoryTestData(testData);
     }
 
@@ -331,6 +347,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+
         AddToTheoryTestData(testData);
     }
 
@@ -347,6 +364,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+
         AddToTheoryTestData(testData);
     }
     #endregion
@@ -370,6 +388,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1);
+
         AddToTheoryTestData(testData);
     }
 
@@ -386,6 +405,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2);
+
         AddToTheoryTestData(testData);
     }
 
@@ -402,6 +422,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3);
+
         AddToTheoryTestData(testData);
     }
 
@@ -418,6 +439,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4);
+
         AddToTheoryTestData(testData);
     }
 
@@ -434,6 +456,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5);
+
         AddToTheoryTestData(testData);
     }
 
@@ -450,6 +473,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6);
+
         AddToTheoryTestData(testData);
     }
 
@@ -466,6 +490,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+
         AddToTheoryTestData(testData);
     }
 
@@ -482,6 +507,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+
         AddToTheoryTestData(testData);
     }
 
@@ -498,6 +524,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             definition,
             expected,
             arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+
         AddToTheoryTestData(testData);
     }
     #endregion
