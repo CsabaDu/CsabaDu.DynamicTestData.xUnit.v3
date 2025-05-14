@@ -40,18 +40,31 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
         var dataCollection =
             await base.GetData(testMethod, disposalTracker)
             .ConfigureAwait(false);
+        var result = new List<ITheoryDataRow>();
 
-        return dataCollection is IEnumerable<ITheoryTestDataRow> testDataCollection ?
-            testDataCollection
-            .Select(namedRowIfArgsCodeProperties)
-            .CastOrToReadOnlyCollection()
-            : dataCollection;
+        foreach (var dataRow in dataCollection)
+        {
+            if (dataRow is ITheoryTestDataRow testDataRow)
+            {
+                var namedDataRow = testDataRow.SetTestDisplayName(testMethod.Name);
+                result.Add(namedDataRow);
+            }
+            else
+            {
+                result.Add(dataRow);
+            }
+        }
 
-        #region Local methods
-        ITheoryDataRow namedRowIfArgsCodeProperties(ITheoryTestDataRow testDataRow)
-        => testDataRow.ArgsCode == ArgsCode.Properties ?
-            testDataRow.SetTestDisplayName(testMethod.Name)
-            : testDataRow;
-        #endregion
+        return result.CastOrToReadOnlyCollection();
     }
+
+    /// <summary>
+    /// Returns <paramref name="dataRow"/> if it is an <see cref="ITheoryTestDataRow"/>,
+    /// otherwise calls the base method.
+    /// </summary>
+    /// <inheritdoc cref="DataAttribute.ConvertDataRow(object)"/>
+    protected override ITheoryDataRow ConvertDataRow(object dataRow)
+    => dataRow is ITheoryTestDataRow testDataRow ?
+        testDataRow
+        : base.ConvertDataRow(dataRow);
 }

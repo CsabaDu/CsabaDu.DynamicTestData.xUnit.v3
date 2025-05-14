@@ -552,8 +552,8 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
         TheoryTestData!.Add(testData);
 
         #region Local methods
-        bool testCaseEquals(ITheoryTestDataRow testDataRow)
-        => testDataRow.TestData.TestCase == testData.TestCase;
+        bool testCaseEquals(ITheoryTestDataRow row)
+        => row.TestData.TestCase == testData.TestCase;
         #endregion
     }
     #endregion

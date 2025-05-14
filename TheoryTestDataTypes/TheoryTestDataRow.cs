@@ -6,25 +6,22 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
 /// </summary>
-/// <param name="TestData">The test data instance</param>
-/// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCode)
+/// <param name="testData">The test data instance</param>
+/// <param name="argsCode">Specifies how the test data should be converted to arguments</param>
+public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCode)
 : ITheoryTestDataRow
 {
-    #region Constants
-    #endregion
-
     #region Properties
     /// <summary>
     /// Gets the test data instance. This property cannot be null.
     /// </summary>
     [NotNull]
-    public ITestData TestData { get; init; } = Guard.ArgumentNotNull(TestData, nameof(TestData));
+    public ITestData TestData { get; init; } = Guard.ArgumentNotNull(testData, nameof(testData));
 
     /// <summary>
     /// Gets the code specifying how the test data should be converted to arguments.
     /// </summary>
-    public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
+    public ArgsCode ArgsCode { get; init; } = argsCode.Defined(nameof(argsCode));
 
     /// <summary>
     /// Gets or sets whether the test should be marked as explicit.
@@ -52,7 +49,7 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     public Dictionary<string, HashSet<string>>? Traits { get; init; } = null;
 
     /// <summary>
-    /// Gets the error message for invalid ArgsCode property value
+    /// Gets the error message for invalid argsCode property value
     /// </summary>
     internal string ArgsCodePropertyHasInvalidValueMessage
     => $"ArgsCode property has invalid value: {(int)ArgsCode}";
@@ -60,31 +57,24 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
 
     #region Methods
     /// <summary>
-    /// Gets the test display name based on the test method name and test data.
-    /// </summary>
-    /// <param name="testMethodName">The name of the test method</param>
-    /// <param name="testData">The test data instance (cannot be null)</param>
-    /// <returns>The formatted display name or null if testMethodName is null</returns>
-    /// <exception cref="ArgumentNullException">Thrown when testData is null</exception>
-    internal static string? GetTestDisplayName(string? testMethodName, [NotNull] ITestData testData)
-    => testMethodName is not null ?
-        GetDisplayName(testMethodName, testData)
-        : null;
-
-    /// <summary>
     /// Sets the test display name based on the test method name.
     /// </summary>
     /// <param name="testMethodName">The name of the test method</param>
     /// <returns>A new instance with the updated display name</returns>
     public ITheoryTestDataRow SetTestDisplayName(string? testMethodName)
-    => this with { TestDisplayName = GetTestDisplayName(testMethodName, TestData) };
+    => testMethodName is not null ?
+        this with
+        {
+            TestDisplayName = GetDisplayName(testMethodName, TestData)
+        }
+        : this;
 
     /// <summary>
-    /// Gets the test data as an array of arguments based on the ArgsCode.
+    /// Gets the test data as an array of arguments based on the argsCode.
     /// </summary>
     /// <returns>An array of test arguments</returns>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when ArgsCode has an invalid value
+    /// Thrown when argsCode has an invalid value
     /// </exception>
     public object?[] GetData() => ArgsCode switch
     {
@@ -98,7 +88,7 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     /// <summary>
     /// Converts test data properties to arguments starting from the specified index.
     /// </summary>
-    /// <param name="startIndex">The starting index of the object array elements of the TestData properties.</param>
+    /// <param name="startIndex">The starting index of the object array elements of the testData properties.</param>
     /// <returns>An array of arguments</returns>
     private object?[] TestDataPropertiesToArgs(int startIndex)
     => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
