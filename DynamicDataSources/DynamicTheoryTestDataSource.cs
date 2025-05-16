@@ -52,10 +52,17 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="addTestDataToTheoryTestData"/> is null
     /// </exception>
-    public void AddOptionalToTheoryTestData(Action addTestDataToTheoryTestData, ArgsCode? argsCode)
+    public void AddOptionalToTheoryTestData(
+        Action addTestDataToTheoryTestData,
+        ArgsCode? argsCode)
     {
-        Guard.ArgumentNotNull(addTestDataToTheoryTestData, nameof(addTestDataToTheoryTestData));
-        WithOptionalArgsCode(this, addTestDataToTheoryTestData, argsCode);
+        Guard.ArgumentNotNull(
+            addTestDataToTheoryTestData,
+            nameof(addTestDataToTheoryTestData));
+        WithOptionalArgsCode(
+            this,
+            addTestDataToTheoryTestData,
+            argsCode);
     }
     #endregion
 

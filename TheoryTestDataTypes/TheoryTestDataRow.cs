@@ -80,17 +80,9 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     {
         ArgsCode.Instance => [TestData],
         ArgsCode.Properties => TestData is ITestDataReturns or ITestDataThrows ?
-            TestDataPropertiesToArgs(1)
-            : TestDataPropertiesToArgs(2),
+            TestData.PropertiesToArgs(true)
+            : TestData.PropertiesToArgs(false),
         _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValueMessage)
     };
-
-    /// <summary>
-    /// Converts test data properties to arguments starting from the specified index.
-    /// </summary>
-    /// <param name="startIndex">The starting index of the object array elements of the testData properties.</param>
-    /// <returns>An array of arguments</returns>
-    private object?[] TestDataPropertiesToArgs(int startIndex)
-    => TestData.ToArgs(ArgsCode.Properties)[startIndex..];
     #endregion
 }
