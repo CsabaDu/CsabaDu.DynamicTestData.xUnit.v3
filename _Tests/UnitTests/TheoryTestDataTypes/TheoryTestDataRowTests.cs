@@ -12,10 +12,10 @@ public sealed class TheoryTestDataRowTests
     private static DynamicArgsCodeDataSource DataSource = new();
     private const string DisplayName = nameof(GetDisplayName);
 
-    private static IEnumerable<object?[]> ArgsCodeDataSource
+    private static IEnumerable<object[]> ArgsCodeDataSource
     => DataSource.ArgsCodeDataSource();
 
-    public static string GetDisplayName(MethodInfo testMethod, object?[] args)
+    public static string GetDisplayName(MethodInfo testMethod, object[] args)
     => DynamicDataSource.GetDisplayName(testMethod.Name, args);
 
     #region Constructors tests
@@ -35,11 +35,11 @@ public sealed class TheoryTestDataRowTests
     {
         // Arrange
         // Act
-        void attempt() => _ = new TheoryTestDataRow(null!, ArgsCode.Instance);
+        void attempt() => _ = new TheoryTestDataRow(null, ArgsCode.Instance);
 
         // Assert
         var exception = Assert.ThrowsException<ArgumentNullException>(attempt);
-        Assert.AreEqual("TestData", exception.ParamName);
+        Assert.AreEqual("testData", exception.ParamName);
     }
 
     [TestMethod]
@@ -50,7 +50,7 @@ public sealed class TheoryTestDataRowTests
         void attempt() => _ = new TheoryTestDataRow(testData, InvalidArgsCode);
         // Assert
         var exception = Assert.ThrowsException<InvalidEnumArgumentException>(attempt);
-        Assert.AreEqual("ArgsCode", exception.ParamName);
+        Assert.AreEqual("argsCode", exception.ParamName);
     }
     #endregion
 
