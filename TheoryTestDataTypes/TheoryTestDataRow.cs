@@ -63,13 +63,15 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     /// </summary>
     /// <param name="testMethodName">The name of the test method</param>
     /// <returns>A new instance with the updated display name</returns>
-    public ITheoryTestDataRow SetTestDisplayName(string? testMethodName)
-    => string.IsNullOrEmpty(testMethodName) ?
-        this
-        : this with
+    public ITheoryTestDataRow TheoryTestDataRow(string? testMethodName)
+    {
+        if (string.IsNullOrEmpty(testMethodName)) return this;
+
+        return this with
         {
             TestDisplayName = GetDisplayName(testMethodName, TestData)
         };
+    }
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the argsCode.
