@@ -79,9 +79,7 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     public object?[] GetData() => ArgsCode switch
     {
         ArgsCode.Instance => [TestData],
-        ArgsCode.Properties => TestData is ITestDataReturns or ITestDataThrows ?
-            TestData.PropertiesToArgs(true)
-            : TestData.PropertiesToArgs(false),
+        ArgsCode.Properties => TestData.PropertiesToArgs(TestData is IExpected),
         _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValueMessage)
     };
     #endregion
