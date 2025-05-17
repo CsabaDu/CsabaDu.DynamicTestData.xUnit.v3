@@ -63,7 +63,7 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     /// </summary>
     /// <param name="testMethodName">The name of the test method</param>
     /// <returns>A new instance with the updated display name</returns>
-    public ITheoryTestDataRow TheoryTestDataRow(string? testMethodName)
+    public ITheoryTestDataRow SetTestDisplayName(string? testMethodName)
     {
         if (string.IsNullOrEmpty(testMethodName)) return this;
 
