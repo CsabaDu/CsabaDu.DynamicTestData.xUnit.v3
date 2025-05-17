@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using System.ComponentModel;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 
 /// <summary>
@@ -62,12 +64,12 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     /// <param name="testMethodName">The name of the test method</param>
     /// <returns>A new instance with the updated display name</returns>
     public ITheoryTestDataRow SetTestDisplayName(string? testMethodName)
-    => testMethodName is not null ?
-        this with
+    => string.IsNullOrEmpty(testMethodName) ?
+        this
+        : this with
         {
             TestDisplayName = GetDisplayName(testMethodName, TestData)
-        }
-        : this;
+        };
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the argsCode.
@@ -76,11 +78,20 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     /// <exception cref="InvalidOperationException">
     /// Thrown when argsCode has an invalid value
     /// </exception>
-    public object?[] GetData() => ArgsCode switch
+    public object?[] GetData()
     {
-        ArgsCode.Instance => [TestData],
-        ArgsCode.Properties => TestData.PropertiesToArgs(TestData is IExpected),
-        _ => throw new InvalidOperationException(ArgsCodePropertyHasInvalidValueMessage)
-    };
+        try
+        {
+            return TestData.ToParams(ArgsCode, TestData is IExpected);
+        }
+        catch (InvalidEnumArgumentException)
+        {
+            throw new InvalidOperationException(ArgsCodePropertyHasInvalidValueMessage);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("'TestData.ToParams' method throwed exception.", ex);
+        }
+    }
     #endregion
 }
