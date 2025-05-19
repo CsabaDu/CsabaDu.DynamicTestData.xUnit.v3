@@ -8,9 +8,9 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
 /// </summary>
-/// <param name="testData">The test data instance</param>
-/// <param name="argsCode">Specifies how the test data should be converted to arguments</param>
-public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCode)
+/// <param name="TestData">The test data instance</param>
+/// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
+public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCode)
 : ITheoryTestDataRow
 {
     #region Properties
@@ -18,12 +18,12 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     /// Gets the test data instance. This property cannot be null.
     /// </summary>
     [NotNull]
-    public ITestData TestData { get; init; } = Guard.ArgumentNotNull(testData, nameof(testData));
+    public ITestData TestData { get; init; } = Guard.ArgumentNotNull(TestData, nameof(TestData));
 
     /// <summary>
     /// Gets the code specifying how the test data should be converted to arguments.
     /// </summary>
-    public ArgsCode ArgsCode { get; init; } = argsCode.Defined(nameof(argsCode));
+    public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
 
     /// <summary>
     /// Gets or sets whether the test should be marked as explicit.
@@ -51,7 +51,7 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     public Dictionary<string, HashSet<string>>? Traits { get; init; } = null;
 
     /// <summary>
-    /// Gets the error message for invalid argsCode property value
+    /// Gets the error message for invalid ArgsCode property value
     /// </summary>
     internal string ArgsCodePropertyHasInvalidValueMessage
     => $"ArgsCode property has invalid value: {(int)ArgsCode}";
@@ -74,18 +74,18 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     }
 
     /// <summary>
-    /// Gets the test data as an array of arguments based on the argsCode.
+    /// Gets the test data as an array of arguments based on the ArgsCode.
     /// </summary>
     /// <returns>An array of test arguments</returns>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when argsCode has an invalid value
+    /// Thrown when ArgsCode has an invalid value
     /// or when the test data conversion fails.
     /// </exception>
     public object?[] GetData()
     {
         try
         {
-            return TestData.ToParams(ArgsCode, TestData is IExpected);
+            return TestData.ToParams(ArgsCode, true);
         }
         catch (InvalidEnumArgumentException)
         {

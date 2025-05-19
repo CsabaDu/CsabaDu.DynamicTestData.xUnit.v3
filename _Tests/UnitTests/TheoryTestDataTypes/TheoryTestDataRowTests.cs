@@ -39,7 +39,7 @@ public sealed class TheoryTestDataRowTests
 
         // Assert
         var exception = Assert.ThrowsException<ArgumentNullException>(attempt);
-        Assert.AreEqual("testData", exception.ParamName);
+        Assert.AreEqual("TestData", exception.ParamName);
     }
 
     [TestMethod]
@@ -50,7 +50,7 @@ public sealed class TheoryTestDataRowTests
         void attempt() => _ = new TheoryTestDataRow(testData, InvalidArgsCode);
         // Assert
         var exception = Assert.ThrowsException<InvalidEnumArgumentException>(attempt);
-        Assert.AreEqual("argsCode", exception.ParamName);
+        Assert.AreEqual("ArgsCode", exception.ParamName);
     }
     #endregion
 
