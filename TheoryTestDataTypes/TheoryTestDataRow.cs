@@ -79,6 +79,7 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
     /// <returns>An array of test arguments</returns>
     /// <exception cref="InvalidOperationException">
     /// Thrown when argsCode has an invalid value
+    /// or when the test data conversion fails.
     /// </exception>
     public object?[] GetData()
     {
@@ -88,11 +89,14 @@ public sealed record class TheoryTestDataRow(ITestData testData, ArgsCode argsCo
         }
         catch (InvalidEnumArgumentException)
         {
-            throw new InvalidOperationException(ArgsCodePropertyHasInvalidValueMessage);
+            throw new InvalidOperationException(
+                ArgsCodePropertyHasInvalidValueMessage);
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException("'TestData.ToParams' method throwed exception.", ex);
+            throw new InvalidOperationException(
+                "'TestData.ToParams' conversion failed.",
+                ex);
         }
     }
     #endregion
