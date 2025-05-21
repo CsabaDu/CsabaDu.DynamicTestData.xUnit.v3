@@ -560,7 +560,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
 
         #region Local methods
         bool testCaseEquals(ITheoryTestDataRow row)
-        => row.TestData.TestCase == testData.TestCase;
+        => row.TestCase == testData.TestCase;
         #endregion
     }
     #endregion

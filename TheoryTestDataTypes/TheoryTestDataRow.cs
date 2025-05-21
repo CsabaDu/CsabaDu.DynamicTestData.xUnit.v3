@@ -8,51 +8,47 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// </summary>
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCode)
-: ITheoryTestDataRow
+public sealed class TheoryTestDataRow
+: TheoryDataRowBase, ITheoryTestDataRow
 {
+    #region Constructors
+    public TheoryTestDataRow(
+        ITestData testData,
+        ArgsCode argsCode)
+    {
+        Data = TestDataToParams(
+            testData,
+            argsCode,
+            testData is IExpected,
+            out string testCase);
+        TestCase = testCase;
+    }
+
+    private TheoryTestDataRow(
+        ITheoryTestDataRow other,
+        string? testMethodName)
+    {
+        Guard.ArgumentNotNull(other, nameof(other));
+
+        Data = other.Data;
+        TestCase = other.TestCase;
+
+        Explicit = other.Explicit;
+        Skip = other.Skip;
+        TestDisplayName =
+            GetDisplayName(testMethodName, other.TestCase)
+            ?? other.TestDisplayName;
+        Timeout = other.Timeout;
+        Traits = other.Traits ?? [];
+    }
+    #endregion
+
     #region Properties
-    /// <summary>
-    /// Gets the test data instance. This property cannot be null.
-    /// </summary>
-    [NotNull]
-    public ITestData TestData { get; init; } = Guard.ArgumentNotNull(TestData, nameof(TestData));
+    /// <inheritdoc cref="ITheoryTestDataRow.Data"/>/>
+    public object?[] Data { get; init;}
 
-    /// <summary>
-    /// Gets the code specifying how the test data should be converted to arguments.
-    /// </summary>
-    public ArgsCode ArgsCode { get; init; } = ArgsCode.Defined(nameof(ArgsCode));
-
-    /// <summary>
-    /// Gets or sets whether the test should be marked as explicit.
-    /// </summary>
-    public bool? Explicit { get; init; } = null;
-
-    /// <summary>
-    /// Gets or sets the skip reason for the test (null means the test won't be skipped).
-    /// </summary>
-    public string? Skip { get; init; } = null;
-
-    /// <summary>
-    /// Gets or sets the display name for the test.
-    /// </summary>
-    public string? TestDisplayName { get; init; } = null;
-
-    /// <summary>
-    /// Gets or sets the timeout in milliseconds for the test.
-    /// </summary>
-    public int? Timeout { get; init; } = null;
-
-    /// <summary>
-    /// Gets or sets the traits associated with the test.
-    /// </summary>
-    public Dictionary<string, HashSet<string>>? Traits { get; init; } = null;
-
-    /// <summary>
-    /// Gets the error message for invalid ArgsCode property value
-    /// </summary>
-    internal string ArgsCodePropertyHasInvalidValueMessage
-    => $"ArgsCode property has invalid value: {(int)ArgsCode}";
+    /// <inheritdoc cref="ITheoryTestDataRow.TestCase"/>/>
+    public string TestCase { get; init; }
     #endregion
 
     #region Methods
@@ -60,16 +56,12 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     /// Sets the test display name based on the test method name.
     /// </summary>
     /// <param name="testMethodName">The name of the test method</param>
-    /// <returns>A new instance with the updated display name</returns>
-    public ITheoryTestDataRow SetTestDisplayName(string? testMethodName)
-    {
-        if (string.IsNullOrEmpty(testMethodName)) return this;
-
-        return this with
-        {
-            TestDisplayName = GetDisplayName(testMethodName, TestData)
-        };
-    }
+    /// <returns>A new instance with the updated display name
+    /// or the same instance if <paramref name="testMethodName"/> is null.</returns>
+    public ITheoryTestDataRow SetName(string? testMethodName)
+    => !string.IsNullOrEmpty(testMethodName) ?
+        new TheoryTestDataRow(this, testMethodName)
+        : this;
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the ArgsCode.
@@ -79,23 +71,14 @@ public sealed record class TheoryTestDataRow(ITestData TestData, ArgsCode ArgsCo
     /// Thrown when ArgsCode has an invalid value
     /// or when the test data conversion fails.
     /// </exception>
-    public object?[] GetData()
-    {
-        try
-        {
-            return TestData.ToParams(ArgsCode, true);
-        }
-        catch (InvalidEnumArgumentException)
-        {
-            throw new InvalidOperationException(
-                ArgsCodePropertyHasInvalidValueMessage);
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException(
-                "'TestData.ToParams' conversion failed.",
-                ex);
-        }
-    }
+    protected override object?[] GetData()
+    => Data;
+
+    /// <summary>
+    /// Returns a string representation of the current object.
+    /// </summary>
+    /// <returns>The value of the <see cref="TestCase"/> property.</returns>
+    public override string ToString()
+    => TestCase;
     #endregion
 }

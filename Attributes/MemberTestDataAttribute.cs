@@ -44,15 +44,11 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
 
         foreach (var dataRow in dataCollection)
         {
-            if (dataRow is ITheoryTestDataRow testDataRow)
-            {
-                var namedDataRow = testDataRow.SetTestDisplayName(testMethod.Name);
-                result.Add(namedDataRow);
-            }
-            else
-            {
-                result.Add(dataRow);
-            }
+            var row = dataRow is ITheoryTestDataRow testDataRow ?
+                testDataRow.SetName(testMethod.Name)
+                : dataRow;
+
+            result.Add(row);
         }
 
         return result.CastOrToReadOnlyCollection();

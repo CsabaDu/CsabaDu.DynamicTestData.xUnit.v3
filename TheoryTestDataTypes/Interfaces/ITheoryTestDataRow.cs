@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+//using ITestCase = CsabaDu.DynamicTestData.TestDataTypes.Interfaces.ITestCase;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
 /// <summary>
@@ -10,25 +12,17 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// Extends <see cref="ITheoryDataRow"/> to provide access to the <see cref="TestDataTypes.TestData"/> instance
 /// and specifies how the test data should be converted to arguments via <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/>.
 /// </remarks>
-public interface ITheoryTestDataRow : ITheoryDataRow
+public interface ITheoryTestDataRow : ITheoryDataRow, TestDataTypes.Interfaces.ITestCase
 {
     /// <summary>
-    /// Gets the test data instance for this test row.
+    /// Gets an array of objects representing the data associated with the current context.
     /// </summary>
-    /// <value>The <see cref="ITestData"/> instance (never null).</value>
-    [NotNull]
-    ITestData TestData { get; }
-
-    /// <summary>
-    /// Gets the code specifying how the test data should be converted to arguments.
-    /// </summary>
-    /// <value>An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> value indicating the argument conversion method.</value>
-    ArgsCode ArgsCode { get; }
+    object?[] Data { get; }
 
     /// <summary>
     /// Sets the display name for the test row based on the test method name.
     /// </summary>
     /// <param name="testMethodName">The name of the test method (optional). If null, the default display name will be used.</param>
     /// <returns>The configured test data row instance.</returns>
-    ITheoryTestDataRow SetTestDisplayName(string? testMethodName);
+    ITheoryTestDataRow SetName(string? testMethodName);
 }

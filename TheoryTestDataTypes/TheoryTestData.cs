@@ -24,7 +24,7 @@ public sealed class TheoryTestData(ArgsCode argsCode)
     /// An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> value that determines how test data should be
     /// converted to test method arguments. The value is validated to be a defined enum value.
     /// </value>
-    public ArgsCode ArgsCode => argsCode.Defined(nameof(argsCode));
+    public ArgsCode ArgsCode { get; init; } = argsCode.Defined(nameof(argsCode));
 
     /// <summary>
     /// Converts test data into a theory test data row.
