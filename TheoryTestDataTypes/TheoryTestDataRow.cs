@@ -21,6 +21,7 @@ public sealed class TheoryTestDataRow
             argsCode,
             testData is IExpected,
             out string testCase);
+        ArgsCode = argsCode.Defined(nameof(argsCode));
         TestCase = testCase;
     }
 
@@ -31,17 +32,21 @@ public sealed class TheoryTestDataRow
         Guard.ArgumentNotNull(other, nameof(other));
 
         Data = other.Data;
+        ArgsCode = other.ArgsCode;
         TestCase = other.TestCase;
-
         Explicit = other.Explicit;
         Skip = other.Skip;
         TestDisplayName =
+            other.ArgsCode == ArgsCode.Properties ?
             GetDisplayName(testMethodName, other.TestCase)
+            : testMethodName
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
         Traits = other.Traits ?? [];
     }
     #endregion
+
+    public ArgsCode ArgsCode { get; init; }
 
     #region Properties
     /// <inheritdoc cref="ITheoryTestDataRow.Data"/>/>
@@ -49,6 +54,7 @@ public sealed class TheoryTestDataRow
 
     /// <inheritdoc cref="ITheoryTestDataRow.TestCase"/>/>
     public string TestCase { get; init; }
+
     #endregion
 
     #region Methods
@@ -59,9 +65,11 @@ public sealed class TheoryTestDataRow
     /// <returns>A new instance with the updated display name
     /// or the same instance if <paramref name="testMethodName"/> is null.</returns>
     public ITheoryTestDataRow SetName(string? testMethodName)
-    => !string.IsNullOrEmpty(testMethodName) ?
-        new TheoryTestDataRow(this, testMethodName)
-        : this;
+    {
+        return !string.IsNullOrEmpty(testMethodName) ?
+            new TheoryTestDataRow(this, testMethodName)
+            : this;
+    }
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the ArgsCode.

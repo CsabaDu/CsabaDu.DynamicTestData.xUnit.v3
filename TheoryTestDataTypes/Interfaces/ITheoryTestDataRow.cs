@@ -12,13 +12,20 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// Extends <see cref="ITheoryDataRow"/> to provide access to the <see cref="TestDataTypes.TestData"/> instance
 /// and specifies how the test data should be converted to arguments via <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/>.
 /// </remarks>
-public interface ITheoryTestDataRow : ITheoryDataRow, TestDataTypes.Interfaces.ITestCase
+public interface ITheoryTestDataRow
+: ITheoryDataRow,
+TestDataTypes.Interfaces.ITestCase
 {
     /// <summary>
     /// Gets an array of objects representing the data associated with the current context.
     /// </summary>
     object?[] Data { get; }
 
+    /// <summary>
+    /// Gets the <see cref="CsabaDu.DynamicTestData.DynamicDataSources.ArgsCode"/> enum value
+    /// which determines the way of the <see cref="ITestData"/> istance conversion to test parameters.
+    /// </summary>
+    ArgsCode ArgsCode { get; }
     /// <summary>
     /// Sets the display name for the test row based on the test method name.
     /// </summary>
