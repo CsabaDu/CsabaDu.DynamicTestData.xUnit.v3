@@ -25,6 +25,16 @@ public sealed class TheoryTestDataRow
         TestCase = testCase;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TheoryTestDataRow"/> class by copying data from another instance
+    /// and optionally specifying a test method name.
+    /// </summary>
+    /// <remarks>This constructor copies all relevant properties from the provided <paramref name="other"/>
+    /// instance, including test data, arguments, and traits. If <paramref name="testMethodName"/> is provided, it may
+    /// be used to generate a custom display name for the test case.</remarks>
+    /// <param name="other">The <see cref="ITheoryTestDataRow"/> instance to copy data from. Cannot be <see langword="null"/>.</param>
+    /// <param name="testMethodName">An optional test method name to use for generating the display name. If <see langword="null"/>, the display name
+    /// from <paramref name="other"/> will be used.</param>
     private TheoryTestDataRow(
         ITheoryTestDataRow other,
         string? testMethodName)
@@ -55,7 +65,6 @@ public sealed class TheoryTestDataRow
 
     /// <inheritdoc cref="ITheoryTestDataRow.TestCase"/>/>
     public string TestCase { get; init; }
-
     #endregion
 
     #region Methods
