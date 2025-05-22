@@ -46,11 +46,12 @@ public sealed class TheoryTestDataRow
     }
     #endregion
 
-    public ArgsCode ArgsCode { get; init; }
-
     #region Properties
     /// <inheritdoc cref="ITheoryTestDataRow.Data"/>/>
     public object?[] Data { get; init;}
+
+    /// <inheritdoc cref="ITheoryTestDataRow.ArgsCode"/>
+    public ArgsCode ArgsCode { get; init; }
 
     /// <inheritdoc cref="ITheoryTestDataRow.TestCase"/>/>
     public string TestCase { get; init; }

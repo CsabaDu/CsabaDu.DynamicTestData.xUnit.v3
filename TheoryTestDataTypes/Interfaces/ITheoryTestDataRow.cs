@@ -26,6 +26,7 @@ TestDataTypes.Interfaces.ITestCase
     /// which determines the way of the <see cref="ITestData"/> istance conversion to test parameters.
     /// </summary>
     ArgsCode ArgsCode { get; }
+
     /// <summary>
     /// Sets the display name for the test row based on the test method name.
     /// </summary>
