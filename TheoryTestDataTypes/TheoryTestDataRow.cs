@@ -99,6 +99,14 @@ public sealed class TheoryTestDataRow
     public override string ToString()
     => TestCase;
 
+    /// <summary>
+    /// Determines whether the current instance is equal to the specified <see
+    /// cref="TestDataTypes.Interfaces.ITestCase"/>.
+    /// </summary>
+    /// <param name="other">The <see cref="TestDataTypes.Interfaces.ITestCase"/> to compare with the current instance.</param>
+    /// <returns><see langword="true"/> if the specified <see cref="TestDataTypes.Interfaces.ITestCase"/> is not <see
+    /// langword="null"/>  and its <c>TestCase</c> property is equal to the <c>TestCase</c> property of the current
+    /// instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(TestDataTypes.Interfaces.ITestCase? other)
     => other is not null
         && other.TestCase == TestCase;
