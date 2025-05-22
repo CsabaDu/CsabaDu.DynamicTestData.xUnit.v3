@@ -80,5 +80,10 @@ public sealed class TheoryTestDataRow
     /// <returns>The value of the <see cref="TestCase"/> property.</returns>
     public override string ToString()
     => TestCase;
+
+    public bool Equals(TestDataTypes.Interfaces.ITestCase? other)
+    => other is not null
+        && other.TestCase == TestCase;
+
     #endregion
 }

@@ -551,17 +551,12 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
             ResetTheoryTestData();
         }
 
-        if (TheoryTestData!.Any(testCaseEquals))
+        if (TheoryTestData!.Any(testData.Equals))
         {
             return;
         }
 
         TheoryTestData!.Add(testData);
-
-        #region Local methods
-        bool testCaseEquals(ITheoryTestDataRow row)
-        => row.TestCase == testData.TestCase;
-        #endregion
     }
     #endregion
     #endregion
