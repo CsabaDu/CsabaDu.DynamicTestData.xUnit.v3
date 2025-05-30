@@ -59,9 +59,8 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     }
     #endregion
 
-
-    #region Private methods
     #region Add
+    #region Private methods
     /// <summary>
     /// Adds test data to the collection, ensuring type consistency.
     /// <remarks>
@@ -69,36 +68,20 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </remarks>
     /// </summary>
     /// <param name="testData">The test data to add</param>
-    private void Add(ITestData testData)
+    private void Add<T>(T testData)
+    where T : ITestData
     {
-        if (TheoryTestData is null)
+        if (TheoryTestData == null
+            || !TheoryTestData.Equals(testData.GetType()))
         {
-            SetTheoryTestData(testData);
-            return;
+            TheoryTestData = new TheoryTestData<T>(ArgsCode, testData);
         }
 
-        if (TheoryTestData!.Any(testData.Equals))
-        {
-            return;
-        }
-
-        if (TheoryTestData!.Equals(testData))
+        else if (!TheoryTestData!.Any(testData.Equals))
         {
             TheoryTestData!.Add(testData);
-            return;
         }
-
-        SetTheoryTestData(testData);
     }
-    #endregion
-
-    #region SetTheoryTestData
-    private void SetTheoryTestData(ITestData testData)
-    {
-        TheoryTestData =
-            TypedTheoryTestData(ArgsCode, testData);
-    }
-    #endregion
     #endregion
 
     /// <summary>
@@ -460,5 +443,6 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
         definition,
         expected,
         arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+    #endregion
     #endregion
 }

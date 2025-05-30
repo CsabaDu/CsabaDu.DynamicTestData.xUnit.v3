@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 
 /// <summary>
@@ -8,7 +9,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// </summary>
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-public sealed class TheoryTestDataRow
+internal sealed class TheoryTestDataRow
 : TheoryDataRowBase, ITheoryTestDataRow
 {
     #region Constructors
@@ -23,7 +24,7 @@ public sealed class TheoryTestDataRow
     /// <param name="argsCode">The argument code associated with the test case. Used to define additional context or behavior.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="testData"/> parameter is null.</exception>
     /// <exception cref="InvalidEnumArgumentException">Thrown is <paramref name="argsCode"/> parameter has invalid value.</exception>
-    public TheoryTestDataRow(
+    internal TheoryTestDataRow(
         ITestData testData,
         ArgsCode argsCode)
     {
@@ -61,11 +62,7 @@ public sealed class TheoryTestDataRow
             : testMethodName
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
-
-        foreach (var trait in other.Traits ?? [])
-        {
-            Traits.Add(trait.Key, trait.Value);
-        }
+        Traits = other.Traits ?? [];
     }
     #endregion
 
@@ -89,8 +86,8 @@ public sealed class TheoryTestDataRow
     /// or the same instance if <paramref name="testMethodName"/> is null.</returns>
     public ITheoryTestDataRow SetName(string? testMethodName)
     => !string.IsNullOrEmpty(testMethodName) ?
-        new TheoryTestDataRow(this, testMethodName)
-        : this;
+            new TheoryTestDataRow(this, testMethodName)
+            : this;
 
     /// <summary>
     /// Determines whether the current instance is equal to the specified <see
