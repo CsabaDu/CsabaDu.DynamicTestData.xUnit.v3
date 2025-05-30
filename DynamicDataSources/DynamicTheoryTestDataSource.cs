@@ -52,16 +52,55 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="add"/> is null
     /// </exception>
-    public void AddOptional(
-        Action add,
-        ArgsCode? argsCode)
+    public void AddOptional(Action add, ArgsCode? argsCode)
     {
         Guard.ArgumentNotNull(add, nameof(add));
         WithOptionalArgsCode(this, add, argsCode);
     }
     #endregion
 
+
+    #region Private methods
     #region Add
+    /// <summary>
+    /// Adds test data to the collection, ensuring type consistency.
+    /// <remarks>
+    /// All test data added to a single instance must have different <see cref="TestData.TestCase"/> property.
+    /// </remarks>
+    /// </summary>
+    /// <param name="testData">The test data to add</param>
+    private void Add(TestData testData)
+    {
+        if (TheoryTestData is null)
+        {
+            SetTheoryTestData(testData);
+            return;
+        }
+
+        if (TheoryTestData!.Any(testData.Equals))
+        {
+            return;
+        }
+
+        if (TheoryTestData!.Equals(testData))
+        {
+            TheoryTestData!.Add(testData);
+            return;
+        }
+
+        SetTheoryTestData(testData);
+    }
+    #endregion
+
+    #region SetTheoryTestData
+    private void SetTheoryTestData(ITestData testData)
+    {
+        TheoryTestData =
+            TypedTheoryTestData(ArgsCode, testData);
+    }
+    #endregion
+    #endregion
+
     /// <summary>
     /// Adds a test case to the theory test data.
     /// </summary>
@@ -421,30 +460,5 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
         definition,
         expected,
         arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-    #endregion
-
-    #region Private Add
-    /// <summary>
-    /// Adds test data to the collection, ensuring type consistency.
-    /// <remarks>
-    /// All test data added to a single instance must have different <see cref="TestData.TestCase"/> property.
-    /// </remarks>
-    /// </summary>
-    /// <param name="testData">The test data to add</param>
-    private void Add(TestData testData)
-    {
-        if (TheoryTestData is null)
-        {
-            ResetTheoryTestData();
-        }
-
-        if (TheoryTestData!.Any(testData.Equals))
-        {
-            return;
-        }
-
-        TheoryTestData!.Add(testData);
-    }
-    #endregion
     #endregion
 }

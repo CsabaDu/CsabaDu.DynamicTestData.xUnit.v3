@@ -17,14 +17,22 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 public sealed class TheoryTestData(ArgsCode argsCode)
 : TheoryDataBase<ITheoryTestDataRow, ITestData>, ITheoryTestData
 {
-    /// <summary>
-    /// Gets the strategy for converting test data to method arguments.
-    /// </summary>
-    /// <value>
-    /// An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> value that determines how test data should be
-    /// converted to test method arguments. The value is validated to be a defined enum value.
-    /// </value>
+    /// <inheritdoc cref="ITheoryTestData.ArgsCode"/>
+    /// <remarks>The value is validated to be a defined enum value.</remarks>
     public ArgsCode ArgsCode { get; init; } = argsCode.Defined(nameof(argsCode));
+
+    /// <inheritdoc cref="ITheoryTestData.TestDataType"/>
+    public Type? TestDataType { get; private set; }
+
+    /// <summary>
+    /// Determines whether the specified <see cref="ITestData"/> instance is equal to the current instance.
+    /// </summary>
+    /// <param name="testData">The <see cref="ITestData"/> instance to compare with the current instance. Can be <see langword="null"/>.</param>
+    /// <returns><see langword="true"/> if the specified <see cref="ITestData"/> instance is of the same type as the current
+    /// instance's <c>TestDataType</c>; otherwise, <see langword="false"/>.</returns>
+    public bool Equals(ITestData? testData)
+    => TestDataType is not null
+        && testData?.GetType() == TestDataType;
 
     /// <summary>
     /// Converts test data into a theory test data row.
@@ -36,4 +44,20 @@ public sealed class TheoryTestData(ArgsCode argsCode)
     /// </returns>
     protected override ITheoryTestDataRow Convert(ITestData testData)
     => new TheoryTestDataRow(testData, ArgsCode);
+
+    /// <summary>
+    /// Creates a strongly-typed instance of <see cref="ITheoryTestData"/> using the specified arguments and test data.
+    /// </summary>
+    /// <param name="argsCode">The code representing the arguments to be used for the test data.</param>
+    /// <param name="testData">The test data instance used to initialize the <see cref="ITheoryTestData"/>. Cannot be <see langword="null"/>.</param>
+    /// <returns>An instance of <see cref="ITheoryTestData"/> initialized with the provided arguments and test data type.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="testData"/> is <see langword="null"/>.</exception>
+    internal static TheoryTestData TypedTheoryTestData(
+        ArgsCode argsCode,
+        [NotNull] ITestData testData)
+    => new(argsCode)
+    {
+        TestDataType = testData?.GetType()
+            ?? throw new ArgumentNullException(nameof(testData)),
+    };
 }
