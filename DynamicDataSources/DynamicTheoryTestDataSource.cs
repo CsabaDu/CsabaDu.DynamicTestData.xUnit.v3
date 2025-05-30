@@ -69,7 +69,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </remarks>
     /// </summary>
     /// <param name="testData">The test data to add</param>
-    private void Add(TestData testData)
+    private void Add(ITestData testData)
     {
         if (TheoryTestData is null)
         {
