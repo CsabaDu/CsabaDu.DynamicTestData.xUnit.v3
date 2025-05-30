@@ -1,8 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-//using ITestCase = CsabaDu.DynamicTestData.TestDataTypes.Interfaces.ITestCase;
-
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 
 /// <summary>

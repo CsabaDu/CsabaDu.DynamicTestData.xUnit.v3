@@ -40,33 +40,28 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     => TheoryTestData = new(ArgsCode);
     #endregion
 
-    #region AddOptionalToTheoryTestData
+    #region AddOptional
     /// <summary>
     /// Adds optional test data to the collection with a specific argument conversion strategy.
     /// <remarks>
     /// This method allows temporarily changing the <see cref="ArgsCode"/> for a specific set of test data.
     /// </remarks>
     /// </summary>
-    /// <param name="addTestDataToTheoryTestData">Action that adds the test data</param>
+    /// <param name="add">Action that adds the test data</param>
     /// <param name="argsCode">The argument conversion strategy to use</param>
     /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="addTestDataToTheoryTestData"/> is null
+    /// Thrown when <paramref name="add"/> is null
     /// </exception>
-    public void AddOptionalToTheoryTestData(
-        Action addTestDataToTheoryTestData,
+    public void AddOptional(
+        Action add,
         ArgsCode? argsCode)
     {
-        Guard.ArgumentNotNull(
-            addTestDataToTheoryTestData,
-            nameof(addTestDataToTheoryTestData));
-        WithOptionalArgsCode(
-            this,
-            addTestDataToTheoryTestData,
-            argsCode);
+        Guard.ArgumentNotNull(add, nameof(add));
+        WithOptionalArgsCode(this, add, argsCode);
     }
     #endregion
 
-    #region AddTestDataToTheoryTestData
+    #region Add
     /// <summary>
     /// Adds a test case to the theory test data.
     /// </summary>
@@ -74,149 +69,113 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <param name="definition">Description of the test case</param>
     /// <param name="expected">Expected result or outcome description</param>
     /// <param name="arg1">First argument value</param>
-    public void AddTestDataToTheoryTestData<T1>(
+    public void Add<T1>(
         string definition,
         string expected,
         T1? arg1)
-    {
-        var testData = new TestData<T1>(
-            definition,
-            expected,
-            arg1);
+    => Add(new TestData<T1>(
+        definition,
+        expected,
+        arg1));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1}" />
+    /// <inheritdoc cref="Add{T1}" />
     /// <typeparam name="T2">The type of the second argument</typeparam>
     /// <param name="arg2">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2>(
+    public void Add<T1, T2>(
         string definition,
         string expected,
         T1? arg1, T2? arg2)
-    {
-        var testData = new TestData<T1, T2>(
-            definition,
-            expected,
-            arg1, arg2);
+    => Add(new TestData<T1, T2>(
+        definition,
+        expected,
+        arg1, arg2));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2}" />
+    /// <inheritdoc cref="Add{T1, T2}" />
     /// <typeparam name="T3">The type of the second argument</typeparam>
     /// <param name="arg3">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3>(
+    public void Add<T1, T2, T3>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3)
-    {
-        var testData = new TestData<T1, T2, T3>(
-            definition,
-            expected,
-            arg1, arg2, arg3);
+    => Add(new TestData<T1, T2, T3>(
+        definition,
+        expected,
+        arg1, arg2, arg3));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2, T3}" />
+    /// <inheritdoc cref="Add{T1, T2, T3}" />
     /// <typeparam name="T4">The type of the second argument</typeparam>
     /// <param name="arg4">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3, T4>(
+    public void Add<T1, T2, T3, T4>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4)
-    {
-        var testData = new TestData<T1, T2, T3, T4>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4);
+    => Add(new TestData<T1, T2, T3, T4>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2, T3, T4}" />
+    /// <inheritdoc cref="Add{T1, T2, T3, T4}" />
     /// <typeparam name="T5">The type of the second argument</typeparam>
     /// <param name="arg5">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3, T4, T5>(
+    public void Add<T1, T2, T3, T4, T5>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5)
-    {
-        var testData = new TestData<T1, T2, T3, T4, T5>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5);
+    => Add(new TestData<T1, T2, T3, T4, T5>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2, T3, T4, T5}" />
+    /// <inheritdoc cref="Add{T1, T2, T3, T4, T5}" />
     /// <typeparam name="T6">The type of the second argument</typeparam>
     /// <param name="arg6">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3, T4, T5, T6>(
+    public void Add<T1, T2, T3, T4, T5, T6>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6)
-    {
-        var testData = new TestData<T1, T2, T3, T4, T5, T6>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6);
+    => Add(new TestData<T1, T2, T3, T4, T5, T6>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2, T3, T4, T5, T6}" />
+    /// <inheritdoc cref="Add{T1, T2, T3, T4, T5, T6}" />
     /// <typeparam name="T7">The type of the second argument</typeparam>
     /// <param name="arg7">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3, T4, T5, T6, T7>(
+    public void Add<T1, T2, T3, T4, T5, T6, T7>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7)
-    {
-        var testData = new TestData<T1, T2, T3, T4, T5, T6, T7>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+    => Add(new TestData<T1, T2, T3, T4, T5, T6, T7>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2, T3, T4, T5, T6, T7}" />
+    /// <inheritdoc cref="Add{T1, T2, T3, T4, T5, T6, T7}" />
     /// <typeparam name="T8">The type of the second argument</typeparam>
     /// <param name="arg8">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3, T4, T5, T6, T7, T8>(
+    public void Add<T1, T2, T3, T4, T5, T6, T7, T8>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8)
-    {
-        var testData = new TestData<T1, T2, T3, T4, T5, T6, T7, T8>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+    => Add(new TestData<T1, T2, T3, T4, T5, T6, T7, T8>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataToTheoryTestData{T1, T2, T3, T4, T5, T6, T7, T8}" />
+    /// <inheritdoc cref="Add{T1, T2, T3, T4, T5, T6, T7, T8}" />
     /// <typeparam name="T9">The type of the second argument</typeparam>
     /// <param name="arg9">Second argument value</param>
-    public void AddTestDataToTheoryTestData<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    public void Add<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8, T9? arg9)
-    {
-        var testData = new TestData<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-
-        AddToTheoryTestData(testData);
-    }
+    => Add(new TestData<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
     #endregion
 
-    #region AddTestDataReturnsToTheoryTestData
+    #region AddReturns
     /// <summary>
     /// Adds a test case that returns a value type.
     /// </summary>
@@ -225,158 +184,122 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <param name="definition">Description of the test case</param>
     /// <param name="expected">Expected return value</param>
     /// <param name="arg1">First argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1>(
+    public void AddReturns<TStruct, T1>(
         string definition,
         TStruct expected,
         T1? arg1)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1>(
-            definition,
-            expected,
-            arg1);
+    => Add(new TestDataReturns<TStruct, T1>(
+        definition,
+        expected,
+        arg1));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1}" />
     /// <typeparam name="T2">The type of the second argument</typeparam>
     /// <param name="arg2">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2>(
+    public void AddReturns<TStruct, T1, T2>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2>(
-            definition,
-            expected,
-            arg1, arg2);
+    => Add(new TestDataReturns<TStruct, T1, T2>(
+        definition,
+        expected,
+        arg1, arg2));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2}" />
     /// <typeparam name="T3">The type of the second argument</typeparam>
     /// <param name="arg3">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3>(
+    public void AddReturns<TStruct, T1, T2, T3>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3>(
-            definition,
-            expected,
-            arg1, arg2, arg3);
+    => Add(new TestDataReturns<TStruct, T1, T2, T3>(
+        definition,
+        expected,
+        arg1, arg2, arg3));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2, T3}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3}" />
     /// <typeparam name="T4">The type of the second argument</typeparam>
     /// <param name="arg4">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3, T4>(
+    public void AddReturns<TStruct, T1, T2, T3, T4>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3, T4>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4);
+    => Add(new TestDataReturns<TStruct, T1, T2, T3, T4>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2, T3, T4}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4}" />
     /// <typeparam name="T5">The type of the second argument</typeparam>
     /// <param name="arg5">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3, T4, T5>(
+    public void AddReturns<TStruct, T1, T2, T3, T4, T5>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3, T4, T5>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5);
+    => Add(new TestDataReturns<TStruct, T1, T2, T3, T4, T5>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2, T3, T4, T5}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5}" />
     /// <typeparam name="T6">The type of the second argument</typeparam>
     /// <param name="arg6">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3, T4, T5, T6>(
+    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6);
+    => Add(new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2, T3, T4, T5, T6}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5, T6}" />
     /// <typeparam name="T7">The type of the second argument</typeparam>
     /// <param name="arg7">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3, T4, T5, T6, T7>(
+    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6, T7>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+    => Add(new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6, T7>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2, T3, T4, T5, T6, T7}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5, T6, T7}" />
     /// <typeparam name="T8">The type of the second argument</typeparam>
     /// <param name="arg8">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3, T4, T5, T6, T7, T8>(
+    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+    => Add(new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataReturnsToTheoryTestData{TStruct, T1, T2, T3, T4, T5, T6, T7, T8}" />
+    /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5, T6, T7, T8}" />
     /// <typeparam name="T9">The type of the second argument</typeparam>
     /// <param name="arg9">Second argument value</param>
-    public void AddTestDataReturnsToTheoryTestData<TStruct, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8, T9? arg9)
     where TStruct : struct
-    {
-        var testData = new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-
-        AddToTheoryTestData(testData);
-    }
+    => Add(new TestDataReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
     #endregion
 
-    #region AddTestDataThrowsToTheoryTestData
+    #region AddThrows
     /// <summary>
     /// Adds a test case that throws an exception.
     /// </summary>
@@ -385,158 +308,122 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <param name="definition">Description of the test case</param>
     /// <param name="expected">Expected exception instance</param>
     /// <param name="arg1">First argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1>(
+    public void AddThrows<TException, T1>(
         string definition,
         TException expected,
         T1? arg1)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1>(
-            definition,
-            expected,
-            arg1);
+    => Add(new TestDataThrows<TException, T1>(
+        definition,
+        expected,
+        arg1));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1}" />
+    /// <inheritdoc cref="AddThrows{TException, T1}" />
     /// <typeparam name="T2">The type of the second argument</typeparam>
     /// <param name="arg2">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2>(
+    public void AddThrows<TException, T1, T2>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2>(
-            definition,
-            expected,
-            arg1, arg2);
+    => Add(new TestDataThrows<TException, T1, T2>(
+        definition,
+        expected,
+        arg1, arg2));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2}" />
     /// <typeparam name="T3">The type of the second argument</typeparam>
     /// <param name="arg3">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3>(
+    public void AddThrows<TException, T1, T2, T3>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3>(
-            definition,
-            expected,
-            arg1, arg2, arg3);
+    => Add(new TestDataThrows<TException, T1, T2, T3>(
+        definition,
+        expected,
+        arg1, arg2, arg3));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2, T3}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2, T3}" />
     /// <typeparam name="T4">The type of the second argument</typeparam>
     /// <param name="arg4">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3, T4>(
+    public void AddThrows<TException, T1, T2, T3, T4>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3, T4>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4);
+    => Add(new TestDataThrows<TException, T1, T2, T3, T4>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2, T3, T4}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4}" />
     /// <typeparam name="T5">The type of the second argument</typeparam>
     /// <param name="arg5">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3, T4, T5>(
+    public void AddThrows<TException, T1, T2, T3, T4, T5>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3, T4, T5>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5);
+    => Add(new TestDataThrows<TException, T1, T2, T3, T4, T5>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2, T3, T4, T5}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5}" />
     /// <typeparam name="T6">The type of the second argument</typeparam>
     /// <param name="arg6">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3, T4, T5, T6>(
+    public void AddThrows<TException, T1, T2, T3, T4, T5, T6>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3, T4, T5, T6>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6);
+    => Add(new TestDataThrows<TException, T1, T2, T3, T4, T5, T6>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2, T3, T4, T5, T6}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5, T6}" />
     /// <typeparam name="T7">The type of the second argument</typeparam>
     /// <param name="arg7">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3, T4, T5, T6, T7>(
+    public void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3, T4, T5, T6, T7>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+    => Add(new TestDataThrows<TException, T1, T2, T3, T4, T5, T6, T7>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2, T3, T4, T5, T6, T7}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5, T6, T7}" />
     /// <typeparam name="T8">The type of the second argument</typeparam>
     /// <param name="arg8">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3, T4, T5, T6, T7, T8>(
+    public void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+    => Add(new TestDataThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
 
-        AddToTheoryTestData(testData);
-    }
-
-    /// <inheritdoc cref="AddTestDataThrowsToTheoryTestData{TException, T1, T2, T3, T4, T5, T6, T7, T8}" />
+    /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5, T6, T7, T8}" />
     /// <typeparam name="T9">The type of the second argument</typeparam>
     /// <param name="arg9">Second argument value</param>
-    public void AddTestDataThrowsToTheoryTestData<TException, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    public void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8, T9? arg9)
     where TException : Exception
-    {
-        var testData = new TestDataThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-            definition,
-            expected,
-            arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-
-        AddToTheoryTestData(testData);
-    }
+    => Add(new TestDataThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+        definition,
+        expected,
+        arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
     #endregion
 
-    #region AddToTheoryTestData
+    #region Private Add
     /// <summary>
     /// Adds test data to the collection, ensuring type consistency.
     /// <remarks>
@@ -544,7 +431,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </remarks>
     /// </summary>
     /// <param name="testData">The test data to add</param>
-    private void AddToTheoryTestData(TestData testData)
+    private void Add(TestData testData)
     {
         if (TheoryTestData is null)
         {

@@ -12,6 +12,17 @@ public sealed class TheoryTestDataRow
 : TheoryDataRowBase, ITheoryTestDataRow
 {
     #region Constructors
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TheoryTestDataRow"/> class with the specified test data and
+    /// argument code.
+    /// </summary>
+    /// <remarks>The constructor processes the provided <paramref name="testData"/> and <paramref
+    /// name="argsCode"/> to generate the test case parameters and determine the test case identifier. If <paramref
+    /// name="testData"/> implements <see cref="IExpected"/>, additional processing is applied.</remarks>
+    /// <param name="testData">The test data to be converted into parameters for the test case. Must implement <see cref="ITestData"/>.</param>
+    /// <param name="argsCode">The argument code associated with the test case. Used to define additional context or behavior.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="testData"/> parameter is null.</exception>
+    /// <exception cref="InvalidEnumArgumentException">Thrown is <paramref name="argsCode"/> parameter has invalid value.</exception>
     public TheoryTestDataRow(
         ITestData testData,
         ArgsCode argsCode)
@@ -39,8 +50,6 @@ public sealed class TheoryTestDataRow
         ITheoryTestDataRow other,
         string? testMethodName)
     {
-        Guard.ArgumentNotNull(other, nameof(other));
-
         Data = other.Data;
         ArgsCode = other.ArgsCode;
         TestCase = other.TestCase;
@@ -52,7 +61,11 @@ public sealed class TheoryTestDataRow
             : testMethodName
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
-        Traits = other.Traits ?? [];
+
+        foreach (var trait in other.Traits ?? [])
+        {
+            Traits.Add(trait.Key, trait.Value);
+        }
     }
     #endregion
 
@@ -75,29 +88,9 @@ public sealed class TheoryTestDataRow
     /// <returns>A new instance with the updated display name
     /// or the same instance if <paramref name="testMethodName"/> is null.</returns>
     public ITheoryTestDataRow SetName(string? testMethodName)
-    {
-        return !string.IsNullOrEmpty(testMethodName) ?
-            new TheoryTestDataRow(this, testMethodName)
-            : this;
-    }
-
-    /// <summary>
-    /// Gets the test data as an array of arguments based on the ArgsCode.
-    /// </summary>
-    /// <returns>An array of test arguments</returns>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when ArgsCode has an invalid value
-    /// or when the test data conversion fails.
-    /// </exception>
-    protected override object?[] GetData()
-    => Data;
-
-    /// <summary>
-    /// Returns a string representation of the current object.
-    /// </summary>
-    /// <returns>The value of the <see cref="TestCase"/> property.</returns>
-    public override string ToString()
-    => TestCase;
+    => !string.IsNullOrEmpty(testMethodName) ?
+        new TheoryTestDataRow(this, testMethodName)
+        : this;
 
     /// <summary>
     /// Determines whether the current instance is equal to the specified <see
@@ -111,5 +104,22 @@ public sealed class TheoryTestDataRow
     => other is not null
         && other.TestCase == TestCase;
 
+    /// <summary>
+    /// Returns a string representation of the current object.
+    /// </summary>
+    /// <returns>The value of the <see cref="TestCase"/> property.</returns>
+    public override string ToString()
+    => TestCase;
+
+    /// <summary>
+    /// Gets the test data as an array of arguments based on the ArgsCode.
+    /// </summary>
+    /// <returns>An array of test arguments</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when ArgsCode has an invalid value
+    /// or when the test data conversion fails.
+    /// </exception>
+    protected override object?[] GetData()
+    => Data;
     #endregion
 }
