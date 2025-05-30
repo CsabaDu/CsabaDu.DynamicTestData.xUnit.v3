@@ -24,5 +24,5 @@ public interface ITheoryTestData
     /// <summary>
     /// Gets the type of the test data associated with the current instance.
     /// </summary>
-    Type? TestDataType { get; }
+    Type TestDataType { get; }
 }

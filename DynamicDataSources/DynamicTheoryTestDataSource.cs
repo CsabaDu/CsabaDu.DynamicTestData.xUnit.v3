@@ -34,10 +34,10 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     #region Methods
     #region ResetTheoryTestData
     /// <summary>
-    /// Resets the underlying theory test data collection to an empty 'TheoryTestData' instance.
+    /// Resets the underlying <see cref="TheoryTestDataTypes.TheoryTestData"/> to null.
     /// </summary>
     public void ResetTheoryTestData()
-    => TheoryTestData = new(ArgsCode);
+    => TheoryTestData = null;
     #endregion
 
     #region AddOptional
@@ -68,19 +68,21 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </remarks>
     /// </summary>
     /// <param name="testData">The test data to add</param>
-    private void Add<T>(T testData)
-    where T : ITestData
+    private void Add<TTestData>(TTestData testData)
+    where TTestData : ITestData
     {
-        if (TheoryTestData == null
-            || !TheoryTestData.Equals(testData.GetType()))
+        if (TheoryTestData?.Equals(testData.GetType()) != true)
         {
-            TheoryTestData = new TheoryTestData<T>(ArgsCode, testData);
+            TheoryTestData = new TheoryTestData<TTestData>(ArgsCode, testData);
+            return;
         }
 
-        else if (!TheoryTestData!.Any(testData.Equals))
+        if (TheoryTestData.Any(testData.Equals))
         {
-            TheoryTestData!.Add(testData);
+            return;
         }
+
+        TheoryTestData.Add(testData);
     }
     #endregion
 

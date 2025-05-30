@@ -12,7 +12,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// </remarks>
 public interface ITheoryTestDataRow
 : ITheoryDataRow,
-TestDataTypes.Interfaces.ITestCase
+ITestCaseName
 {
     /// <summary>
     /// Gets an array of objects representing the data associated with the current context.

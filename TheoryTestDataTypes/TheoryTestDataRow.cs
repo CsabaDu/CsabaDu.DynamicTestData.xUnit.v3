@@ -86,27 +86,19 @@ internal sealed class TheoryTestDataRow
     /// or the same instance if <paramref name="testMethodName"/> is null.</returns>
     public ITheoryTestDataRow SetName(string? testMethodName)
     => !string.IsNullOrEmpty(testMethodName) ?
-            new TheoryTestDataRow(this, testMethodName)
-            : this;
+        new TheoryTestDataRow(this, testMethodName)
+        : this;
 
     /// <summary>
     /// Determines whether the current instance is equal to the specified <see
-    /// cref="TestDataTypes.Interfaces.ITestCase"/>.
+    /// cref="ITestCaseName"/>.
     /// </summary>
-    /// <param name="other">The <see cref="TestDataTypes.Interfaces.ITestCase"/> to compare with the current instance.</param>
-    /// <returns><see langword="true"/> if the specified <see cref="TestDataTypes.Interfaces.ITestCase"/> is not <see
+    /// <param name="other">The <see cref="ITestCaseName"/> to compare with the current instance.</param>
+    /// <returns><see langword="true"/> if the specified <see cref="ITestCaseName"/> is not <see
     /// langword="null"/>  and its <c>TestCase</c> property is equal to the <c>TestCase</c> property of the current
     /// instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(TestDataTypes.Interfaces.ITestCase? other)
-    => other is not null
-        && other.TestCase == TestCase;
-
-    /// <summary>
-    /// Returns a string representation of the current object.
-    /// </summary>
-    /// <returns>The value of the <see cref="TestCase"/> property.</returns>
-    public override string ToString()
-    => TestCase;
+    public bool Equals(ITestCaseName? other)
+    => other?.TestCase == TestCase;
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the ArgsCode.
