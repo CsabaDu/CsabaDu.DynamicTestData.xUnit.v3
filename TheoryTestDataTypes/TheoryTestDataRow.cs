@@ -86,7 +86,7 @@ public sealed class TheoryTestDataRow
     public ITheoryTestDataRow SetName(string? testMethodName)
     => string.IsNullOrEmpty(testMethodName) ?
         this
-        : new TheoryTestDataRow(this, testMethodName)
+        : new TheoryTestDataRow(this, testMethodName);
 
     /// <summary>
     /// Determines whether the current instance is equal to the specified <see
