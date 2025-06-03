@@ -12,19 +12,9 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// </remarks>
 public interface ITheoryTestDataRow
 : ITheoryDataRow,
+    ITestDataRow,
 ITestCaseName
 {
-    /// <summary>
-    /// Gets an array of objects representing the data associated with the current context.
-    /// </summary>
-    object?[] Data { get; }
-
-    /// <summary>
-    /// Gets the <see cref="CsabaDu.DynamicTestData.DynamicDataSources.ArgsCode"/> enum value
-    /// which determines the way of the <see cref="ITestData"/> istance conversion to test parameters.
-    /// </summary>
-    ArgsCode ArgsCode { get; }
-
     /// <summary>
     /// Sets the display name for the test row based on the test method name.
     /// </summary>

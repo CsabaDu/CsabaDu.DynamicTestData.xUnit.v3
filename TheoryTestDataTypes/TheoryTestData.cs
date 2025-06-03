@@ -16,15 +16,13 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <param name="argsCode">The strategy for converting test data to method arguments.</param>
 /// <exception cref="InvalidEnumArgumentException">Thrown if <paramref name="argsCode"/> has invalid value.</exception>
 public abstract class TheoryTestData(ArgsCode argsCode)
-: TheoryDataBase<ITheoryTestDataRow, ITestData>
+: TheoryDataBase<ITheoryTestDataRow, ITestData>, ITheoryTestData
 {
-    /// <inheritdoc cref="ITheoryTestData.ArgsCode"/>
-    /// <remarks>The value is validated to be a defined enum value.</remarks>
-    /// <param name="argsCode">The strategy for converting test data to method arguments.</param>
+    /// <inheritdoc cref="IArgsCode.ArgsCode"/>
     public ArgsCode ArgsCode { get; init; } = argsCode.Defined(nameof(argsCode));
 
     /// <inheritdoc cref="ITheoryTestData.TestDataType"/>
-    public abstract Type TestDataType { get; init; }
+    public abstract Type TestDataType { get; }
 
     /// <summary>
     /// Determines whether the specified <see cref="Type"/> is equal to the current test data type.
@@ -62,7 +60,7 @@ public abstract class TheoryTestData(ArgsCode argsCode)
 /// <typeparam name="TTestData">The type of test data contained in this instance. Must implement <see cref="ITestData"/>.</typeparam>
 public sealed class TheoryTestData<TTestData>
 : TheoryTestData
-where TTestData : ITestData
+where TTestData : notnull, ITestData
 {
     /// <summary>
     /// Represents test data for a theory test, including its type and associated arguments.
@@ -78,5 +76,5 @@ where TTestData : ITestData
         Add(TestData);
     }
 
-    public override Type TestDataType { get; init; }
+    public override Type TestDataType { get; }
 }

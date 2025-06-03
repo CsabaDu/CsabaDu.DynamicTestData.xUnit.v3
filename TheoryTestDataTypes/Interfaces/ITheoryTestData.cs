@@ -10,17 +10,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// This interface provides access to the argument conversion strategy (<see cref="DynamicTestData.DynamicDataSources.ArgsCode"/>)
 /// and allows initialization with a test method name.
 /// </remarks>
-public interface ITheoryTestData
+public interface ITheoryTestData : IArgsCode, IEquatable<Type>
 {
-    /// <summary>
-    /// Gets the strategy for converting test data to method arguments.
-    /// </summary>
-    /// <value>
-    /// An <see cref="DynamicTestData.DynamicDataSources.ArgsCode"/> enum value that determines
-    /// how test data should be converted to test method arguments.
-    /// </value>
-    ArgsCode ArgsCode { get; }
-
     /// <summary>
     /// Gets the type of the test data associated with the current instance.
     /// </summary>

@@ -9,7 +9,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// </summary>
 /// <param name="TestData">The test data instance</param>
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
-internal sealed class TheoryTestDataRow
+public sealed class TheoryTestDataRow
 : TheoryDataRowBase, ITheoryTestDataRow
 {
     #region Constructors
@@ -24,16 +24,15 @@ internal sealed class TheoryTestDataRow
     /// <param name="argsCode">The argument code associated with the test case. Used to define additional context or behavior.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="testData"/> parameter is null.</exception>
     /// <exception cref="InvalidEnumArgumentException">Thrown is <paramref name="argsCode"/> parameter has invalid value.</exception>
-    internal TheoryTestDataRow(
+    public TheoryTestDataRow(
         ITestData testData,
         ArgsCode argsCode)
     {
-        Data = TestDataToParams(
+        Params = TestDataToParams(
             testData,
             argsCode,
-            testData is IExpected,
             out string testCase);
-        ArgsCode = argsCode.Defined(nameof(argsCode));
+        ArgsCode = argsCode;
         TestCase = testCase;
     }
 
@@ -51,7 +50,7 @@ internal sealed class TheoryTestDataRow
         ITheoryTestDataRow other,
         string? testMethodName)
     {
-        Data = other.Data;
+        Params = other.Params;
         ArgsCode = other.ArgsCode;
         TestCase = other.TestCase;
         Explicit = other.Explicit;
@@ -67,10 +66,10 @@ internal sealed class TheoryTestDataRow
     #endregion
 
     #region Properties
-    /// <inheritdoc cref="ITheoryTestDataRow.Data"/>/>
-    public object?[] Data { get; init;}
+    /// <inheritdoc cref="ITestDataRow.Data"/>/>
+    public object?[] Params { get; init;}
 
-    /// <inheritdoc cref="ITheoryTestDataRow.ArgsCode"/>
+    /// <inheritdoc cref="IArgsCode.ArgsCode"/>
     public ArgsCode ArgsCode { get; init; }
 
     /// <inheritdoc cref="ITheoryTestDataRow.TestCase"/>/>
@@ -85,9 +84,9 @@ internal sealed class TheoryTestDataRow
     /// <returns>A new instance with the updated display name
     /// or the same instance if <paramref name="testMethodName"/> is null.</returns>
     public ITheoryTestDataRow SetName(string? testMethodName)
-    => !string.IsNullOrEmpty(testMethodName) ?
-        new TheoryTestDataRow(this, testMethodName)
-        : this;
+    => string.IsNullOrEmpty(testMethodName) ?
+        this
+        : new TheoryTestDataRow(this, testMethodName)
 
     /// <summary>
     /// Determines whether the current instance is equal to the specified <see
@@ -98,7 +97,8 @@ internal sealed class TheoryTestDataRow
     /// langword="null"/>  and its <c>TestCase</c> property is equal to the <c>TestCase</c> property of the current
     /// instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(ITestCaseName? other)
-    => other?.TestCase == TestCase;
+    => other is not null
+        && other.TestCase == TestCase;
 
     /// <summary>
     /// Gets the test data as an array of arguments based on the ArgsCode.
@@ -109,6 +109,6 @@ internal sealed class TheoryTestDataRow
     /// or when the test data conversion fails.
     /// </exception>
     protected override object?[] GetData()
-    => Data;
+    => Params;
     #endregion
 }

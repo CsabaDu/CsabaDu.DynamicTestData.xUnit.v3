@@ -19,7 +19,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 /// </para>
 /// </remarks>
 /// <param name="argsCode">The strategy for converting test data to method arguments</param>
-public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDataSource(argsCode)
+public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDataSourceBase(argsCode)
 {
     #region Properties
     /// <summary>
@@ -52,7 +52,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="add"/> is null
     /// </exception>
-    public void AddOptional(Action add, ArgsCode? argsCode)
+    protected void AddOptional(Action add, ArgsCode? argsCode)
     {
         Guard.ArgumentNotNull(add, nameof(add));
         WithOptionalArgsCode(this, add, argsCode);
@@ -69,7 +69,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// </summary>
     /// <param name="testData">The test data to add</param>
     private void Add<TTestData>(TTestData testData)
-    where TTestData : ITestData
+    where TTestData : notnull, ITestData
     {
         if (TheoryTestData?.Equals(testData.GetType()) != true)
         {
@@ -93,7 +93,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <param name="definition">Description of the test case</param>
     /// <param name="expected">Expected result or outcome description</param>
     /// <param name="arg1">First argument value</param>
-    public void Add<T1>(
+    protected void Add<T1>(
         string definition,
         string expected,
         T1? arg1)
@@ -105,7 +105,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1}" />
     /// <typeparam name="T2">The type of the second argument</typeparam>
     /// <param name="arg2">Second argument value</param>
-    public void Add<T1, T2>(
+    protected void Add<T1, T2>(
         string definition,
         string expected,
         T1? arg1, T2? arg2)
@@ -117,7 +117,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2}" />
     /// <typeparam name="T3">The type of the second argument</typeparam>
     /// <param name="arg3">Second argument value</param>
-    public void Add<T1, T2, T3>(
+    protected void Add<T1, T2, T3>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3)
@@ -129,7 +129,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2, T3}" />
     /// <typeparam name="T4">The type of the second argument</typeparam>
     /// <param name="arg4">Second argument value</param>
-    public void Add<T1, T2, T3, T4>(
+    protected void Add<T1, T2, T3, T4>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4)
@@ -141,7 +141,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2, T3, T4}" />
     /// <typeparam name="T5">The type of the second argument</typeparam>
     /// <param name="arg5">Second argument value</param>
-    public void Add<T1, T2, T3, T4, T5>(
+    protected void Add<T1, T2, T3, T4, T5>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5)
@@ -153,7 +153,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2, T3, T4, T5}" />
     /// <typeparam name="T6">The type of the second argument</typeparam>
     /// <param name="arg6">Second argument value</param>
-    public void Add<T1, T2, T3, T4, T5, T6>(
+    protected void Add<T1, T2, T3, T4, T5, T6>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6)
@@ -165,7 +165,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2, T3, T4, T5, T6}" />
     /// <typeparam name="T7">The type of the second argument</typeparam>
     /// <param name="arg7">Second argument value</param>
-    public void Add<T1, T2, T3, T4, T5, T6, T7>(
+    protected void Add<T1, T2, T3, T4, T5, T6, T7>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7)
@@ -177,7 +177,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2, T3, T4, T5, T6, T7}" />
     /// <typeparam name="T8">The type of the second argument</typeparam>
     /// <param name="arg8">Second argument value</param>
-    public void Add<T1, T2, T3, T4, T5, T6, T7, T8>(
+    protected void Add<T1, T2, T3, T4, T5, T6, T7, T8>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8)
@@ -189,7 +189,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="Add{T1, T2, T3, T4, T5, T6, T7, T8}" />
     /// <typeparam name="T9">The type of the second argument</typeparam>
     /// <param name="arg9">Second argument value</param>
-    public void Add<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    protected void Add<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         string definition,
         string expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8, T9? arg9)
@@ -208,7 +208,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <param name="definition">Description of the test case</param>
     /// <param name="expected">Expected return value</param>
     /// <param name="arg1">First argument value</param>
-    public void AddReturns<TStruct, T1>(
+    protected void AddReturns<TStruct, T1>(
         string definition,
         TStruct expected,
         T1? arg1)
@@ -221,7 +221,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1}" />
     /// <typeparam name="T2">The type of the second argument</typeparam>
     /// <param name="arg2">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2>(
+    protected void AddReturns<TStruct, T1, T2>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2)
@@ -234,7 +234,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2}" />
     /// <typeparam name="T3">The type of the second argument</typeparam>
     /// <param name="arg3">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3>(
+    protected void AddReturns<TStruct, T1, T2, T3>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3)
@@ -247,7 +247,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3}" />
     /// <typeparam name="T4">The type of the second argument</typeparam>
     /// <param name="arg4">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3, T4>(
+    protected void AddReturns<TStruct, T1, T2, T3, T4>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4)
@@ -260,7 +260,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4}" />
     /// <typeparam name="T5">The type of the second argument</typeparam>
     /// <param name="arg5">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3, T4, T5>(
+    protected void AddReturns<TStruct, T1, T2, T3, T4, T5>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5)
@@ -273,7 +273,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5}" />
     /// <typeparam name="T6">The type of the second argument</typeparam>
     /// <param name="arg6">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6>(
+    protected void AddReturns<TStruct, T1, T2, T3, T4, T5, T6>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6)
@@ -286,7 +286,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5, T6}" />
     /// <typeparam name="T7">The type of the second argument</typeparam>
     /// <param name="arg7">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7>(
+    protected void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7)
@@ -299,7 +299,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5, T6, T7}" />
     /// <typeparam name="T8">The type of the second argument</typeparam>
     /// <param name="arg8">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8>(
+    protected void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8)
@@ -312,7 +312,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddReturns{TStruct, T1, T2, T3, T4, T5, T6, T7, T8}" />
     /// <typeparam name="T9">The type of the second argument</typeparam>
     /// <param name="arg9">Second argument value</param>
-    public void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    protected void AddReturns<TStruct, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         string definition,
         TStruct expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8, T9? arg9)
@@ -332,7 +332,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <param name="definition">Description of the test case</param>
     /// <param name="expected">Expected exception instance</param>
     /// <param name="arg1">First argument value</param>
-    public void AddThrows<TException, T1>(
+    protected void AddThrows<TException, T1>(
         string definition,
         TException expected,
         T1? arg1)
@@ -345,7 +345,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1}" />
     /// <typeparam name="T2">The type of the second argument</typeparam>
     /// <param name="arg2">Second argument value</param>
-    public void AddThrows<TException, T1, T2>(
+    protected void AddThrows<TException, T1, T2>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2)
@@ -358,7 +358,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2}" />
     /// <typeparam name="T3">The type of the second argument</typeparam>
     /// <param name="arg3">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3>(
+    protected void AddThrows<TException, T1, T2, T3>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3)
@@ -371,7 +371,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2, T3}" />
     /// <typeparam name="T4">The type of the second argument</typeparam>
     /// <param name="arg4">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3, T4>(
+    protected void AddThrows<TException, T1, T2, T3, T4>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4)
@@ -384,7 +384,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4}" />
     /// <typeparam name="T5">The type of the second argument</typeparam>
     /// <param name="arg5">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3, T4, T5>(
+    protected void AddThrows<TException, T1, T2, T3, T4, T5>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5)
@@ -397,7 +397,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5}" />
     /// <typeparam name="T6">The type of the second argument</typeparam>
     /// <param name="arg6">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3, T4, T5, T6>(
+    protected void AddThrows<TException, T1, T2, T3, T4, T5, T6>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6)
@@ -410,7 +410,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5, T6}" />
     /// <typeparam name="T7">The type of the second argument</typeparam>
     /// <param name="arg7">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7>(
+    protected void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7)
@@ -423,7 +423,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5, T6, T7}" />
     /// <typeparam name="T8">The type of the second argument</typeparam>
     /// <param name="arg8">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8>(
+    protected void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8)
@@ -436,7 +436,7 @@ public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode) : DynamicDa
     /// <inheritdoc cref="AddThrows{TException, T1, T2, T3, T4, T5, T6, T7, T8}" />
     /// <typeparam name="T9">The type of the second argument</typeparam>
     /// <param name="arg9">Second argument value</param>
-    public void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    protected void AddThrows<TException, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         string definition,
         TException expected,
         T1? arg1, T2? arg2, T3? arg3, T4? arg4, T5? arg5, T6? arg6, T7? arg7, T8? arg8, T9? arg9)
