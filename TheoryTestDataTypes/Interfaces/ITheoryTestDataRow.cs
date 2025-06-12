@@ -12,7 +12,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// </remarks>
 public interface ITheoryTestDataRow
 : ITheoryDataRow,
-    ITestDataRow,
+ITestDataRow<object?[]>,
 ITestCaseName
 {
     /// <summary>

@@ -40,18 +40,18 @@ public sealed class MemberTestDataAttribute : MemberDataAttributeBase
         var dataCollection =
             await base.GetData(testMethod, disposalTracker)
             .ConfigureAwait(false);
-        var result = new List<ITheoryDataRow>();
+        var dataRowList = new List<ITheoryDataRow>();
 
-        foreach (var dataRow in dataCollection)
+        foreach (var row in dataCollection)
         {
-            var row = dataRow is ITheoryTestDataRow testDataRow ?
+            var dataRow = row is ITheoryTestDataRow testDataRow ?
                 testDataRow.SetName(testMethod.Name)
-                : dataRow;
+                : row;
 
-            result.Add(row);
+            dataRowList.Add(dataRow);
         }
 
-        return result.CastOrToReadOnlyCollection();
+        return dataRowList.CastOrToReadOnlyCollection();
     }
 
     /// <summary>
