@@ -10,10 +10,4 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes.Interfaces;
 /// This interface provides access to the argument conversion strategy (<see cref="DynamicTestData.DynamicDataSources.ArgsCode"/>)
 /// and allows initialization with a test method name.
 /// </remarks>
-public interface ITheoryTestData : IDataRowHolder<object?[]>
-{
-    ///// <summary>
-    ///// Gets the type of the test data associated with the current instance.
-    ///// </summary>
-    //Type TestDataType { get; }
-}
+public interface ITheoryTestData : IDataRowHolder<object?[]>;

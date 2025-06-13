@@ -10,7 +10,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
-    IDataStrategy? dataStrategy)
+    IDataStrategy dataStrategy)
 : TestDataRow<TTestData, object?[]>(
     testData,
     dataStrategy),
@@ -35,6 +35,7 @@ where TTestData : notnull, ITestData
         Traits = other.Traits ?? [];
     }
 
+    #region ITheoryDataRow members
     Dictionary<string, HashSet<string>> traits = [];
 
     /// <inheritdoc/>
@@ -56,18 +57,19 @@ where TTestData : notnull, ITestData
         set => traits = Guard.ArgumentNotNull(value, nameof(Traits));
     }
 
+    public object?[] GetData()
+    => Params;
+    #endregion
+
     public override object?[] Convert()
     => Params;
 
     public override ITestDataRow<TTestData, object?[]> CreateTestDataRow(
         TTestData testData,
-        IDataStrategy? dataStrategy)
+        IDataStrategy dataStrategy)
     => new TheoryTestDataRow<TTestData>(
         testData,
         dataStrategy);
-
-    public object?[] GetData()
-    => Params;
 
     public ITheoryTestDataRow SetName(string? testMethodName)
     => string.IsNullOrEmpty(testMethodName) ?
