@@ -1,7 +1,9 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
+using CsabaDu.DynamicTestData.TestDataTypes;
+
+namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders;
 
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
@@ -11,10 +13,10 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
     IDataStrategy dataStrategy)
-: TestDataRow<TTestData, object?[]>(
+: TestDataRow<TTestData, ITheoryTestDataRow>(
     testData,
     dataStrategy),
-ITheoryTestDataRow
+ITheoryTestDataRow<TTestData>
 where TTestData : notnull, ITestData
 {
     private TheoryTestDataRow(
@@ -23,13 +25,36 @@ where TTestData : notnull, ITestData
     : this(
         other.TestData,
         other.DataStrategy)
+    => SetTheoryDataRow(
+        other,
+        other.DataStrategy.ArgsCode,
+        testMethodName);
+
+    internal TheoryTestDataRow(
+        TheoryTestDataRow<TTestData> other,
+        ArgsCode argsCode,
+        string? testMethodName)
+    : this(
+        other.TestData,
+        new DataStrategy(
+            argsCode,
+            other.DataStrategy.WithExpected))
+    => SetTheoryDataRow(
+        other,
+        argsCode,
+        testMethodName);
+
+    private void SetTheoryDataRow(
+        TheoryTestDataRow<TTestData> other,
+        ArgsCode argsCode,
+        string? testMethodName)
     {
         Explicit = other.Explicit;
         Skip = other.Skip;
         TestDisplayName =
-            other.DataStrategy.ArgsCode == ArgsCode.Properties ?
-            GetDisplayName(testMethodName, other.TestCaseName)
-            : testMethodName
+            (argsCode == ArgsCode.Properties ?
+                GetDisplayName(testMethodName, other.TestCaseName)
+                : testMethodName)
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
         Traits = other.Traits ?? [];
@@ -61,18 +86,31 @@ where TTestData : notnull, ITestData
     => Params;
     #endregion
 
-    public override object?[] Convert()
-    => Params;
+    public override ITheoryTestDataRow Convert()
+    => this;
 
-    public override ITestDataRow<TTestData, object?[]> CreateTestDataRow(
+    public override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow(
         TTestData testData,
         IDataStrategy dataStrategy)
     => new TheoryTestDataRow<TTestData>(
         testData,
         dataStrategy);
 
-    public ITheoryTestDataRow SetName(string? testMethodName)
-    => string.IsNullOrEmpty(testMethodName) ?
+    public ITheoryTestDataRow Convert(string? testMethodName)
+    => (string.IsNullOrEmpty(testMethodName) ?
         this
-        : new TheoryTestDataRow<TTestData>(this, testMethodName);
+        : new TheoryTestDataRow<TTestData>(
+            this,
+            testMethodName));
+
+    public IDataStrategy GetDataStrategy()
+    => DataStrategy;
+
+    //public ITheoryTestDataRow SetName(string? testMethodName)
+    //=> string.IsNullOrEmpty(testMethodName) ?
+    //    this
+    //    : new TheoryTestDataRow<TTestData>(
+    //        this,
+    //        testMethodName);
+
 }

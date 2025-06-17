@@ -19,5 +19,12 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 /// </para>
 /// </remarks>
 /// <param name="argsCode">The strategy for converting test data to method arguments</param>
-public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode)
+public abstract class DynamicXunitV3TestDataSource(ArgsCode argsCode)
 : DynamicDataSource(argsCode, typeof(IExpected));
+
+//public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
+//: DynamicDataSourceBase<object?[]>(argsCode),
+//IRows<ITheoryTestDataRow>
+//{
+
+//}
