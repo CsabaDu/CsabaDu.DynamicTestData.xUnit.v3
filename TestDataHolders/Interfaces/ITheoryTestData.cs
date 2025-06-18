@@ -4,16 +4,4 @@
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders.Interfaces;
 
 public interface ITheoryTestData
-: INamedDataRowHolder<ITheoryTestDataRow>
-{
-    IDataStrategy DataStrategy { get; }
-    //void Add(ITestDataRow<object?> testDataRow);
-}
-
-//public interface ITheoryTestData<TTestData>
-//: ITheoryTestData,
-//INamedDataRowHolder<TTestData, ITheoryTestDataRow>
-//where TTestData : notnull, ITestData
-//{
-
-//}
+: INamedDataRowHolder<ITheoryTestDataRow>;

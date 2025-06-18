@@ -1,30 +1,33 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders;
+using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 
-/// <summary>
-/// Abstract base class for providing dynamic theory test data sources with type-safe argument handling.
-/// </summary>
-/// <remarks>
-/// <para>
-/// This class serves as a foundation for creating strongly-typed test data sources
-/// that can be used with xUnit theory tests. It maintains type consistency across
-/// all added test data and provides various methods for adding different kinds of
-/// test cases (normal, return value, and exception cases).
-/// </para>
-/// <para>
-/// The class ensures all test data added to a single instance maintains consistent
-/// generic type parameters through runtime checks.
-/// </para>
-/// </remarks>
-/// <param name="argsCode">The strategy for converting test data to method arguments</param>
-public abstract class DynamicXunitV3TestDataSource(ArgsCode argsCode)
-: DynamicDataSource(argsCode, typeof(IExpected));
+public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
+: DynamicNamedDataSource<ITheoryTestDataRow>(argsCode, typeof(IExpected))
+{
+    protected override void Add<TTestData>(TTestData testData)
+    {
+        var success = TryGetTestDataRow(
+            testData,
+            out ITestDataRow<TTestData, ITheoryTestDataRow>? testDataRow);
 
-//public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
-//: DynamicDataSourceBase<object?[]>(argsCode),
-//IRows<ITheoryTestDataRow>
-//{
+        if (success && DataRowHolder is TheoryTestData<TTestData> theoryTestData)
+        {
+            theoryTestData.Add(testDataRow!.TestData);
+        }
+    }
 
-//}
+    protected override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow<TTestData>(TTestData testData)
+    => new TheoryTestDataRow<TTestData>(
+        testData,
+        this);
+
+    protected override void InitDataRowHolder<TTestData>(TTestData testData)
+    => DataRowHolder = new TheoryTestData<TTestData>
+        (testData,
+        this);
+}

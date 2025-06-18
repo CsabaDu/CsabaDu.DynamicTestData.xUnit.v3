@@ -1,7 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-using CsabaDu.DynamicTestData.TestDataTypes;
 using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders;
 
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders
@@ -11,24 +10,22 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders
     ITheoryTestData
     where TTestData : notnull, ITestData
     {
+        private TheoryTestData(IDataStrategy? dataStrategy, string paramName)
+        => DataStrategy = dataStrategy
+            ?? throw new ArgumentNullException(paramName);
+
         public TheoryTestData(
             TTestData testData,
             IDataStrategy dataStrategy)
-        : this(dataStrategy)
+        : this(dataStrategy, nameof(dataStrategy))
         => Add(testData);
 
         public TheoryTestData(ITheoryTestDataRow<TTestData> row)
-        : this(row?.DataStrategy)
+        : this(row?.DataStrategy, nameof(row))
         => Add(row!);
 
-        private TheoryTestData(IDataStrategy? dataStrategy)
-        {
-            Guard.ArgumentNotNull(dataStrategy);
-            DataStrategy = dataStrategy;
-        }
-
         public TheoryTestData(IEnumerable<TheoryTestDataRow<TTestData>> rows)
-        : this(rows?.FirstOrDefault()?.DataStrategy)
+        : this(rows?.FirstOrDefault()?.DataStrategy, nameof(rows))
         => AddRange(rows!);
 
         public Type TestDataType => typeof(TTestData);
@@ -36,59 +33,16 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders
         public IDataStrategy DataStrategy { get; init; }
 
         public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName)
-        {
-            return GetRows(testMethodName, null);
-
-            //if (string.IsNullOrEmpty(testMethodName))
-            //{
-            //    return GetRows();
-            //}
-
-            //return GetRows()?.Select(ttdr => new TheoryTestDataRow<TTestData>(
-            //    (ttdr as TheoryTestDataRow<TTestData>)!,
-            //    ttdr.GetDataStrategy().ArgsCode,
-            //    testMethodName));
-        }
+        => GetRows(testMethodName, null);
 
         public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName, ArgsCode? argsCode)
-        {
-            return GetRows(testMethodName, argsCode);
-
-            //if (string.IsNullOrEmpty(testMethodName))
-            //{
-            //    return GetRows(argsCode);
-            //}
-
-            //if (!argsCode.HasValue || argsCode.Value == DataStrategy.ArgsCode)
-            //{
-            //    return GetNamedRows(testMethodName);
-            //}
-
-            //return GetRows()?.Select(ttdr => new TheoryTestDataRow<TTestData>(
-            //    (ttdr as TheoryTestDataRow<TTestData>)!,
-            //    argsCode.Value,
-            //    testMethodName));
-        }
+        => GetRows(testMethodName, argsCode);
 
         public IEnumerable<ITheoryTestDataRow>? GetRows()
-        {
-            return GetRows(null, null);
-        }
+        => GetRows(null, null);
 
         public IEnumerable<ITheoryTestDataRow>? GetRows(ArgsCode? argsCode)
-        {
-            return GetRows(null, argsCode);
-
-            //if (!argsCode.HasValue || argsCode.Value == DataStrategy.ArgsCode)
-            //{
-            //    return GetRows();
-            //}
-
-            //return GetRows()?.Select(ttdr => new TheoryTestDataRow<TTestData>(
-            //    (ttdr as TheoryTestDataRow<TTestData>)!,
-            //    argsCode.Value,
-            //    null));
-        }
+        => GetRows(null, argsCode);
 
         private IEnumerable<ITheoryTestDataRow>? GetRows(
             string? testMethodName,
@@ -109,6 +63,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders
         }
 
         protected override ITheoryTestDataRow<TTestData> Convert(TTestData testData)
-        => new TheoryTestDataRow<TTestData>(testData, DataStrategy);
+        => new TheoryTestDataRow<TTestData>(
+            testData,
+            DataStrategy);
     }
 }
