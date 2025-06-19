@@ -36,10 +36,10 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
         MethodInfo testMethod,
         DisposalTracker disposalTracker)
     {
+        var testMethodName = testMethod.Name;
         var dataCollection =
             await base.GetData(testMethod, disposalTracker)
             .ConfigureAwait(false);
-        var testMethodName = testMethod.Name;
 
         if (testMethodName == null
             || dataCollection.Any(x => x is not ITheoryTestDataRow))
