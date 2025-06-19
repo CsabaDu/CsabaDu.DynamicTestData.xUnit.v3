@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders.TheoryTestDataRow&lt;TTestData&gt;">
-    <Position X="0.5" Y="2.25" Width="2.75" />
+    <Position X="0.5" Y="2.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAEAAAAAAAgIAAAIAAQAAAAAIAIQAAAAAQEAA=</HashCode>
       <FileName>TestDataHolders\TheoryTestDataRow.cs</FileName>
