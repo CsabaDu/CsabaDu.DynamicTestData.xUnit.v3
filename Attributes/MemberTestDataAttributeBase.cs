@@ -41,15 +41,8 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
             .ConfigureAwait(false);
         var testMethodName = testMethod.Name;
 
-        if (testMethodName == null)
-        {
-            return dataCollection;
-        }
-
-        var collectionType = dataCollection.GetType();
-        var elementsType = collectionType.GetGenericArguments()[0];
-
-        if (elementsType != typeof(ITheoryTestDataRow))
+        if (testMethodName == null
+            || dataCollection.Any(x => x is not ITheoryTestDataRow))
         {
             return dataCollection;
         }
@@ -59,9 +52,10 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
         foreach (var dataRow in dataCollection!)
         {
             var testDataRow = dataRow as ITheoryTestDataRow;
+
             if (testDataRow!.TestDisplayName == null)
             {
-                testDataRow.Convert(testMethodName);
+                testDataRow = testDataRow.Convert(testMethodName);
             }
 
             dataRowList.Add(testDataRow);

@@ -11,11 +11,11 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
 {
     protected override void Add<TTestData>(TTestData testData)
     {
-        var success = TryGetTestDataRow(
+        bool rowCreated = TryGetTestDataRow<TTestData, ITheoryTestDataRow<TTestData>>(
             testData,
             out ITestDataRow<TTestData, ITheoryTestDataRow>? testDataRow);
 
-        if (success && DataRowHolder is TheoryTestData<TTestData> theoryTestData)
+        if (rowCreated && DataRowHolder is TheoryTestData<TTestData> theoryTestData)
         {
             theoryTestData.Add(testDataRow!.TestData);
         }
