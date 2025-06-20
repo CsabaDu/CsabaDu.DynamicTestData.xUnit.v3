@@ -37,7 +37,7 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
     protected override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow<TTestData>(TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,
-        this);
+        this.ArgsCode);
 
     protected override void InitDataRowHolder<TTestData>(TTestData testData)
     => DataRowHolder = new TheoryTestData<TTestData>

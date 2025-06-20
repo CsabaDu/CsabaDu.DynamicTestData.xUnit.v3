@@ -8,9 +8,9 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders.Interfaces.ITheoryTestDataRow">
-    <Position X="3.25" Y="2.25" Width="2.75" />
+    <Position X="3.25" Y="2" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
       <FileName>TestDataHolders\Interfaces\ITheoryTestDataRow.cs</FileName>
     </TypeIdentifier>
   </Interface>

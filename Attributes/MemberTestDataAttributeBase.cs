@@ -55,7 +55,9 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
 
             if (testDataRow!.TestDisplayName == null)
             {
-                testDataRow = testDataRow.Convert(testMethodName);
+                testDataRow = testDataRow.Convert(
+                    testDataRow.GetDataStrategy(),
+                    testMethodName);
             }
 
             dataRowList.Add(testDataRow);

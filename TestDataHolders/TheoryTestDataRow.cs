@@ -10,10 +10,9 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders;
 /// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
-    IDataStrategy dataStrategy)
+    ArgsCode argsCode)
 : TestDataRow<TTestData, ITheoryTestDataRow>(
-    testData,
-    dataStrategy),
+    testData),
 ITheoryTestDataRow<TTestData>
 where TTestData : notnull, ITestData
 {
@@ -22,10 +21,10 @@ where TTestData : notnull, ITestData
         string? testMethodName)
     : this(
         other.TestData,
-        other.DataStrategy)
+        other.ArgsCode)
     => SetTheoryDataRow(
         other,
-        other.DataStrategy.ArgsCode,
+        other.ArgsCode,
         testMethodName);
 
     internal TheoryTestDataRow(
@@ -34,9 +33,7 @@ where TTestData : notnull, ITestData
         string? testMethodName)
     : this(
         other.TestData,
-        new DataStrategy(
-            argsCode,
-            other.DataStrategy.WithExpected))
+        other.ArgsCode)
     => SetTheoryDataRow(
         other,
         argsCode,
@@ -51,7 +48,7 @@ where TTestData : notnull, ITestData
         Skip = other.Skip;
         TestDisplayName =
             (argsCode == ArgsCode.Properties ?
-                GetDisplayName(testMethodName, other.TestCaseName)
+                GetDisplayName(testMethodName, other.GetTestCaseName())
                 : testMethodName)
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
@@ -80,21 +77,36 @@ where TTestData : notnull, ITestData
         set => traits = Guard.ArgumentNotNull(value, nameof(Traits));
     }
 
+    public ArgsCode ArgsCode{ get; init; } = argsCode;
+
+    public IDataStrategy GetDataStrategy()
+    => new DataStrategy(
+        ArgsCode,
+        TestData is IExpected);
+
     public object?[] GetData()
-    => Params;
+    => GetParams(GetDataStrategy());
     #endregion
 
-    public override ITheoryTestDataRow Convert()
-    => this;
+    public override ITheoryTestDataRow Convert(IDataStrategy dataStrategy)
+    {
+        ArgsCode argsCode = dataStrategy.ArgsCode;
+
+        return argsCode == ArgsCode ?
+            this
+            : new TheoryTestDataRow<TTestData>(
+                this,
+                argsCode,
+                null);
+    }
 
     public override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow(
-        TTestData testData,
-        IDataStrategy dataStrategy)
+        TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,
-        dataStrategy);
+        default);
 
-    public ITheoryTestDataRow Convert(string? testMethodName)
+    public ITheoryTestDataRow Convert(IDataStrategy dataStrategy, string? testMethodName)
     => (string.IsNullOrEmpty(testMethodName) ?
         this
         : new TheoryTestDataRow<TTestData>(

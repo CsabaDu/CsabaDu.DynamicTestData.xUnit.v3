@@ -1,68 +1,106 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders
+namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders;
+
+public class TheoryTestData<TTestData>
+: TheoryDataBase<ITheoryTestDataRow<TTestData>, TTestData>,
+ITheoryTestData
+where TTestData : notnull, ITestData
 {
-    public class TheoryTestData<TTestData>
-    : TheoryDataBase<ITheoryTestDataRow<TTestData>, TTestData>,
-    ITheoryTestData
-    where TTestData : notnull, ITestData
+    private TheoryTestData(
+        IDataStrategy? dataStrategy)
+    => DataStrategy = dataStrategy
+        ?? throw new ArgumentNullException(nameof(dataStrategy));
+
+    public TheoryTestData(
+        TheoryTestData<TTestData> other,
+        IDataStrategy dataStrategy)
+    : this(dataStrategy)
     {
-        private TheoryTestData(IDataStrategy? dataStrategy, string paramName)
-        => DataStrategy = dataStrategy
-            ?? throw new ArgumentNullException(paramName);
-
-        public TheoryTestData(
-            TTestData testData,
-            IDataStrategy dataStrategy)
-        : this(dataStrategy, nameof(dataStrategy))
-        => Add(testData);
-
-        public TheoryTestData(ITheoryTestDataRow<TTestData> row)
-        : this(row?.DataStrategy, nameof(row))
-        => Add(row!);
-
-        public TheoryTestData(IEnumerable<TheoryTestDataRow<TTestData>> rows)
-        : this(rows?.FirstOrDefault()?.DataStrategy, nameof(rows))
-        => AddRange(rows!);
-
-        public Type TestDataType => typeof(TTestData);
-
-        public IDataStrategy DataStrategy { get; init; }
-
-        public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName)
-        => GetRows(testMethodName, null);
-
-        public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName, ArgsCode? argsCode)
-        => GetRows(testMethodName, argsCode);
-
-        public IEnumerable<ITheoryTestDataRow>? GetRows()
-        => GetRows(null, null);
-
-        public IEnumerable<ITheoryTestDataRow>? GetRows(ArgsCode? argsCode)
-        => GetRows(null, argsCode);
-
-        private IEnumerable<ITheoryTestDataRow>? GetRows(
-            string? testMethodName,
-            ArgsCode? argsCode)
+        foreach (var row in other)
         {
-            argsCode ??= DataStrategy.ArgsCode;
+            Add(new TheoryTestDataRow<TTestData>(
+                row.TestData,
+                dataStrategy.ArgsCode));
+        }
+    }
 
-            if (string.IsNullOrEmpty(testMethodName)
-                && argsCode == DataStrategy.ArgsCode)
-            {
-                return this;
-            }
+    public TheoryTestData(
+        TTestData testData,
+        IDataStrategy dataStrategy)
+    : this(dataStrategy)
+    => Add(testData);
 
-            return this.Select(ttdr => new TheoryTestDataRow<TTestData>(
-                (ttdr as TheoryTestDataRow<TTestData>)!,
-                argsCode.Value,
-                testMethodName));
+    public TheoryTestData(ITheoryTestDataRow<TTestData> row)
+    : this(row?.GetDataStrategy())
+    => Add(row!);
+
+    public TheoryTestData(IEnumerable<TheoryTestDataRow<TTestData>> rows)
+    : this(rows?.FirstOrDefault()?.GetDataStrategy())
+    => AddRange(rows!);
+
+    public Type TestDataType => typeof(TTestData);
+
+    public IDataStrategy DataStrategy { get; init; }
+
+    public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName)
+    //=> GetRows(testMethodName, null);
+    => (GetDataRowHolder(DataStrategy) as IEnumerable<ITestDataRow>)
+    ?.Select(tdr => (tdr as INamedTestDataRow<ITheoryTestDataRow>)
+    !.Convert(DataStrategy, testMethodName));
+
+    public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName, ArgsCode? argsCode)
+    {
+        if (argsCode.HasValue)
+        {
+            var dataStrategy =
+                GetDataStrategy(argsCode.Value);
+            var dataRowHolder =
+                (GetDataRowHolder(dataStrategy)
+                    as INamedDataRowHolder<ITheoryTestDataRow>)!;
+
+            return dataRowHolder.GetNamedRows(testMethodName);
         }
 
-        protected override ITheoryTestDataRow<TTestData> Convert(TTestData testData)
-        => new TheoryTestDataRow<TTestData>(
-            testData,
-            DataStrategy);
+        return GetNamedRows(testMethodName);
     }
+
+    private IDataStrategy GetDataStrategy(ArgsCode argsCode)
+        => argsCode == DataStrategy.ArgsCode ?
+            DataStrategy
+            : new DataStrategy(
+                argsCode,
+                DataStrategy.WithExpected);
+
+    public IEnumerable<ITheoryTestDataRow>? GetRows()
+    => (GetDataRowHolder(DataStrategy) as IEnumerable<ITestDataRow>)
+        ?.Select(tdr => (tdr as ITestDataRow<ITheoryTestDataRow>)
+        !.Convert(DataStrategy));
+
+    public IEnumerable<ITheoryTestDataRow>? GetRows(ArgsCode? argsCode)
+    {
+        if (argsCode.HasValue)
+        {
+            var dataStrategy =
+                GetDataStrategy(argsCode.Value);
+            var dataRowHolder =
+                GetDataRowHolder(dataStrategy);
+
+            return dataRowHolder.GetRows();
+        }
+
+        return GetRows();
+    }
+
+    protected override ITheoryTestDataRow<TTestData> Convert(TTestData testData)
+    => new TheoryTestDataRow<TTestData>(
+        testData,
+        DataStrategy.ArgsCode);
+
+    public IDataRowHolder<ITheoryTestDataRow> GetDataRowHolder(
+        IDataStrategy dataStrategy)
+    => new TheoryTestData<TTestData>(
+        this,
+        dataStrategy);
 }

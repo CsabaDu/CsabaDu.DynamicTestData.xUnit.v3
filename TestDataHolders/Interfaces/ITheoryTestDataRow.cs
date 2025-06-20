@@ -12,9 +12,15 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders.Interfaces;
 /// </remarks>
 public interface ITheoryTestDataRow
 : ITheoryDataRow,
-INamedTestDataRow<ITheoryTestDataRow>;
+INamedTestDataRow<ITheoryTestDataRow>
+{
+    IDataStrategy GetDataStrategy();
+}
 
 public interface ITheoryTestDataRow<TTestData>
 : ITheoryTestDataRow,
-ITestDataRow<TTestData, ITheoryTestDataRow>
-where TTestData : notnull, ITestData;
+ITestDataRow<TTestData, ITheoryTestDataRow>,
+IArgsCode
+where TTestData : notnull, ITestData
+{
+}
