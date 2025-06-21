@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.Statics;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders;
 
 /// <summary>
@@ -33,7 +35,7 @@ where TTestData : notnull, ITestData
         string? testMethodName)
     : this(
         other.TestData,
-        other.ArgsCode)
+        argsCode)
     => SetTheoryDataRow(
         other,
         argsCode,
@@ -54,6 +56,9 @@ where TTestData : notnull, ITestData
         Timeout = other.Timeout;
         Traits = other.Traits ?? [];
     }
+
+    public ArgsCode ArgsCode { get; init; } =
+        argsCode.Defined(nameof(argsCode));
 
     #region ITheoryDataRow members
     Dictionary<string, HashSet<string>> traits = [];
@@ -77,13 +82,6 @@ where TTestData : notnull, ITestData
         set => traits = Guard.ArgumentNotNull(value, nameof(Traits));
     }
 
-    public ArgsCode ArgsCode{ get; init; } = argsCode;
-
-    public IDataStrategy GetDataStrategy()
-    => new DataStrategy(
-        ArgsCode,
-        TestData is IExpected);
-
     public object?[] GetData()
     => GetParams(GetDataStrategy());
     #endregion
@@ -100,16 +98,21 @@ where TTestData : notnull, ITestData
                 null);
     }
 
-    public override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow(
-        TTestData testData)
-    => new TheoryTestDataRow<TTestData>(
-        testData,
-        default);
-
     public ITheoryTestDataRow Convert(IDataStrategy dataStrategy, string? testMethodName)
     => (string.IsNullOrEmpty(testMethodName) ?
         this
         : new TheoryTestDataRow<TTestData>(
             this,
             testMethodName));
+
+    public override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow(
+        TTestData testData)
+    => new TheoryTestDataRow<TTestData>(
+        testData,
+        default);
+
+    public IDataStrategy GetDataStrategy()
+    => new DataStrategy(
+        ArgsCode,
+        TestData is IExpected);
 }

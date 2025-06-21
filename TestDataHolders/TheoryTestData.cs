@@ -3,16 +3,11 @@
 
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders;
 
-public class TheoryTestData<TTestData>
+public class TheoryTestData<TTestData>(IDataStrategy? dataStrategy)
 : TheoryDataBase<ITheoryTestDataRow<TTestData>, TTestData>,
 ITheoryTestData
 where TTestData : notnull, ITestData
 {
-    private TheoryTestData(
-        IDataStrategy? dataStrategy)
-    => DataStrategy = dataStrategy
-        ?? throw new ArgumentNullException(nameof(dataStrategy));
-
     public TheoryTestData(
         TheoryTestData<TTestData> other,
         IDataStrategy dataStrategy)
@@ -32,46 +27,16 @@ where TTestData : notnull, ITestData
     : this(dataStrategy)
     => Add(testData);
 
-    public TheoryTestData(ITheoryTestDataRow<TTestData> row)
-    : this(row?.GetDataStrategy())
-    => Add(row!);
-
-    public TheoryTestData(IEnumerable<TheoryTestDataRow<TTestData>> rows)
-    : this(rows?.FirstOrDefault()?.GetDataStrategy())
-    => AddRange(rows!);
-
     public Type TestDataType => typeof(TTestData);
 
-    public IDataStrategy DataStrategy { get; init; }
+    public IDataStrategy DataStrategy { get; init; } = dataStrategy
+        ?? throw new ArgumentNullException(nameof(dataStrategy));
 
-    public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName)
-    //=> GetRows(testMethodName, null);
-    => (GetDataRowHolder(DataStrategy) as IEnumerable<ITestDataRow>)
-    ?.Select(tdr => (tdr as INamedTestDataRow<ITheoryTestDataRow>)
-    !.Convert(DataStrategy, testMethodName));
-
-    public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName, ArgsCode? argsCode)
-    {
-        if (argsCode.HasValue)
-        {
-            var dataStrategy =
-                GetDataStrategy(argsCode.Value);
-            var dataRowHolder =
-                (GetDataRowHolder(dataStrategy)
-                    as INamedDataRowHolder<ITheoryTestDataRow>)!;
-
-            return dataRowHolder.GetNamedRows(testMethodName);
-        }
-
-        return GetNamedRows(testMethodName);
-    }
-
-    private IDataStrategy GetDataStrategy(ArgsCode argsCode)
-        => argsCode == DataStrategy.ArgsCode ?
-            DataStrategy
-            : new DataStrategy(
-                argsCode,
-                DataStrategy.WithExpected);
+    public IDataRowHolder<ITheoryTestDataRow> GetDataRowHolder(
+        IDataStrategy dataStrategy)
+    => new TheoryTestData<TTestData>(
+        this,
+        dataStrategy);
 
     public IEnumerable<ITheoryTestDataRow>? GetRows()
     => (GetDataRowHolder(DataStrategy) as IEnumerable<ITestDataRow>)
@@ -79,28 +44,35 @@ where TTestData : notnull, ITestData
         !.Convert(DataStrategy));
 
     public IEnumerable<ITheoryTestDataRow>? GetRows(ArgsCode? argsCode)
-    {
-        if (argsCode.HasValue)
-        {
-            var dataStrategy =
-                GetDataStrategy(argsCode.Value);
-            var dataRowHolder =
-                GetDataRowHolder(dataStrategy);
+    => argsCode.HasValue ?
+        GetDataRowHolder(argsCode.Value)
+        .GetRows()
+        : GetRows();
 
-            return dataRowHolder.GetRows();
-        }
+    public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName)
+    => (GetDataRowHolder(DataStrategy) as IEnumerable<ITestDataRow>)
+        ?.Select(tdr => (tdr as INamedTestDataRow<ITheoryTestDataRow>)
+        !.Convert(DataStrategy, testMethodName));
 
-        return GetRows();
-    }
+    public IEnumerable<ITheoryTestDataRow>? GetNamedRows(string? testMethodName, ArgsCode? argsCode)
+    => argsCode.HasValue ?
+        (GetDataRowHolder(argsCode.Value)
+            as INamedDataRowHolder<ITheoryTestDataRow>)
+        !.GetNamedRows(testMethodName)
+            : GetNamedRows(testMethodName);
 
     protected override ITheoryTestDataRow<TTestData> Convert(TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,
         DataStrategy.ArgsCode);
 
-    public IDataRowHolder<ITheoryTestDataRow> GetDataRowHolder(
-        IDataStrategy dataStrategy)
-    => new TheoryTestData<TTestData>(
-        this,
-        dataStrategy);
+    private IDataStrategy GetDataStrategy(ArgsCode argsCode)
+    => argsCode == DataStrategy.ArgsCode ?
+        DataStrategy
+        : new DataStrategy(
+            argsCode,
+            DataStrategy.WithExpected);
+
+    private IDataRowHolder<ITheoryTestDataRow> GetDataRowHolder(ArgsCode argsCode)
+    => GetDataRowHolder(GetDataStrategy(argsCode));
 }
