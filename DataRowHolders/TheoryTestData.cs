@@ -4,8 +4,8 @@
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders;
 
 public class TheoryTestData<TTestData>(IDataStrategy? dataStrategy)
-: TheoryDataBase<ITheoryTestDataRow<TTestData>, TTestData>,
-ITheoryTestData
+: TheoryDataBase<TheoryTestDataRow<TTestData>, TTestData>,
+INamedDataRowHolder<ITheoryTestDataRow>
 where TTestData : notnull, ITestData
 {
     public TheoryTestData(
@@ -61,7 +61,7 @@ where TTestData : notnull, ITestData
         !.GetNamedRows(testMethodName)
             : GetNamedRows(testMethodName);
 
-    protected override ITheoryTestDataRow<TTestData> Convert(TTestData testData)
+    protected override TheoryTestDataRow<TTestData> Convert(TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,
         DataStrategy.ArgsCode);

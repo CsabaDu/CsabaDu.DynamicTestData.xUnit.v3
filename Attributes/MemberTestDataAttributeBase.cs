@@ -37,21 +37,21 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
         DisposalTracker disposalTracker)
     {
         var testMethodName = testMethod.Name;
-        var dataCollection =
+        var theoryDataRowCollection =
             await base.GetData(testMethod, disposalTracker)
             .ConfigureAwait(false);
 
         if (testMethodName == null
-            || dataCollection.Any(x => x is not ITheoryTestDataRow))
+            || theoryDataRowCollection.Any(x => x is not ITheoryTestDataRow))
         {
-            return dataCollection;
+            return theoryDataRowCollection;
         }
 
-        var dataRowList = new List<ITheoryTestDataRow>();
+        var testDataRowList = new List<ITheoryTestDataRow>();
 
-        foreach (var dataRow in dataCollection!)
+        foreach (var item in theoryDataRowCollection!)
         {
-            var testDataRow = dataRow as ITheoryTestDataRow;
+            var testDataRow = item as ITheoryTestDataRow;
 
             if (testDataRow!.TestDisplayName == null)
             {
@@ -60,10 +60,10 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
                     testMethodName);
             }
 
-            dataRowList.Add(testDataRow);
+            testDataRowList.Add(testDataRow);
         }
 
-        return dataRowList.CastOrToReadOnlyCollection();
+        return testDataRowList.CastOrToReadOnlyCollection();
     }
 
     /// <summary>

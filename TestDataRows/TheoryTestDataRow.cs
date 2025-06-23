@@ -1,9 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-using CsabaDu.DynamicTestData.Statics;
-
-namespace CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataHolders;
+namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
@@ -15,7 +13,9 @@ public sealed class TheoryTestDataRow<TTestData>(
     ArgsCode argsCode)
 : TestDataRow<TTestData, ITheoryTestDataRow>(
     testData),
-ITheoryTestDataRow<TTestData>
+ITheoryTestDataRow,
+ITestDataRow<TTestData, ITheoryTestDataRow>,
+IArgsCode
 where TTestData : notnull, ITestData
 {
     private TheoryTestDataRow(
@@ -41,7 +41,7 @@ where TTestData : notnull, ITestData
         argsCode,
         testMethodName);
 
-    internal void SetTheoryDataRow(
+    private void SetTheoryDataRow(
         TheoryTestDataRow<TTestData> other,
         ArgsCode argsCode,
         string? testMethodName)
@@ -99,11 +99,11 @@ where TTestData : notnull, ITestData
     }
 
     public ITheoryTestDataRow Convert(IDataStrategy dataStrategy, string? testMethodName)
-    => (string.IsNullOrEmpty(testMethodName) ?
+    => string.IsNullOrEmpty(testMethodName) ?
         this
         : new TheoryTestDataRow<TTestData>(
             this,
-            testMethodName));
+            testMethodName);
 
     public override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow(
         TTestData testData)

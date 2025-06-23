@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders.Interfaces;
+namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Interfaces;
 
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with strongly-typed test data.
@@ -17,10 +17,10 @@ INamedTestDataRow<ITheoryTestDataRow>
     IDataStrategy GetDataStrategy();
 }
 
-public interface ITheoryTestDataRow<TTestData>
-: ITheoryTestDataRow,
-ITestDataRow<TTestData, ITheoryTestDataRow>,
-IArgsCode
-where TTestData : notnull, ITestData
-{
-}
+//public interface ITheoryTestDataRow<TTestData>
+//: ITheoryTestDataRow,
+//ITestDataRow<TTestData, ITheoryTestDataRow>,
+//IArgsCode
+//where TTestData : notnull, ITestData
+//{
+//}

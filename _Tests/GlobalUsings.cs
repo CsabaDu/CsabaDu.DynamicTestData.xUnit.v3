@@ -4,8 +4,6 @@
 global using CsabaDu.DynamicTestData.DynamicDataSources;
 global using CsabaDu.DynamicTestData.TestDataTypes.Interfaces;
 global using CsabaDu.DynamicTestData.TestHelpers.DynamicDataSources;
-global using CsabaDu.DynamicTestData.TestHelpers.TestDoubles;
-global using CsabaDu.DynamicTestData.xUnit.v3.TheoryTestDataTypes;
 global using System.ComponentModel;
 global using System.Reflection;
 global using static CsabaDu.DynamicTestData.TestHelpers.TestParameters.Params;
