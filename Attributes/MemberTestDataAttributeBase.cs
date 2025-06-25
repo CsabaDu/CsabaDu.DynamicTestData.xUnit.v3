@@ -72,7 +72,19 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
     /// </summary>
     /// <inheritdoc cref="DataAttribute.ConvertDataRow(object)"/>
     protected override ITheoryDataRow ConvertDataRow(object dataRow)
-    => dataRow is ITheoryTestDataRow testDataRow ?
-        testDataRow
-        : base.ConvertDataRow(dataRow);
+    {
+        if (dataRow is ITheoryTestDataRow theoryTestDataRow)
+        {
+            return theoryTestDataRow;
+        }
+
+        if (dataRow is ITestDataRow testDataRow)
+        {
+            return new TheoryTestDataRow<ITestData>(
+                testDataRow.GetTestData(),
+                ArgsCode.Properties);
+        }
+
+        return base.ConvertDataRow(dataRow);
+    }
 }
