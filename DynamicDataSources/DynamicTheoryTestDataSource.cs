@@ -34,10 +34,44 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
         }
     }
 
+    public TheoryTestData<TTestData>? GetTheoryTestData<TTestData>(
+        string? testMethodName,
+        ArgsCode? argsCode)
+    where TTestData : notnull, ITestData
+    {
+        if (DataRowHolder is null)
+        {
+            return null;
+        }
+
+        var dataStrategy = GetDataStrategy(argsCode);
+
+        if (DataRowHolder is TheoryTestData<TTestData> theoryTestData)
+        {
+            return dataStrategy.ArgsCode == DataRowHolder?.DataStrategy.ArgsCode
+                && testMethodName == null ?
+                theoryTestData
+                : new TheoryTestData<TTestData>(
+                    theoryTestData,
+                    dataStrategy,
+                    testMethodName);
+        }
+
+        if (DataRowHolder is IEnumerable<ITestDataRow<TTestData, TheoryTestDataRow<TTestData>>> testDataRows)
+        {
+            return new TheoryTestData<TTestData>(
+                testDataRows,
+                dataStrategy,
+                testMethodName);
+        }
+
+        return null;
+    }
+
     protected override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow<TTestData>(TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,
-        this.ArgsCode);
+        ArgsCode);
 
     protected override void InitDataRowHolder<TTestData>(TTestData testData)
     => DataRowHolder = new TheoryTestData<TTestData>

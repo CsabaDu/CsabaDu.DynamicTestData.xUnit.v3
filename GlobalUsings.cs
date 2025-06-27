@@ -2,6 +2,8 @@
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
 global using CsabaDu.DynamicTestData.DataRowHolders.Interfaces;
+global using CsabaDu.DynamicTestData.DataStrategyTypes;
+global using CsabaDu.DynamicTestData.DataStrategyTypes.Interfaces;
 global using CsabaDu.DynamicTestData.DynamicDataSources;
 global using CsabaDu.DynamicTestData.Statics;
 global using CsabaDu.DynamicTestData.TestDataRows;

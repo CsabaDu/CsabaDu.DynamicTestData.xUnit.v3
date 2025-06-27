@@ -9,17 +9,42 @@ INamedDataRowHolder<ITheoryTestDataRow>
 where TTestData : notnull, ITestData
 {
     public TheoryTestData(
+        IEnumerable<ITestDataRow<TTestData, TheoryTestDataRow<TTestData>>> testDataRows,
+        IDataStrategy dataStrategy,
+        string? testMethodName)
+        : this(dataStrategy)
+    {
+        foreach (var row in testDataRows)
+        {
+            Add(new TheoryTestDataRow<TTestData>(
+                row.TestData,
+                dataStrategy.ArgsCode,
+                testMethodName));
+        }
+    }
+
+    public TheoryTestData(
         TheoryTestData<TTestData> other,
-        IDataStrategy dataStrategy)
+        IDataStrategy dataStrategy,
+        string? testMethodName)
     : this(dataStrategy)
     {
         foreach (var row in other)
         {
             Add(new TheoryTestDataRow<TTestData>(
-                row.TestData,
-                dataStrategy.ArgsCode));
+                row,
+                dataStrategy.ArgsCode,
+                testMethodName));
         }
     }
+
+    public TheoryTestData(
+        TheoryTestData<TTestData> other,
+        IDataStrategy dataStrategy)
+    : this(other, dataStrategy, null)
+    {
+    }
+
 
     public TheoryTestData(
         TTestData testData,
@@ -54,9 +79,7 @@ where TTestData : notnull, ITestData
     }
 
     protected override TheoryTestDataRow<TTestData> Convert(TTestData testData)
-    => new TheoryTestDataRow<TTestData>(
-        testData,
-        DataStrategy.ArgsCode);
+    => new(testData, DataStrategy.ArgsCode);
 
     public IEnumerable<ITestDataRow> GetTestDataRows()
     => this;

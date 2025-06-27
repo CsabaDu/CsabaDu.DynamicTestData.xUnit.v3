@@ -16,11 +16,3 @@ INamedTestDataRow<ITheoryTestDataRow>
 {
     IDataStrategy GetDataStrategy();
 }
-
-//public interface ITheoryTestDataRow<TTestData>
-//: ITheoryTestDataRow,
-//ITestDataRow<TTestData, ITheoryTestDataRow>,
-//IArgsCode
-//where TTestData : notnull, ITestData
-//{
-//}

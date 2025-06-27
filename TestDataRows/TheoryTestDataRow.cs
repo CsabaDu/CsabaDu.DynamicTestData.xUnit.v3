@@ -18,6 +18,18 @@ ITestDataRow<TTestData, ITheoryTestDataRow>,
 IArgsCode
 where TTestData : notnull, ITestData
 {
+    internal TheoryTestDataRow(
+        TTestData testData,
+        ArgsCode argsCode,
+        string? testMethodName)
+    : this(
+        testData,
+        argsCode)
+    => TestDisplayName = GetTestDisplayName(
+        testMethodName,
+        argsCode,
+        testData);
+
     private TheoryTestDataRow(
         TheoryTestDataRow<TTestData> other,
         string? testMethodName)
@@ -48,14 +60,24 @@ where TTestData : notnull, ITestData
     {
         Explicit = other.Explicit;
         Skip = other.Skip;
-        TestDisplayName =
-            (argsCode == ArgsCode.Properties ?
-                GetDisplayName(testMethodName, other.GetTestCaseName())
-                : testMethodName)
+        TestDisplayName = GetTestDisplayName(
+            testMethodName,
+            argsCode,
+            other)
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
         Traits = other.Traits ?? [];
     }
+
+    private static string? GetTestDisplayName(
+        string? testMethodName,
+        ArgsCode argsCode,
+        INamedTestCase namedTestCase)
+    => argsCode == ArgsCode.Properties ?
+        GetDisplayName(
+            testMethodName,
+            namedTestCase.GetTestCaseName())
+        : testMethodName;
 
     public ArgsCode ArgsCode { get; init; } =
         argsCode.Defined(nameof(argsCode));

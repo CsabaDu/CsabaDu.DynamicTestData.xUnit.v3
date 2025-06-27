@@ -85,6 +85,13 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
                 ArgsCode.Properties);
         }
 
+        if (dataRow is ITestData testData)
+        {
+            return new TheoryTestDataRow<ITestData>(
+                testData,
+                ArgsCode.Properties);
+        }
+
         return base.ConvertDataRow(dataRow);
     }
 }
