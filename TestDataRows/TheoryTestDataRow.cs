@@ -11,10 +11,10 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
     ArgsCode argsCode)
-: TestDataRow<TTestData, ITheoryTestDataRow>(
+: TestDataRow<ITheoryTestDataRow, TTestData>(
     testData),
 ITheoryTestDataRow,
-ITestDataRow<TTestData, ITheoryTestDataRow>,
+ITestDataRow<ITheoryTestDataRow, TTestData>,
 IArgsCode
 where TTestData : notnull, ITestData
 {
@@ -127,7 +127,7 @@ where TTestData : notnull, ITestData
             this,
             testMethodName);
 
-    public override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow(
+    public override ITestDataRow<ITheoryTestDataRow, TTestData> CreateTestDataRow(
         TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,

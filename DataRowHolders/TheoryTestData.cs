@@ -9,7 +9,7 @@ INamedDataRowHolder<ITheoryTestDataRow>
 where TTestData : notnull, ITestData
 {
     public TheoryTestData(
-        IEnumerable<ITestDataRow<TTestData, TheoryTestDataRow<TTestData>>> testDataRows,
+        IEnumerable<ITestDataRow<TheoryTestDataRow<TTestData>, TTestData>> testDataRows,
         IDataStrategy dataStrategy,
         string? testMethodName)
         : this(dataStrategy)

@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 
 /// <summary>
@@ -24,9 +26,9 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
 {
     protected override void Add<TTestData>(TTestData testData)
     {
-        bool rowCreated = TryGetTestDataRow<TTestData, TheoryTestDataRow<TTestData>>(
+        bool rowCreated = TryGetTestDataRow<TheoryTestDataRow<TTestData>, TTestData>(
             testData,
-            out ITestDataRow<TTestData, ITheoryTestDataRow>? testDataRow);
+            out ITestDataRow<ITheoryTestDataRow, TTestData>? testDataRow);
 
         if (rowCreated && DataRowHolder is TheoryTestData<TTestData> theoryTestData)
         {
@@ -57,7 +59,7 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
                     testMethodName);
         }
 
-        if (DataRowHolder is IEnumerable<ITestDataRow<TTestData, TheoryTestDataRow<TTestData>>> testDataRows)
+        if (DataRowHolder is IEnumerable<ITestDataRow<TheoryTestDataRow<TTestData>, TTestData>> testDataRows)
         {
             return new TheoryTestData<TTestData>(
                 testDataRows,
@@ -68,7 +70,7 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
         return null;
     }
 
-    protected override ITestDataRow<TTestData, ITheoryTestDataRow> CreateTestDataRow<TTestData>(TTestData testData)
+    protected override ITestDataRow<ITheoryTestDataRow, TTestData> CreateTestDataRow<TTestData>(TTestData testData)
     => new TheoryTestDataRow<TTestData>(
         testData,
         ArgsCode);
