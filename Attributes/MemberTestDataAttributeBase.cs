@@ -7,8 +7,12 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 /// Provides a data source for a theory test, with the data coming from a member of the test class.
 /// Extends <see cref="MemberDataAttributeBase"/> with additional functionality.
 /// </summary>
-public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
+public abstract class MemberTestDataAttributeBase
+: MemberDataAttributeBase,
+IArgsCode
 {
+    public ArgsCode ArgsCode { get; set; } = ArgsCode.Properties;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MemberTestDataAttribute"/> class.
     /// <remarks>
@@ -78,20 +82,18 @@ public abstract class MemberTestDataAttributeBase : MemberDataAttributeBase
             return theoryTestDataRow;
         }
 
-        if (dataRow is ITestDataRow testDataRow)
+        if (dataRow is not ITestData testData)
         {
-            return new TheoryTestDataRow<ITestData>(
-                testDataRow.GetTestData(),
-                ArgsCode.Properties);
+            if (dataRow is not ITestDataRow testDataRow)
+            {
+                return base.ConvertDataRow(dataRow);
+            }
+
+            testData = testDataRow.GetTestData();
         }
 
-        if (dataRow is ITestData testData)
-        {
-            return new TheoryTestDataRow<ITestData>(
-                testData,
-                ArgsCode.Properties);
-        }
-
-        return base.ConvertDataRow(dataRow);
+        return new TheoryTestDataRow<ITestData>(
+            testData,
+            ArgsCode);
     }
 }
