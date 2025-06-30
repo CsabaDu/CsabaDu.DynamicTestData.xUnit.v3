@@ -4,20 +4,20 @@
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 
 /// <summary>
-/// Provides a data source for a theory test, with the data coming from a memberValue of the test class.
+/// Provides a data source for a theory test, with the data coming from a dataSource of the test class.
 /// Extends <see cref="MemberDataAttributeBase"/> with additional functionality.
 /// </summary>
 public abstract class MemberTestDataAttributeBase
 : MemberDataAttributeBase
 {
     /// <summary>
-    /// Initializes a new memberValue of the <see cref="MemberTestDataAttribute"/> class.
+    /// Initializes a new dataSource of the <see cref="MemberTestDataAttribute"/> class.
     /// <remarks>
     /// Constructor extension to set <see cref="MemberDataAttributeBase.DisableDiscoveryEnumeration"/> to true.
     /// </remarks>
     /// </summary>
-    /// <param name="memberName">The name of the public memberValue that will provide the test data.</param>
-    /// <param name="arguments">The arguments to be passed to the memberValue (only supported for static members).</param>
+    /// <param name="memberName">The name of the public dataSource that will provide the test data.</param>
+    /// <param name="arguments">The arguments to be passed to the dataSource (only supported for static members).</param>
     private protected MemberTestDataAttributeBase(string memberName, params object[] arguments)
     : base(memberName, arguments)
     => DisableDiscoveryEnumeration = true;
@@ -99,10 +99,10 @@ public abstract class MemberTestDataAttributeBase
 
         return new TheoryTestDataRow<ITestData>(
             testData,
-            getArgsCode());
+            getArgsCodeFromDataSourceMember());
 
         #region Local methods
-        ArgsCode getArgsCode()
+        ArgsCode getArgsCodeFromDataSourceMember()
         {
             try
             {
@@ -110,7 +110,7 @@ public abstract class MemberTestDataAttributeBase
                     ?? throw new InvalidOperationException(
                         "Test method type is null");
 
-                object memberValue = getMemberValue(
+                object dataSource = getMemberValue(
                     testMethodType,
                     BindingFlags.Static |
                     BindingFlags.Public |
@@ -121,7 +121,7 @@ public abstract class MemberTestDataAttributeBase
 
                 var argCodeProperty = MemberType?.GetProperty("ArgsCode");
 
-                if (argCodeProperty?.GetValue(memberValue) is ArgsCode argsCode)
+                if (argCodeProperty?.GetValue(dataSource) is ArgsCode argsCode)
                 {
                     return argsCode;
                 }
