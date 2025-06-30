@@ -106,68 +106,61 @@ public abstract class MemberTestDataAttributeBase
         {
             try
             {
-                var testMethodType = (MemberType?.DeclaringType)
+                Type declaringType = MemberType
                     ?? throw new InvalidOperationException(
-                        "Test method type is null");
+                        "Data source member declaring type is null");
 
-                object dataSource = getMemberValue(
-                    testMethodType,
+                object dataSource = getDataSourceMemberValue(
+                    declaringType,
                     BindingFlags.Static |
                     BindingFlags.Public |
-                    BindingFlags.NonPublic)
-                    ?? throw new InvalidOperationException(
-                        "static data source member is not found " +
-                        $"in the test method {testMethodType.Name}");
+                    BindingFlags.NonPublic);
 
-                var argCodeProperty = MemberType?.GetProperty("ArgsCode");
-
-                if (argCodeProperty?.GetValue(dataSource) is ArgsCode argsCode)
-                {
-                    return argsCode;
-                }
-
-                throw new InvalidOperationException(
-                    "'ArgsCode' property is not found in the member " +
-                    $"{MemberType?.Name}.{MemberName}");
+                return dataSource is IArgsCode dataStrategyBase ?
+                    dataStrategyBase.ArgsCode
+                    : default;
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException(
-                    "Failed to retrieve ArgsCode from " +
-                    $"{MemberType?.Name}.{MemberName}",
+                    "Failed to retrieve 'ArgsCode' from " +
+                    $"{MemberType?.Name ?? "(unknown type)"}.{MemberName}",
                     ex is TargetInvocationException tiex ?
-                        tiex.InnerException
-                        : ex);
+                    tiex.InnerException
+                    : ex);
             }
         }
 
-        object? getMemberValue(Type testMethodType, BindingFlags flags)
+        object getDataSourceMemberValue(
+            Type declaringType,
+            BindingFlags flags)
         {
-            if (testMethodType.GetProperty(MemberName, flags)
-                is { PropertyType: var propertyType } propertyInfo
-                && propertyType == MemberType)
+            // Property
+            if (declaringType.GetProperty(MemberName, flags) is { } property
+                && property.GetValue(null) is object propertyValue)
             {
-                return propertyInfo.GetValue(null);
+                return propertyValue;
             }
 
-            if (testMethodType.GetMethod(MemberName, flags,
-                null,
-                Type.EmptyTypes,
-                null)
-                is { ReturnType: var returnType } methodInfo
-                && returnType == MemberType)
+            // Method
+            if (declaringType.GetMethod(MemberName, flags,
+                null, Type.EmptyTypes, null) is { } method
+                && method.Invoke(null, null) is object methodValue)
             {
-                return methodInfo.Invoke(null, null);
+                return methodValue;
             }
 
-            if (testMethodType.GetField(MemberName, flags)
-                is { FieldType: var fieldType } fieldInfo
-                && fieldType == MemberType)
+            // Field
+            if (declaringType.GetField(MemberName, flags) is { } field
+                && field.GetValue(null) is object fieldValue)
             {
-                return fieldInfo.GetValue(null);
+                return fieldValue;
             }
 
-            return null;
+            throw new InvalidOperationException(
+                "Static data source member " +
+                $"'{MemberName}' not found in " +
+                $"{declaringType.Name}");
         }
         #endregion
     }
