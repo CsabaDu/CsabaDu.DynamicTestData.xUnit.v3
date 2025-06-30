@@ -4,23 +4,20 @@
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
 
 /// <summary>
-/// Provides a data source for a theory test, with the data coming from a member of the test class.
+/// Provides a data source for a theory test, with the data coming from a memberValue of the test class.
 /// Extends <see cref="MemberDataAttributeBase"/> with additional functionality.
 /// </summary>
 public abstract class MemberTestDataAttributeBase
-: MemberDataAttributeBase,
-IArgsCode
+: MemberDataAttributeBase
 {
-    public ArgsCode ArgsCode { get; set; } = ArgsCode.Properties;
-
     /// <summary>
-    /// Initializes a new instance of the <see cref="MemberTestDataAttribute"/> class.
+    /// Initializes a new memberValue of the <see cref="MemberTestDataAttribute"/> class.
     /// <remarks>
     /// Constructor extension to set <see cref="MemberDataAttributeBase.DisableDiscoveryEnumeration"/> to true.
     /// </remarks>
     /// </summary>
-    /// <param name="memberName">The name of the public member that will provide the test data.</param>
-    /// <param name="arguments">The arguments to be passed to the member (only supported for static members).</param>
+    /// <param name="memberName">The name of the public memberValue that will provide the test data.</param>
+    /// <param name="arguments">The arguments to be passed to the memberValue (only supported for static members).</param>
     private protected MemberTestDataAttributeBase(string memberName, params object[] arguments)
     : base(memberName, arguments)
     => DisableDiscoveryEnumeration = true;
@@ -45,29 +42,37 @@ IArgsCode
             await base.GetData(testMethod, disposalTracker)
             .ConfigureAwait(false);
 
-        if (testMethodName == null
-            || theoryDataRowCollection.Any(x => x is not ITheoryTestDataRow))
+        if (testMethodName == null)
         {
             return theoryDataRowCollection;
         }
 
-        var testDataRowList = new List<ITheoryTestDataRow>();
+        var runtimeGenericType = theoryDataRowCollection
+            !.GetType()
+            .GetGenericArguments()[0];
+
+        if (!typeof(ITheoryTestDataRow).IsAssignableFrom(runtimeGenericType))
+        {
+            return theoryDataRowCollection;
+        }
+
+        var ttdrList = new List<ITheoryTestDataRow>();
 
         foreach (var item in theoryDataRowCollection!)
         {
-            var testDataRow = item as ITheoryTestDataRow;
+            var ttdr = item as ITheoryTestDataRow;
 
-            if (testDataRow!.TestDisplayName == null)
+            if (ttdr!.TestDisplayName == null)
             {
-                testDataRow = testDataRow.Convert(
-                    testDataRow.GetDataStrategy(),
+                ttdr = ttdr.Convert(
+                    ttdr.GetDataStrategy(),
                     testMethodName);
             }
 
-            testDataRowList.Add(testDataRow);
+            ttdrList.Add(ttdr);
         }
 
-        return testDataRowList.CastOrToReadOnlyCollection();
+        return ttdrList.CastOrToReadOnlyCollection();
     }
 
     /// <summary>
@@ -94,6 +99,76 @@ IArgsCode
 
         return new TheoryTestDataRow<ITestData>(
             testData,
-            ArgsCode);
+            getArgsCode());
+
+        #region Local methods
+        ArgsCode getArgsCode()
+        {
+            try
+            {
+                var testMethodType = (MemberType?.DeclaringType)
+                    ?? throw new InvalidOperationException(
+                        "Test method type is null");
+
+                object memberValue = getMemberValue(
+                    testMethodType,
+                    BindingFlags.Static |
+                    BindingFlags.Public |
+                    BindingFlags.NonPublic)
+                    ?? throw new InvalidOperationException(
+                        "static data source member is not found " +
+                        $"in the test method {testMethodType.Name}");
+
+                var argCodeProperty = MemberType?.GetProperty("ArgsCode");
+
+                if (argCodeProperty?.GetValue(memberValue) is ArgsCode argsCode)
+                {
+                    return argsCode;
+                }
+
+                throw new InvalidOperationException(
+                    "'ArgsCode' property is not found in the member " +
+                    $"{MemberType?.Name}.{MemberName}");
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    "Failed to retrieve ArgsCode from " +
+                    $"{MemberType?.Name}.{MemberName}",
+                    ex is TargetInvocationException tiex ?
+                        tiex.InnerException
+                        : ex);
+            }
+        }
+
+        object? getMemberValue(Type testMethodType, BindingFlags flags)
+        {
+            if (testMethodType.GetProperty(MemberName, flags)
+                is { PropertyType: var propertyType } propertyInfo
+                && propertyType == MemberType)
+            {
+                return propertyInfo.GetValue(null);
+            }
+
+            if (testMethodType.GetMethod(MemberName, flags,
+                null,
+                Type.EmptyTypes,
+                null)
+                is { ReturnType: var returnType } methodInfo
+                && returnType == MemberType)
+            {
+                return methodInfo.Invoke(null, null);
+            }
+
+            if (testMethodType.GetField(MemberName, flags)
+                is { FieldType: var fieldType } fieldInfo
+                && fieldType == MemberType)
+            {
+                return fieldInfo.GetValue(null);
+            }
+
+            return null;
+        }
+        #endregion
     }
 }
