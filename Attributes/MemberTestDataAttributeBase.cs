@@ -118,12 +118,12 @@ public abstract class MemberTestDataAttributeBase
 
                 return dataSource is IArgsCode dataStrategyBase ?
                     dataStrategyBase.ArgsCode
-                    : default;
+                    : ArgsCode.Instance;
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException(
-                    "Failed to retrieve 'ArgsCode' from " +
+                    "Failed to retrieve 'ITestData' type data rows from " +
                     $"{MemberType?.Name ?? "(unknown type)"}.{MemberName}",
                     ex is TargetInvocationException tiex ?
                     tiex.InnerException
@@ -135,6 +135,8 @@ public abstract class MemberTestDataAttributeBase
             Type declaringType,
             BindingFlags flags)
         {
+            Guard.ArgumentNotNull(declaringType, nameof(declaringType));
+
             // Property
             if (declaringType.GetProperty(MemberName, flags) is { } property
                 && property.GetValue(null) is object propertyValue)
