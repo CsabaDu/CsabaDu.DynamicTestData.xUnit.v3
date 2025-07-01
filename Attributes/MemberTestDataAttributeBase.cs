@@ -146,7 +146,7 @@ public abstract class MemberTestDataAttributeBase
 
             // Method
             if (declaringType.GetMethod(MemberName, flags,
-                null, Type.EmptyTypes, null) is { } method
+                null, EmptyTypeArray, null) is { } method
                 && method.Invoke(null, null) is object methodValue)
             {
                 return methodValue;
@@ -166,4 +166,6 @@ public abstract class MemberTestDataAttributeBase
         }
         #endregion
     }
+
+    private static readonly Type[] EmptyTypeArray = Type.EmptyTypes;
 }
