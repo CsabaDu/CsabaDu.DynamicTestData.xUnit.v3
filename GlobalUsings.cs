@@ -13,6 +13,7 @@ global using CsabaDu.DynamicTestData.TestDataTypes.Interfaces;
 global using CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders;
 global using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 global using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Interfaces;
+global using System.Collections.Concurrent;
 global using System.Reflection;
 global using Xunit;
 global using Xunit.Internal;
