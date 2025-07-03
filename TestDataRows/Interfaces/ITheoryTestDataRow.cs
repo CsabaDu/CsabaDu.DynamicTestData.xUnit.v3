@@ -12,7 +12,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Interfaces;
 /// </remarks>
 public interface ITheoryTestDataRow
 : ITheoryDataRow,
-INamedTestDataRow<ITheoryTestDataRow>
+INamedTestDataRow<ITheoryTestDataRow>,
+IArgsCode
 {
     IDataStrategy GetDataStrategy();
 }

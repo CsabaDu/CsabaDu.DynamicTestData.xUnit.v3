@@ -14,8 +14,7 @@ public sealed class TheoryTestDataRow<TTestData>(
 : TestDataRow<ITheoryTestDataRow, TTestData>(
     testData),
 ITheoryTestDataRow,
-ITestDataRow<ITheoryTestDataRow, TTestData>,
-IArgsCode
+ITestDataRow<ITheoryTestDataRow, TTestData>
 where TTestData : notnull, ITestData
 {
     internal TheoryTestDataRow(
