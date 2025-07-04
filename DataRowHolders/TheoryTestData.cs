@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.xUnit.v3.Statics;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DataRowHolders;
 
 public class TheoryTestData<TTestData>
@@ -41,10 +43,10 @@ where TTestData : notnull, ITestData
         else
         {
             AddRange(
-                testDataRows.Select(row => GetTheoryTestDataRow(
-                    getTestData(row),
-                    dataStrategy.ArgsCode,
-                    testMethodName)));
+                testDataRows.Select(
+                    row => getTestData(row).ToTheoryTestDataRow(
+                        dataStrategy.ArgsCode,
+                        testMethodName)));
         }
 
         #region Local methods
@@ -60,8 +62,7 @@ where TTestData : notnull, ITestData
     : this(dataStrategy)
     {
         AddRange(testDataRows.Select(
-            row => GetTheoryTestDataRow(
-                row.TestData,
+            row => row.TestData.ToTheoryTestDataRow(
                 dataStrategy.ArgsCode,
                 testMethodName)));
     }
@@ -91,8 +92,7 @@ where TTestData : notnull, ITestData
         }
         else
         {
-            Add(GetTheoryTestDataRow(
-                testData,
+            Add(testData.ToTheoryTestDataRow(
                 dataStrategy.ArgsCode,
                 testMethodName));
         }
@@ -146,13 +146,4 @@ where TTestData : notnull, ITestData
                 argsCode.Value,
                 DataStrategy.WithExpected);
     }
-
-    private static TheoryTestDataRow<TTestData> GetTheoryTestDataRow(
-        TTestData testData,
-        ArgsCode argsCode,
-        string? testMethodName)
-    => new TheoryTestDataRow<TTestData>(
-        testData,
-        argsCode,
-        testMethodName);
 }

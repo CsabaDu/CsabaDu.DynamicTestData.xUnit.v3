@@ -17,6 +17,7 @@ ITheoryTestDataRow,
 ITestDataRow<ITheoryTestDataRow, TTestData>
 where TTestData : notnull, ITestData
 {
+    #region Constructors
     internal TheoryTestDataRow(
         TTestData testData,
         ArgsCode argsCode,
@@ -51,35 +52,12 @@ where TTestData : notnull, ITestData
         other,
         argsCode,
         testMethodName);
+    #endregion
 
-    private void SetTheoryDataRow(
-        TheoryTestDataRow<TTestData> other,
-        ArgsCode argsCode,
-        string? testMethodName)
-    {
-        Explicit = other.Explicit;
-        Skip = other.Skip;
-        TestDisplayName = GetTestDisplayName(
-            testMethodName,
-            argsCode,
-            other)
-            ?? other.TestDisplayName;
-        Timeout = other.Timeout;
-        Traits = other.Traits ?? [];
-    }
-
-    private static string? GetTestDisplayName(
-        string? testMethodName,
-        ArgsCode argsCode,
-        INamedTestCase namedTestCase)
-    => argsCode == ArgsCode.Properties ?
-        GetDisplayName(
-            testMethodName,
-            namedTestCase.GetTestCaseName())
-        : testMethodName;
-
+    #region Properties
     public ArgsCode ArgsCode { get; init; } =
         argsCode.Defined(nameof(argsCode));
+    #endregion
 
     #region ITheoryDataRow members
     Dictionary<string, HashSet<string>> traits = [];
@@ -107,6 +85,7 @@ where TTestData : notnull, ITestData
     => GetParams(GetDataStrategy());
     #endregion
 
+    #region TestDataRow members
     public override ITheoryTestDataRow Convert(IDataStrategy dataStrategy)
     {
         ArgsCode argsCode = dataStrategy.ArgsCode;
@@ -119,6 +98,14 @@ where TTestData : notnull, ITestData
                 null);
     }
 
+    public override ITestDataRow<ITheoryTestDataRow, TTestData> CreateTestDataRow(
+        TTestData testData)
+    => new TheoryTestDataRow<TTestData>(
+        testData,
+        default);
+    #endregion
+
+    #region ITheoryTestDataRow members
     public ITheoryTestDataRow Convert(IDataStrategy dataStrategy, string? testMethodName)
     => string.IsNullOrEmpty(testMethodName) ?
         this
@@ -126,14 +113,37 @@ where TTestData : notnull, ITestData
             this,
             testMethodName);
 
-    public override ITestDataRow<ITheoryTestDataRow, TTestData> CreateTestDataRow(
-        TTestData testData)
-    => new TheoryTestDataRow<TTestData>(
-        testData,
-        default);
-
     public IDataStrategy GetDataStrategy()
     => new DataStrategy(
         ArgsCode,
         TestData is IExpected);
+    #endregion
+
+    #region Private methods
+    private void SetTheoryDataRow(
+        TheoryTestDataRow<TTestData> other,
+        ArgsCode argsCode,
+        string? testMethodName)
+    {
+        Explicit = other.Explicit;
+        Skip = other.Skip;
+        TestDisplayName = GetTestDisplayName(
+            testMethodName,
+            argsCode,
+            other)
+            ?? other.TestDisplayName;
+        Timeout = other.Timeout;
+        Traits = other.Traits ?? [];
+    }
+
+    private static string? GetTestDisplayName(
+        string? testMethodName,
+        ArgsCode argsCode,
+        INamedTestCase namedTestCase)
+    => argsCode == ArgsCode.Properties ?
+        GetDisplayName(
+            testMethodName,
+            namedTestCase.GetTestCaseName())
+        : testMethodName;
+    #endregion
 }
