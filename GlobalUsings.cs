@@ -19,4 +19,4 @@ global using Xunit;
 global using Xunit.Internal;
 global using Xunit.Sdk;
 global using Xunit.v3;
-global using static CsabaDu.DynamicTestData.DynamicDataSources.DynamicDataSourceBase;
+global using static CsabaDu.DynamicTestData.DynamicDataSources.DynamicDataSource;
