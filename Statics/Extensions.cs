@@ -40,7 +40,7 @@ public static class Extensions
         ArgsCode argsCode,
         string? testMethodName)
     where TTestData : notnull, ITestData
-    => new TheoryTestDataRow<TTestData>(
+    => new(
         testData,
         argsCode,
         testMethodName);
