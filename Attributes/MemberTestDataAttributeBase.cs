@@ -23,7 +23,7 @@ public abstract class MemberTestDataAttributeBase
     => DisableDiscoveryEnumeration = true;
     #endregion
 
-    #region MemberDataAttributeBase overrides
+    #region Methodsű
     /// <inheritdoc/>
     public override async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
         MethodInfo testMethod,
@@ -39,17 +39,16 @@ public abstract class MemberTestDataAttributeBase
             return theoryDataRowCollection ?? [];
         }
 
-        Type ttdrType = typeof(ITheoryTestDataRow);
         var runtimeGenericType = theoryDataRowCollection
             .GetType()
             .GetGenericArguments()[0];
 
-        if (!ttdrType.IsAssignableFrom(runtimeGenericType))
+        if (!runtimeGenericType.IsAssignableTo(typeof(ITheoryTestDataRow)))
         {
             return theoryDataRowCollection;
         }
 
-        var ttdrList = new List<ITheoryTestDataRow>(theoryDataRowCollection.Count);
+        List<ITheoryTestDataRow> ttdrList = new(theoryDataRowCollection.Count);
 
         foreach (var item in theoryDataRowCollection)
         {

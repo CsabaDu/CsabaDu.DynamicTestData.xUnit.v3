@@ -11,10 +11,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
     ArgsCode argsCode)
-: TestDataRow<ITheoryTestDataRow, TTestData>(
-    testData),
-ITheoryTestDataRow,
-ITestDataRow<ITheoryTestDataRow, TTestData>
+: TestDataRow<ITheoryTestDataRow, TTestData>(testData),
+ITheoryTestDataRow
 where TTestData : notnull, ITestData
 {
     #region Constructors
