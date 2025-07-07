@@ -142,7 +142,7 @@ where TTestData : notnull, ITestData
 
         return argsCode == DataStrategy.ArgsCode ?
             DataStrategy
-            : new DataStrategy(
+            : GetStoredDataStrategy(
                 argsCode.Value,
                 DataStrategy.WithExpected);
     }

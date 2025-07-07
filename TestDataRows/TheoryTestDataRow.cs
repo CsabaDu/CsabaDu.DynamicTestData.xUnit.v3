@@ -112,7 +112,7 @@ where TTestData : notnull, ITestData
             testMethodName);
 
     public IDataStrategy GetDataStrategy()
-    => new DataStrategy(
+    => GetStoredDataStrategy(
         ArgsCode,
         TestData is IExpected);
     #endregion
