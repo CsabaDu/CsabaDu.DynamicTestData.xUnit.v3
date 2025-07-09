@@ -1,8 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-using CsabaDu.DynamicTestData.xUnit.v3.Statics;
-
 namespace CsabaDu.DynamicTestData.xUnit.v3.DataRowHolders;
 
 public class TheoryTestData<TTestData>
@@ -137,13 +135,5 @@ where TTestData : notnull, ITestData
     }
 
     public IDataStrategy GetDataStrategy(ArgsCode? argsCode)
-    {
-        argsCode ??= DataStrategy.ArgsCode;
-
-        return argsCode == DataStrategy.ArgsCode ?
-            DataStrategy
-            : GetStoredDataStrategy(
-                argsCode.Value,
-                DataStrategy.WithExpected);
-    }
+    => GetStoredDataStrategy(argsCode, DataStrategy);
 }
