@@ -40,16 +40,17 @@ where TTestData : notnull, ITestData
 
         else
         {
-            AddRange(
-                testDataRows.Select(
-                    row => getTestData(row).ToTheoryTestDataRow(
-                        dataStrategy.ArgsCode,
-                        testMethodName)));
+            AddRange(testDataRows.Select(getTheoryTestDataRow));
         }
 
         #region Local methods
         static TTestData getTestData(ITestDataRow row)
         => (TTestData)row.GetTestData();
+
+        TheoryTestDataRow<TTestData> getTheoryTestDataRow(ITestDataRow row)
+        => getTestData(row).ToTheoryTestDataRow(
+            dataStrategy.ArgsCode,
+            testMethodName);
         #endregion
     }
 
@@ -98,7 +99,7 @@ where TTestData : notnull, ITestData
     #endregion
 
     public Type TestDataType
-        => typeof(TTestData);
+    => typeof(TTestData);
 
     public IDataStrategy DataStrategy { get; init; }
 
