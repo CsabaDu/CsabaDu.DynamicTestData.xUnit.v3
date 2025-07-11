@@ -6,8 +6,8 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 /// <summary>
 /// Represents a row of test data for xUnit.net theory tests with additional configuration options.
 /// </summary>
-/// <param name="TestData">The test data instance</param>
-/// <param name="ArgsCode">Specifies how the test data should be converted to arguments</param>
+/// <param name="testData">The test data instance</param>
+/// <param name="argsCode">Specifies how the test data should be converted to arguments</param>
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
     ArgsCode argsCode)

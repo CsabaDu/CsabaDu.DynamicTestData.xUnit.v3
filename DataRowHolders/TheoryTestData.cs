@@ -98,10 +98,12 @@ where TTestData : notnull, ITestData
     }
     #endregion
 
+    #region Properties
     public Type TestDataType
     => typeof(TTestData);
 
     public IDataStrategy DataStrategy { get; init; }
+    #endregion
 
     public IDataRowHolder<ITheoryTestDataRow> GetDataRowHolder(IDataStrategy dataStrategy)
     => dataStrategy.ArgsCode == DataStrategy.ArgsCode ?
