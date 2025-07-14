@@ -95,12 +95,6 @@ where TTestData : notnull, ITestData
                 argsCode,
                 null);
     }
-
-    public override ITestDataRow<ITheoryTestDataRow, TTestData> CreateTestDataRow(
-        TTestData testData)
-    => new TheoryTestDataRow<TTestData>(
-        testData,
-        default);
     #endregion
 
     #region ITheoryTestDataRow members
