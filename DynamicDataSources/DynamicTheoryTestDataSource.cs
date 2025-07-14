@@ -48,7 +48,7 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
 
         if (DataRowHolder is TheoryTestData<TTestData> theoryTestData)
         {
-            return dataStrategy.ArgsCode == DataRowHolder?.DataStrategy.ArgsCode
+            return dataStrategy.ArgsCode == ArgsCode
                 && testMethodName is null ?
                 theoryTestData
                 : new TheoryTestData<TTestData>(
@@ -78,8 +78,8 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
     }
 
     protected override void InitDataRowHolder<TTestData>(TTestData testData)
-    => DataRowHolder = new TheoryTestData<TTestData>
-        (testData,
+    => DataRowHolder = new TheoryTestData<TTestData>(
+        testData,
         this,
         null);
 }
