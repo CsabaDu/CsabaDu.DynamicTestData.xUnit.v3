@@ -24,7 +24,7 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
 {
     protected override void Add<TTestData>(TTestData testData)
     {
-        bool rowCreated = TryGetTestDataRow<TheoryTestDataRow<TTestData>, TTestData>(
+        bool rowCreated = TryCreateTestDataRow<TheoryTestDataRow<TTestData>, TTestData>(
             testData,
             out ITestDataRow<ITheoryTestDataRow, TTestData>? testDataRow);
 
