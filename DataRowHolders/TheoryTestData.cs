@@ -105,6 +105,7 @@ where TTestData : notnull, ITestData
     public IDataStrategy DataStrategy { get; init; }
     #endregion
 
+    #region Methods
     public IDataRowHolder<ITheoryTestDataRow> GetDataRowHolder(IDataStrategy dataStrategy)
     => dataStrategy.ArgsCode == DataStrategy.ArgsCode ?
         this
@@ -116,7 +117,9 @@ where TTestData : notnull, ITestData
     public IEnumerable<ITheoryTestDataRow>? GetRows(ArgsCode? argsCode)
     => GetRows(null, argsCode);
 
-    public IEnumerable<ITheoryTestDataRow>? GetRows(string? testMethodName, ArgsCode? argsCode)
+    public IEnumerable<ITheoryTestDataRow>? GetRows(
+        string? testMethodName,
+        ArgsCode? argsCode)
     {
         var testDataRows = GetTestDataRows();
         var dataStrategy = GetDataStrategy(argsCode);
@@ -139,4 +142,5 @@ where TTestData : notnull, ITestData
 
     public IDataStrategy GetDataStrategy(ArgsCode? argsCode)
     => GetStoredDataStrategy(argsCode, DataStrategy);
+    #endregion
 }
