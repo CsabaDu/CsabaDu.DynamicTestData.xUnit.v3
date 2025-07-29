@@ -4,10 +4,10 @@
     <Position X="0.5" Y="0.5" Width="3.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="CsabaDu.DynamicTestData.xUnit.v3.TestDataHolders.TheoryTestData&lt;TTestData&gt;">
-    <Position X="0.5" Y="1.75" Width="3.5" />
+  <Class Name="CsabaDu.DynamicTestData.xUnit.v3.DataRowHolders.TheoryTestData&lt;TTestData&gt;">
+    <Position X="0.5" Y="1.5" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AECCAAAAAAAAAAAAAIAQAAEAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AECAAAAAAAAAAAAAAIAQAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
       <FileName>DataRowHolders\TheoryTestData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
