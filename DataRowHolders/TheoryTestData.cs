@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.DataRowHolders;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DataRowHolders;
 
 public class TheoryTestData<TTestData>
@@ -99,9 +101,6 @@ where TTestData : notnull, ITestData
     #endregion
 
     #region Properties
-    public Type TestDataType
-    => typeof(TTestData);
-
     public IDataStrategy DataStrategy { get; init; }
     #endregion
 
@@ -115,19 +114,36 @@ where TTestData : notnull, ITestData
             null);
 
     public IEnumerable<ITheoryTestDataRow>? GetRows(ArgsCode? argsCode)
-    => GetRows(null, argsCode);
+    => GetRows(
+        null,
+        argsCode);
 
     public IEnumerable<ITheoryTestDataRow>? GetRows(
         string? testMethodName,
         ArgsCode? argsCode)
-    {
-        var testDataRows = GetTestDataRows();
-        var dataStrategy = GetDataStrategy(argsCode);
+    => NamedDataRowHolder<ITheoryTestDataRow, TTestData>.GetRows(
+        this,
+        testMethodName,
+        GetDataStrategy(argsCode));
 
-        return testDataRows?.Select(
-            tdr => (tdr as INamedTestDataRow<ITheoryTestDataRow>)
-            !.Convert(dataStrategy, testMethodName));
-    }
+    public IEnumerable<ITheoryTestDataRow>? GetRows(
+        ArgsCode? argsCode,
+        PropertyCode? propertyCode)
+    => GetRows(
+        null,
+        argsCode,
+        propertyCode);
+
+    public IEnumerable<ITheoryTestDataRow>? GetRows(
+        string? testMethodName,
+        ArgsCode? argsCode,
+        PropertyCode? propertyCode)
+    => NamedDataRowHolder<ITheoryTestDataRow, TTestData>.GetRows(
+        this,
+        testMethodName,
+        GetDataStrategy(
+            argsCode,
+            propertyCode));
 
     protected override TheoryTestDataRow<TTestData> Convert(TTestData testData)
     => new(testData, DataStrategy.ArgsCode);
@@ -141,6 +157,15 @@ where TTestData : notnull, ITestData
     }
 
     public IDataStrategy GetDataStrategy(ArgsCode? argsCode)
-    => GetStoredDataStrategy(argsCode, DataStrategy);
+    => GetStoredDataStrategy(
+        argsCode,
+        DataStrategy);
+
+    public IDataStrategy GetDataStrategy(
+        ArgsCode? argsCode,
+        PropertyCode? propertyCode)
+    => GetStoredDataStrategy(
+        argsCode ?? DataStrategy.ArgsCode,
+        propertyCode ?? DataStrategy.PropertyCode);
     #endregion
 }
