@@ -128,22 +128,22 @@ where TTestData : notnull, ITestData
 
     public IEnumerable<ITheoryTestDataRow>? GetRows(
         ArgsCode? argsCode,
-        PropertyCode? propertyCode)
+        PropsCode? propsCode)
     => GetRows(
         null,
         argsCode,
-        propertyCode);
+        propsCode);
 
     public IEnumerable<ITheoryTestDataRow>? GetRows(
         string? testMethodName,
         ArgsCode? argsCode,
-        PropertyCode? propertyCode)
+        PropsCode? propsCode)
     => NamedDataRowHolder<ITheoryTestDataRow, TTestData>.GetRows(
         this,
         testMethodName,
         GetDataStrategy(
             argsCode,
-            propertyCode));
+            propsCode));
 
     protected override TheoryTestDataRow<TTestData> Convert(TTestData testData)
     => new(testData, DataStrategy.ArgsCode);
@@ -163,9 +163,9 @@ where TTestData : notnull, ITestData
 
     public IDataStrategy GetDataStrategy(
         ArgsCode? argsCode,
-        PropertyCode? propertyCode)
+        PropsCode? propsCode)
     => GetStoredDataStrategy(
         argsCode ?? DataStrategy.ArgsCode,
-        propertyCode ?? DataStrategy.PropertyCode);
+        propsCode ?? DataStrategy.PropsCode);
     #endregion
 }

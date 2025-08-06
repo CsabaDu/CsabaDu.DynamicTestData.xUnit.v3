@@ -20,7 +20,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 /// </remarks>
 /// <param name="argsCode">The strategy for converting test data to method arguments</param>
 public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
-: DynamicNamedDataRowSource<ITheoryTestDataRow>(argsCode, PropertyCode.Expected)
+: DynamicNamedDataRowSource<ITheoryTestDataRow>(argsCode, PropsCode.Expected)
 {
     protected override void Add<TTestData>(TTestData testData)
     {

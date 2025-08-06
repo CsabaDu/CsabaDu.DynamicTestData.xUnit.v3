@@ -108,7 +108,7 @@ where TTestData : notnull, ITestData
     public IDataStrategy GetDataStrategy()
     => GetStoredDataStrategy(
         ArgsCode,
-        PropertyCode.Expected);
+        PropsCode.Expected);
     #endregion
 
     #region Private methods
