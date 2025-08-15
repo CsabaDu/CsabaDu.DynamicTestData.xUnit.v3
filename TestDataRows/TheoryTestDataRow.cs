@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 
 /// <summary>
@@ -79,6 +80,18 @@ where TTestData : notnull, ITestData
         set => traits = Guard.ArgumentNotNull(value, nameof(Traits));
     }
 
+    /// <inheritdoc/>
+    public string? Label { get; set; }
+
+    /// <inheritdoc/>
+    public Type? SkipType { get; set; }
+
+    /// <inheritdoc/>
+    public string? SkipUnless { get; set; }
+
+    /// <inheritdoc/>
+    public string? SkipWhen { get; set; }
+
     public object?[] GetData()
     => GetParams(GetDataStrategy());
     #endregion
@@ -119,6 +132,10 @@ where TTestData : notnull, ITestData
     {
         Explicit = other.Explicit;
         Skip = other.Skip;
+        Label = other.Label;
+        SkipType = other.SkipType;
+        SkipUnless = other.SkipUnless;
+        SkipWhen = other.SkipWhen;
         TestDisplayName = GetTestDisplayName(
             testMethodName,
             argsCode,
