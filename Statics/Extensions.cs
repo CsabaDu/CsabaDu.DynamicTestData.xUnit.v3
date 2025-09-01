@@ -24,16 +24,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?>(
                     testData.Expected,
                     testData.Arg1)
@@ -44,7 +47,10 @@ public static class Extensions
                     testData.Arg1)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2>(
@@ -53,16 +59,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?>(
                     testData.Expected,
                     testData.Arg1,
@@ -75,25 +84,31 @@ public static class Extensions
                     testData.Arg2)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
-    public static ITheoryDataRow ToTheoryDataRow< TResult, T1, T2, T3>(
+    public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3>(
         this ITestData<TResult, T1, T2, T3> testData,
         ArgsCode argsCode,
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?>(
                     testData.Expected,
                     testData.Arg1,
@@ -108,7 +123,10 @@ public static class Extensions
                     testData.Arg3)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3, T4>(
@@ -117,16 +135,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?, T4?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?, T4?>(
                     testData.Expected,
                     testData.Arg1,
@@ -143,7 +164,10 @@ public static class Extensions
                     testData.Arg4)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3, T4, T5>(
@@ -152,16 +176,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?, T4?, T5?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?, T4?, T5?>(
                     testData.Expected,
                     testData.Arg1,
@@ -180,7 +207,10 @@ public static class Extensions
                     testData.Arg5)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3, T4, T5, T6>(
@@ -189,16 +219,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?, T4?, T5?, T6?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?, T4?, T5?, T6?>(
                     testData.Expected,
                     testData.Arg1,
@@ -219,7 +252,10 @@ public static class Extensions
                     testData.Arg6)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3, T4, T5, T6, T7>(
@@ -228,16 +264,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?, T4?, T5?, T6?, T7?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?, T4?, T5?, T6?, T7?>(
                     testData.Expected,
                     testData.Arg1,
@@ -260,7 +299,10 @@ public static class Extensions
                     testData.Arg7)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3, T4, T5, T6, T7, T8>(
@@ -269,16 +311,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?, T4?, T5?, T6?, T7?, T8?>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?, T4?, T5?, T6?, T7?, T8?>(
                     testData.Expected,
                     testData.Arg1,
@@ -303,7 +348,10 @@ public static class Extensions
                     testData.Arg8)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
 
     public static ITheoryDataRow ToTheoryDataRow<TResult, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -312,16 +360,19 @@ public static class Extensions
         string? testMethodName)
     where TResult : notnull
     {
-        var instanceRow =
-            InstanceToTheoryDataRowOrNull(
-                testData,
-                argsCode,
-                testMethodName,
-                out string? testDisplayName);
+        var testDisplayName = CreateDisplayName(
+            testData,
+            testMethodName);
 
-        return instanceRow is not null ?
-            instanceRow
-            : testData is IExpected ?
+        return argsCode switch
+        {
+            ArgsCode.Instance =>
+            new TheoryDataRow<ITestData<TResult, T1?, T2?, T3?, T4?, T5?, T6?, T7?, T8?, T9>>(testData)
+            {
+                TestDisplayName = testDisplayName,
+            },
+            ArgsCode.Properties =>
+            testData is IExpected ?
                 new TheoryDataRow<TResult, T1?, T2?, T3?, T4?, T5?, T6?, T7?, T8?, T9?>(
                     testData.Expected,
                     testData.Arg1,
@@ -348,38 +399,26 @@ public static class Extensions
                     testData.Arg9)
                 {
                     TestDisplayName = testDisplayName
-                };
+                },
+            _ =>
+            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
+        };
     }
     #endregion
 
-    #region Private InstanceToTheoryDataRowOrNull
-    private static TheoryDataRow<TTestData>? InstanceToTheoryDataRowOrNull<TTestData>(
-        TTestData testData,
-        ArgsCode argsCode,
-        string? testMethodName,
-        out string? testDisplayName)
-    where TTestData : notnull, ITestData
+    #region Private CreateDisplayName
+
+    private static string? CreateDisplayName(
+        ITestData testData,
+        string? testMethodName)
     {
         var testCaseName = (testData
             ?? throw new ArgumentNullException(nameof(testData)))
             .GetTestCaseName();
 
-        testDisplayName = GetDisplayName(
+       return GetDisplayName(
             testMethodName,
             testCaseName);
-
-        return argsCode switch
-        {
-            ArgsCode.Instance =>
-            new TheoryDataRow<TTestData>(testData)
-            {
-                TestDisplayName = testDisplayName,
-            },
-            ArgsCode.Properties =>
-            null,
-            _ =>
-            throw argsCode.GetInvalidEnumArgumentException(nameof(argsCode)),
-        };
     }
     #endregion
 }
