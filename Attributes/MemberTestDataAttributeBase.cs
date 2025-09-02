@@ -23,7 +23,7 @@ public abstract class MemberTestDataAttributeBase
     => DisableDiscoveryEnumeration = true;
     #endregion
 
-    #region Methodsű
+    #region Methods
     /// <inheritdoc/>
     public override async ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(
         MethodInfo testMethod,

@@ -15,7 +15,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
 /// </para>
 /// <para>
 /// The class ensures all test data added to a single instance maintains consistent
-/// generic type parameters through runtime checks.
+/// generic type typeParams through runtime checks.
 /// </para>
 /// </remarks>
 /// <param name="argsCode">The strategy for converting test data to method arguments</param>
