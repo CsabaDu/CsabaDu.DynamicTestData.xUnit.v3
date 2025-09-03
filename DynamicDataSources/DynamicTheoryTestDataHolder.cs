@@ -24,12 +24,18 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
 {
     protected override void Add<TTestData>(TTestData testData)
     {
-        if (DataHolder is TheoryTestData<TTestData> theoryTestData)
+        if (DataHolder is not TheoryTestData<TTestData> theoryTestData)
         {
-            theoryTestData.Add(testData);
+            InitDataHolder(testData);
+            return;
         }
 
-        base.Add(testData);
+        if (theoryTestData.Any(testData.Equals))
+        {
+            return;
+        }
+
+        theoryTestData.Add(testData);
     }
 
     public TheoryTestData<TTestData>? GetTheoryTestData<TTestData>(
