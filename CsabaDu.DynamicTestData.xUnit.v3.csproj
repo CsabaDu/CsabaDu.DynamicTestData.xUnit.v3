@@ -4,6 +4,21 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Dynamic Test Data xUnit.v3</Title>
+    <Version>1.0.0-beta</Version>
+    <Company>CsabaDu</Company>
+    <Description>An extension of CsabaDu.DynamicTestData framework to facilitate dynamic data-driven testing in xUnit.v3.</Description>
+    <Copyright>(c) 2025. Csaba Dudas (CsabaDu)</Copyright>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/CsabaDu/CsabaDu.DynamicTestData.xUnit.v3</RepositoryUrl>
+    <PackageTags>dynamic; unit; test; data; driven; typesafe; threadsafe; extensible; xunit.v3; modular; TheoryData; ITheoryDataRow</PackageTags>
+    <PackageReleaseNotes>Initial beta release: Stable, partially tested, documentation is incomplete.</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +47,21 @@
 
   <ItemGroup>
     <Folder Include="Statics\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

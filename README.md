@@ -1,194 +1,66 @@
-# CsabaDu.DynamicTestData.xUnit.v3
+﻿# CsabaDu.DynamicTestData.xUnit.v3
 
-A powerful xUnit.net v3 extension for creating dynamic, strongly-typed test data with fluent configuration options.
 
-## Features
+🎯 An extension of CsabaDu.DynamicTestData framework to facilitate dynamic data-driven testing in xUnit.  
 
-- **Fluent API** for building test cases with clear, chainable syntax
-- **Strongly-typed test data** with compile-time type checking
-- **Dynamic test display names** automatically generated from test data
-- **Comprehensive configuration** including:
-  - Custom display names
-  - Explicit test marking
-  - Skip reasons
-  - Timeout values
-  - Test traits
-- **Support for multiple test scenarios**:
-  - Normal test cases
-  - Value-returning test cases
-  - Exception-throwing test cases
-- **Type-safe argument handling** up to 9 parameters
-- **Clean separation** between test data and display logic
+- ⚙️ Test data **conversion, management and provisioning**
+- ⛑️ **Type-safe and thread-safe** support for *xUnit*
+- 🧩 **Modular design**, abstractions and ready-to-use integrations
+- 💼 **Portable** data sources
+- 📋 Traceable **descriptive display names**
+- 💵 **Now seeking sponsors** to complete v2.0 – comprehensive testing, documentation, examples, and new features!
 
-## Installation
+---
 
-Add the NuGet package to your test project:
+[![Sponsor this project](https://img.shields.io/badge/Sponsor_on_GitHub-💖-ff69b4?style=flat-square)](https://github.com/sponsors/CsabaDu) 
+[![Buy me a coffee](https://raw.githubusercontent.com/CsabaDu/CsabaDu.DynamicTestData/refs/heads/master/_Images/white-button_15.png)](https://buymeacoffee.com/csabadu) 
+[![Support Me a Ko-fi](https://raw.githubusercontent.com/CsabaDu/CsabaDu.DynamicTestData/refs/heads/master/_Images/SupportMeOnKofi_20.png)](https://ko-fi.com/csabadu) 
+[![OpenCollective](https://opencollective.com/static/images/opencollectivelogo-footer-n.svg)](https://opencollective.com/csabadudynamictestdata)  
 
-```bash
-dotnet add package CsabaDu.DynamicTestData.xUnit.v3
-```
+---
 
-## Usage
+## Documentation
 
-### Basic Example
+This README and the [dedicated Wiki](https://github.com/CsabaDu/CsabaDu.DynamicTestData.xUnit/wiki) for the **CsabaDu.DynamicTestData.xUnit.v3** extension are currently under development. While full documentation is in progress, you can already find essential information and usage guidance.
 
-```csharp
-public class CalculatorTests
-{
-    [Theory]
-    [DynamicTestDisplayName(nameof(GetAdditionTestData))]
-    public void AdditionTest(TestData<int, int, int> testData)
-    {
-        // Arrange
-        var calculator = new Calculator();
-        int actual = calculator.Add(testData.Arg1, testData.Arg2);
-        
-        // Assert
-        Assert.Equal(testData.Expected, actual);
-    }
+To learn more about the core framework, visit the [CsabaDu.DynamicTestData package on NuGet](https://www.nuget.org/packages/CsabaDu.DynamicTestData/2.0.6-beta) and explore its [main Wiki](https://github.com/CsabaDu/CsabaDu.DynamicTestData/wiki).
 
-    public static IEnumerable<TheoryTestDataRow> GetAdditionTestData()
-    {
-        var testData = new DynamicTheoryTestDataSource<int, int, int>(ArgsCode.Properties);
+For an overview of this xUnit-specific extension—including its purpose, integration points, and sample usage—see the [Extensibility & Ready-to-Use Implementations](https://github.com/CsabaDu/CsabaDu.DynamicTestData/wiki/02.08-%F0%9F%93%90-Extensibility-&-Ready-to-Use-Implementations#-xunit) section.
 
-        testData.AddTestDataToTheoryTestData("Simple addition", "3", 1, 2, 3);
-        testData.AddTestDataToTheoryTestData("Add zero", "5", 5, 0, 5);
-        testData.AddTestDataToTheoryTestData("Negative numbers", "-3", -1, -2, -3);
+---
 
-        return testData.TheoryTestData;
-    }
-}
-```
+## Documentation
 
-### Fluent Configuration
+This README and the [dedicated Wiki](https://github.com/CsabaDu/CsabaDu.DynamicTestData.xUnit/wiki) for the **CsabaDu.DynamicTestData.xUnit.v3** extension are currently under development. While full documentation is in progress, you can already find essential information and usage guidance.
 
-```csharp
-public static IEnumerable<TheoryTestDataRow> GetConfiguredTestData()
-{
-    var testData = new DynamicTheoryTestDataSource<string, bool>(ArgsCode.Instance);
+To learn more about the core framework, visit the [CsabaDu.DynamicTestData package on NuGet](https://www.nuget.org/packages/CsabaDu.DynamicTestData/2.0.7-beta) and explore its [main Wiki](https://github.com/CsabaDu/CsabaDu.DynamicTestData/wiki).
 
-    testData
-        .AddTestDataToTheoryTestData("Empty string", "True", "", true)
-        .SetTestDisplayName("Test_EmptyString")
-        .SetExplicit(true)
-        .SetTimeout(1000)
-        .SetTraits("Category", "Validation");
+For an overview of this xUnit-specific extensionâ€”including its purpose, integration points, and sample usageâ€”see the [Extensibility & Ready-to-Use Implementations](https://github.com/CsabaDu/CsabaDu.DynamicTestData/wiki/02.08-%F0%9F%93%90-Extensibility-&-Ready-to-Use-Implementations#-xunitv3) section.
 
-    testData
-        .AddTestDataToTheoryTestData("Null string", "False", null, false)
-        .SetSkip("Temporarily disabled for investigation");
+---
 
-    return testData.TheoryTestData;
-}
-```
+## Changelog  
 
-### Exception Testing
+### **Version 1.0.0-beta** (2025-09-08)
 
-```csharp
-public static IEnumerable<TheoryTestDataRow> GetExceptionTestData()
-{
-    var testData = new DynamicTheoryTestDataSource<string>(ArgsCode.Properties);
+Initial beta release.
+---
+## Contributing
 
-    testData.AddTestDataThrowsToTheoryTestData(
-        "Null argument",
-        new ArgumentNullException("input"),
-        null);
+Contributions are welcome! Please submit a pull request or open an issue if you have any suggestions or bug reports.
 
-    return testData.TheoryTestData;
-}
-```
-
-## API Reference
-
-### Core Interfaces
-
-#### `ISetTheoryDataRow<TTheoryDataRow>`
-Provides a fluent interface for configuring theory test data rows with methods for:
-- Setting display names (`SetTestDisplayName`)
-- Marking tests as explicit (`SetExplicit`)
-- Setting skip reasons (`SetSkip`)
-- Configuring timeouts (`SetTimeout`)
-- Adding traits (`SetTraits`)
-
-#### `ITheoryTestDataRow`
-Represents a row of test data with strongly-typed access to:
-- The test data instance (`TestData`)
-- Argument conversion strategy (`ArgsCode`)
-
-#### `ITheoryTestData`
-Provides initialization capabilities for theory test data collections with:
-- Argument conversion strategy (`ArgsCode`)
-- Test method name initialization (`InitTestMethodName`)
-
-### Main Classes
-
-#### `TheoryTestDataRow`
-A record type that implements both `ITheoryTestDataRow` and `ISetTheoryDataRow<TTheoryDataRow>`, providing:
-- Immutable test data configuration
-- Fluent API for configuration
-- Conversion of test data to method arguments
-
-#### `TheoryTestData`
-A collection class for theory test data that:
-- Maintains type consistency
-- Supports initialization with test method names
-- Provides conversion of test data to rows
-
-#### `DynamicTheoryTestDataSource`
-Abstract base class for creating strongly-typed test data sources that:
-- Enforces type safety
-- Provides methods for adding different test case types
-- Supports temporary argument conversion strategy changes
-
-### Attributes
-
-#### `DynamicTestDisplayNameAttribute`
-Enables dynamic test display names by:
-- Specifying a data source member
-- Generating display names from test data
-- Maintaining clean separation between data and display logic
-
-## Advanced Usage
-
-### Custom Argument Conversion
-
-```csharp
-// Use ArgsCode.Instance to pass the entire TestData object
-var instanceTestData = new DynamicTheoryTestDataSource<int, int>(ArgsCode.Instance);
-
-// Use ArgsCode.Properties to pass individual properties as arguments
-var propertiesTestData = new DynamicTheoryTestDataSource<int, int>(ArgsCode.Properties);
-```
-
-### Temporary Strategy Changes
-
-```csharp
-testData.AddOptionalToTheoryTestData(() => {
-    // Add test data with different ArgsCode temporarily
-    testData.AddTestDataToTheoryTestData("Special case", "Result", 42, 42);
-}, ArgsCode.Instance);
-```
-
-## Best Practices
-
-1. **Initialize test method name** early in your test data setup:
-   ```csharp
-   var testData = new DynamicTheoryTestDataSource<int>(ArgsCode.Properties);
-   testData.InitTestMethodName(nameof(MyTestMethod));
-   ```
-
-2. **Use descriptive names** for test cases in the `definition` parameter to generate meaningful display names.
-
-3. **Group related tests** using traits for better test organization:
-   ```csharp
-   .SetTraits("Category", "Performance")
-   ```
-
-4. **Limit use of explicit tests** and always provide clear reasons when using `SetSkip`.
-
-5. **Consider timeout values** carefully for tests that might hang or run too long.
-
+---
 ## License
 
-MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [License](LICENSE.txt) file for details.
 
+---
+## Contact
+
+For any questions or inquiries, please contact [CsabaDu](https://github.com/CsabaDu).
+
+---
+## FAQ
+
+---
+## Troubleshooting
