@@ -41,11 +41,6 @@ For an overview of this xUnit-specific extensionâ€”including its purpose, i
 
 ## Changelog  
 
-### **Version 1.0.0-beta** (2025-09-08)
-
-Initial beta release.
-
----
 ### **Version 2.1.0-beta** (2025-10-31)
 
 **Updated**:
@@ -56,6 +51,11 @@ Initial beta release.
 
 **Removed**:
 - `CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources` namespace removed.
+
+---
+### **Version 1.0.0-beta** (2025-09-08)
+
+Initial beta release.
 
 ---
 ## Contributing
