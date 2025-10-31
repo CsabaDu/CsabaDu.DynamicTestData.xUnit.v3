@@ -44,6 +44,19 @@ For an overview of this xUnit-specific extensionâ€”including its purpose, i
 ### **Version 1.0.0-beta** (2025-09-08)
 
 Initial beta release.
+
+---
+### **Version 2.1.0-beta** (2025-10-31)
+
+**Updated**:
+- `CsabaDu.DynamicTestData` dependency updated to v2.1.0-beta.
+
+**Changed**:
+- `DynamicTheoryTestDataHolder` class moved to `CsabaDu.DynamicTestData.xUnit.v3.DynamicDataRowSources` namespace.
+
+**Removed**:
+- `CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources` namespace removed.
+
 ---
 ## Contributing
 

@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataSources;
+namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataRowSources;
 
 /// <summary>
 /// Abstract base class for providing dynamic theory test data sources with type-safe argument handling.
