@@ -4,6 +4,7 @@
 global using CsabaDu.DynamicTestData.Core.Statics;
 global using CsabaDu.DynamicTestData.Core.TestDataTypes;
 global using CsabaDu.DynamicTestData.Core.TestDataTypes.Interfaces;
+global using CsabaDu.DynamicTestData.DataRowHolders;
 global using CsabaDu.DynamicTestData.DataRowHolders.Interfaces;
 global using CsabaDu.DynamicTestData.DynamicDataRowSources;
 global using CsabaDu.DynamicTestData.Lite.DataStrategyTypes.Interfaces;

@@ -1,8 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-using CsabaDu.DynamicTestData.DataRowHolders;
-
 namespace CsabaDu.DynamicTestData.xUnit.v3.DataRowHolders;
 
 public class TheoryTestData<TTestData>
@@ -11,10 +9,11 @@ INamedDataRowHolder<ITheoryTestDataRow>
 where TTestData : notnull, ITestData
 {
     #region Constructors
-    protected TheoryTestData(IDataStrategy? dataStrategy)
+    private TheoryTestData(IDataStrategy? dataStrategy)
     {
-        DataStrategy = dataStrategy
-            ?? throw new ArgumentNullException(nameof(dataStrategy));
+        DataStrategy = Guard.ArgumentNotNull(
+            dataStrategy,
+            nameof(dataStrategy));
     }
 
     internal TheoryTestData(
@@ -23,11 +22,8 @@ where TTestData : notnull, ITestData
         string? testMethodName)
     : this(dataStrategy)
     {
-        Guard.ArgumentNotNull(
-            testDataRows,
-            nameof(testDataRows));
-
-        if (testDataRows.Any(row => row.GetTestData() is not TTestData))
+        if (Guard.ArgumentNotNull(testDataRows, nameof(testDataRows))
+            .Any(row => row.GetTestData() is not TTestData))
         {
             throw new ArgumentException(
                 "'GetTestData()' method of the provided test data rows" +

@@ -11,7 +11,7 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 public sealed class TheoryTestDataRow<TTestData>(
     TTestData testData,
     ArgsCode argsCode)
-: TestDataRow<ITheoryTestDataRow, TTestData>(testData),
+: NamedTestDataRow<ITheoryTestDataRow, TTestData>(testData),
 ITheoryTestDataRow
 where TTestData : notnull, ITestData
 {
@@ -25,7 +25,6 @@ where TTestData : notnull, ITestData
         argsCode)
     => TestDisplayName = GetTestDisplayName(
         testMethodName,
-        argsCode,
         testData);
 
     private TheoryTestDataRow(
@@ -53,7 +52,7 @@ where TTestData : notnull, ITestData
     #endregion
 
     #region Properties
-    public ArgsCode ArgsCode { get; init; } =
+    public ArgsCode ArgsCode { get; private set; } =
         argsCode.Defined(nameof(argsCode));
     #endregion
 
@@ -110,7 +109,7 @@ where TTestData : notnull, ITestData
     #endregion
 
     #region ITheoryTestDataRow members
-    public ITheoryTestDataRow Convert(IDataStrategy dataStrategy, string? testMethodName)
+    public override ITheoryTestDataRow Convert(IDataStrategy dataStrategy, string? testMethodName)
     => string.IsNullOrEmpty(testMethodName) ?
         this
         : new TheoryTestDataRow<TTestData>(
@@ -118,9 +117,7 @@ where TTestData : notnull, ITestData
             testMethodName);
 
     public IDataStrategy GetDataStrategy()
-    => GetStoredDataStrategy(
-        ArgsCode,
-        PropsCode.Expected);
+    => GetStoredDataStrategy(ArgsCode, default);
     #endregion
 
     #region Private methods
@@ -129,6 +126,8 @@ where TTestData : notnull, ITestData
         ArgsCode argsCode,
         string? testMethodName)
     {
+        ArgsCode = argsCode;
+
         Explicit = other.Explicit;
         Skip = other.Skip;
         Label = other.Label;
@@ -137,18 +136,16 @@ where TTestData : notnull, ITestData
         SkipWhen = other.SkipWhen;
         TestDisplayName = GetTestDisplayName(
             testMethodName,
-            argsCode,
             other)
             ?? other.TestDisplayName;
         Timeout = other.Timeout;
         Traits = other.Traits ?? [];
     }
 
-    private static string? GetTestDisplayName(
+    private string? GetTestDisplayName(
         string? testMethodName,
-        ArgsCode argsCode,
         INamedTestCase namedTestCase)
-    => argsCode == ArgsCode.Properties ?
+    => ArgsCode == ArgsCode.Properties ?
         GetDisplayName(
             testMethodName,
             namedTestCase.GetTestCaseName())
