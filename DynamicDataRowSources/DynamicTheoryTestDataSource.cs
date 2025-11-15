@@ -19,23 +19,17 @@ namespace CsabaDu.DynamicTestData.xUnit.v3.DynamicDataRowSources;
 /// </para>
 /// </remarks>
 /// <param name="argsCode">The strategy for converting test data to method arguments</param>
-public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
+public abstract class DynamicTheoryTestDataSource(ArgsCode argsCode)
 : DynamicNamedDataRowSource<ITheoryTestDataRow>(argsCode, PropsCode.Expected)
 {
     protected override void Add<TTestData>(TTestData testData)
     {
-        if (DataHolder is not TheoryTestData<TTestData> theoryTestData)
-        {
-            InitDataHolder(testData);
-            return;
-        }
+        var theoryTestData = DataHolder as TheoryTestData<TTestData>;
 
-        if (theoryTestData.Any(testData.Equals))
-        {
-            return;
-        }
-
-        theoryTestData.Add(testData);
+        Add(theoryTestData is not null,
+            testData,
+            theoryTestData!,
+            theoryTestData!.Add);
     }
 
     public TheoryTestData<TTestData>? GetTheoryTestData<TTestData>(
@@ -43,42 +37,20 @@ public abstract class DynamicTheoryTestDataHolder(ArgsCode argsCode)
         ArgsCode? argsCode)
     where TTestData : notnull, ITestData
     {
-        if (DataHolder is null)
+        if (DataHolder is not TheoryTestData<TTestData> theoryTestData)
         {
             return null;
         }
 
         var dataStrategy = GetDataStrategy(argsCode);
 
-        if (DataHolder is TheoryTestData<TTestData> theoryTestData)
-        {
-            return dataStrategy.ArgsCode == ArgsCode
-                && testMethodName is null ?
-                theoryTestData
-                : new TheoryTestData<TTestData>(
-                    theoryTestData,
-                    dataStrategy,
-                    testMethodName);
-        }
-
-        if (DataHolder is IEnumerable<ITestDataRow<TheoryTestDataRow<TTestData>, TTestData>> theoryTestDataRows)
-        {
-            return new TheoryTestData<TTestData>(
-                theoryTestDataRows,
+        return dataStrategy.ArgsCode == ArgsCode
+            && testMethodName is null ?
+            theoryTestData
+            : new TheoryTestData<TTestData>(
+                theoryTestData,
                 dataStrategy,
                 testMethodName);
-        }
-
-        if (DataHolder is IEnumerable<ITestDataRow> testDataRows
-            && testDataRows.All(x => x.GetTestData() is TTestData))
-        {
-            return new TheoryTestData<TTestData>(
-                testDataRows,
-                dataStrategy,
-                testMethodName);
-        }
-
-        return null;
     }
 
     protected override void InitDataHolder<TTestData>(TTestData testData)

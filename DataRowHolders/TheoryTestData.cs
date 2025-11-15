@@ -16,54 +16,6 @@ where TTestData : notnull, ITestData
             nameof(dataStrategy));
     }
 
-    internal TheoryTestData(
-        IEnumerable<ITestDataRow> testDataRows,
-        IDataStrategy dataStrategy,
-        string? testMethodName)
-    : this(dataStrategy)
-    {
-        if (Guard.ArgumentNotNull(testDataRows, nameof(testDataRows))
-            .Any(row => row.GetTestData() is not TTestData))
-        {
-            throw new ArgumentException(
-                "'GetTestData()' method of the provided test data rows" +
-                $" must return objects of type {typeof(TTestData).Name}.",
-                nameof(testDataRows));
-        }
-
-        if (testMethodName is null)
-        {
-            AddRange(testDataRows.Select(getTestData));
-        }
-
-        else
-        {
-            AddRange(testDataRows.Select(getTheoryTestDataRow));
-        }
-
-        #region Local methods
-        static TTestData getTestData(ITestDataRow row)
-        => (TTestData)row.GetTestData();
-
-        TheoryTestDataRow<TTestData> getTheoryTestDataRow(ITestDataRow row)
-        => getTestData(row).ToTheoryTestDataRow(
-            dataStrategy.ArgsCode,
-            testMethodName);
-        #endregion
-    }
-
-    public TheoryTestData(
-        IEnumerable<ITestDataRow<TheoryTestDataRow<TTestData>, TTestData>> testDataRows,
-        IDataStrategy dataStrategy,
-        string? testMethodName)
-    : this(dataStrategy)
-    {
-        AddRange(testDataRows.Select(
-            row => row.TestData.ToTheoryTestDataRow(
-                dataStrategy.ArgsCode,
-                testMethodName)));
-    }
-
     public TheoryTestData(
         TheoryTestData<TTestData> other,
         IDataStrategy dataStrategy,
