@@ -93,6 +93,26 @@ where TTestData : notnull, ITestData
             argsCode,
             propsCode));
 
+    public override void Add(TheoryTestDataRow<TTestData> row)
+    {
+        if (row.ContainedBy(this))
+        {
+            return;
+        }
+
+        base.Add(row);
+    }
+
+    public new void Add(TTestData testData)
+    {
+        if (testData.ContainedBy(this))
+        {
+            return;
+        }
+
+        base.Add(testData);
+    }
+
     protected override TheoryTestDataRow<TTestData> Convert(TTestData testData)
     => new(testData, DataStrategy.ArgsCode);
 
