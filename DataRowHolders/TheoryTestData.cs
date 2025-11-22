@@ -95,12 +95,12 @@ where TTestData : notnull, ITestData
 
     public override void Add(TheoryTestDataRow<TTestData> row)
     {
-        if (row.ContainedBy(this))
+        if (row?.ContainedBy(this) == true)
         {
             return;
         }
 
-        base.Add(row);
+        base.Add(row!);
     }
 
     public new void Add(TTestData testData)
