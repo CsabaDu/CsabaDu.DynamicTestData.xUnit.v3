@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Dynamic Test Data xUnit.v3</Title>
-    <Version>2.2.2-beta</Version>
+    <Version>2.2.43-beta</Version>
     <Company>CsabaDu</Company>
     <Description>An extension of CsabaDu.DynamicTestData framework to facilitate dynamic data-driven testing in xUnit.v3.</Description>
     <Copyright>(c) 2025. Csaba Dudas (CsabaDu)</Copyright>
@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsabaDu.DynamicTestData" Version="2.2.2-beta" />
     <PackageReference Include="xunit.v3.extensibility.core" Version="3.2.0" />
   </ItemGroup>
 
@@ -50,6 +49,10 @@
 
   <ItemGroup>
     <Folder Include="Statics\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CsabaDu.DynamicTestData\CsabaDu.DynamicTestData.csproj" />
   </ItemGroup>
 
   <ItemGroup>

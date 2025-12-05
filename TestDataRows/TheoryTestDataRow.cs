@@ -148,7 +148,7 @@ where TTestData : notnull, ITestData
     => ArgsCode == ArgsCode.Properties ?
         GetDisplayName(
             testMethodName,
-            namedTestCase.GetTestCaseName())
+            namedTestCase.TestCaseName)
         : testMethodName;
     #endregion
 }
