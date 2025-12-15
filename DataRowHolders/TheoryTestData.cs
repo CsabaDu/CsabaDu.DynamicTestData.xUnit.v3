@@ -1,6 +1,11 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Converters;
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Interfaces;
+using static CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Converters.TestDataConverter;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.DataRowHolders;
 
 public class TheoryTestData<TTestData>

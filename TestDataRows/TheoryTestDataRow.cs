@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Interfaces;
+
 namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
 
 /// <summary>
@@ -146,7 +148,7 @@ where TTestData : notnull, ITestData
         string? testMethodName,
         INamedTestCase namedTestCase)
     => ArgsCode == ArgsCode.Properties ?
-        GetDisplayName(
+        CreateDisplayName(
             testMethodName,
             namedTestCase.TestCaseName)
         : testMethodName;

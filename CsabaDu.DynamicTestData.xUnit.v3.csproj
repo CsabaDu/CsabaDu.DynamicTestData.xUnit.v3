@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Dynamic Test Data xUnit.v3</Title>
-    <Version>2.2.5-beta</Version>
+    <Version>2.2.6-beta</Version>
     <Company>CsabaDu</Company>
     <Description>An extension of CsabaDu.DynamicTestData framework to facilitate dynamic data-driven testing in xUnit.v3.</Description>
     <Copyright>(c) 2025. Csaba Dudas (CsabaDu)</Copyright>
@@ -45,10 +45,6 @@
 
   <ItemGroup>
     <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Statics\" />
   </ItemGroup>
 
   <ItemGroup>

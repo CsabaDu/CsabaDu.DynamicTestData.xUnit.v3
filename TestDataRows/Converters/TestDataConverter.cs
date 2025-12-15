@@ -1,9 +1,9 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-namespace CsabaDu.DynamicTestData.xUnit.v3.Statics;
+namespace CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Converters;
 
-public static class Extensions
+public static class TestDataConverter
 {
     #region ToTheoryTestDataRow
     public static TheoryTestDataRow<TTestData> ToTheoryTestDataRow<TTestData>(
