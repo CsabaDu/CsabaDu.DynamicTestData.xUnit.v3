@@ -22,39 +22,43 @@ where TTestData : notnull, ITestData
         TTestData testData,
         ArgsCode argsCode,
         string? testMethodName)
-    : this(
-        testData,
-        argsCode)
-    => TestDisplayName = GetTestDisplayName(
-        testMethodName,
-        testData);
+    : this(testData, argsCode)
+    {
+        TestDisplayName =
+            TestData.GetDisplayName(testMethodName);
+    }
 
     private TheoryTestDataRow(
         TheoryTestDataRow<TTestData> other,
         string? testMethodName)
-    : this(
-        other.TestData,
-        other.ArgsCode)
-    => SetTheoryDataRow(
-        other,
-        other.ArgsCode,
-        testMethodName);
+    : this(other.TestData, other.ArgsCode, testMethodName)
+    {
+    }
 
     internal TheoryTestDataRow(
         TheoryTestDataRow<TTestData> other,
         ArgsCode argsCode,
         string? testMethodName)
-    : this(
-        other.TestData,
-        argsCode)
-    => SetTheoryDataRow(
-        other,
-        argsCode,
-        testMethodName);
+    : this(other.TestData, argsCode)
+    {
+        ArgsCode = argsCode;
+
+        Explicit = other.Explicit;
+        Skip = other.Skip;
+        Label = other.Label;
+        SkipType = other.SkipType;
+        SkipUnless = other.SkipUnless;
+        SkipWhen = other.SkipWhen;
+        TestDisplayName =
+            other.GetDisplayName(testMethodName)
+            ?? other.TestDisplayName;
+        Timeout = other.Timeout;
+        Traits = other.Traits ?? [];
+    }
     #endregion
 
     #region Properties
-    public ArgsCode ArgsCode { get; private set; } =
+    public ArgsCode ArgsCode { get; } =
         argsCode.Defined(nameof(argsCode));
     #endregion
 
@@ -77,7 +81,8 @@ where TTestData : notnull, ITestData
     public Dictionary<string, HashSet<string>> Traits
     {
         get => traits;
-        set => traits = Guard.ArgumentNotNull(value, nameof(Traits));
+        set => traits =
+            Guard.ArgumentNotNull(value, nameof(Traits));
     }
 
     /// <inheritdoc/>
@@ -120,37 +125,5 @@ where TTestData : notnull, ITestData
 
     public IDataStrategy GetDataStrategy()
     => GetStoredDataStrategy(ArgsCode, default);
-    #endregion
-
-    #region Private methods
-    private void SetTheoryDataRow(
-        TheoryTestDataRow<TTestData> other,
-        ArgsCode argsCode,
-        string? testMethodName)
-    {
-        ArgsCode = argsCode;
-
-        Explicit = other.Explicit;
-        Skip = other.Skip;
-        Label = other.Label;
-        SkipType = other.SkipType;
-        SkipUnless = other.SkipUnless;
-        SkipWhen = other.SkipWhen;
-        TestDisplayName = GetTestDisplayName(
-            testMethodName,
-            other)
-            ?? other.TestDisplayName;
-        Timeout = other.Timeout;
-        Traits = other.Traits ?? [];
-    }
-
-    private string? GetTestDisplayName(
-        string? testMethodName,
-        INamedTestCase namedTestCase)
-    => ArgsCode == ArgsCode.Properties ?
-        CreateDisplayName(
-            testMethodName,
-            namedTestCase.TestCaseName)
-        : testMethodName;
     #endregion
 }
