@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // Copyright (c) 2025. Csaba Dudas (CsabaDu)
 
-using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows;
+using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Converters;
 using CsabaDu.DynamicTestData.xUnit.v3.TestDataRows.Interfaces;
 
 namespace CsabaDu.DynamicTestData.xUnit.v3.Attributes;
@@ -85,9 +85,9 @@ public abstract class MemberTestDataAttributeBase
             testData = testDataRow.GetTestData();
         }
 
-        return new TheoryTestDataRow<ITestData>(
-            testData,
-            ArgsCode.Instance);
+        return testData.ToTheoryTestDataRow(
+            ArgsCode.Instance,
+            null);
     }
     #endregion
 }

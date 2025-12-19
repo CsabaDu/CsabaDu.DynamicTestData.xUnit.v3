@@ -130,7 +130,6 @@ where TTestData : notnull, ITestData
         }
     }
 
-
     protected override TheoryTestDataRow<TTestData> Convert(TTestData testData)
     => new(testData, DataStrategy.ArgsCode);
 
